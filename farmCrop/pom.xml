@@ -25,7 +25,7 @@
 		<tomcate-jsp-api.version>6.0.44</tomcate-jsp-api.version>
 		<jstl.version>1.2</jstl.version>
 
-		<struts2.version>2.3.24</struts2.version>
+		<struts2.version>2.3.34</struts2.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<quartz.version>1.6.3</quartz.version>
 		<apache-velocity.version>1.7</apache-velocity.version>
