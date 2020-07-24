@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="com.sourcetrace.eses.entity.DeviceType" table="DEVICE_TYPE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.entity.Device" table="DEVICE">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" type="string" />
+		<property name="serialNumber" column="SERIAL_NUMBER" type="string" />
+		<property name="name" column="NAME" type="string" />
+		<property name="deviceType" column="DEVICE_TYPE" type="string" />
+		<many-to-one name="agent" column="AGENT_ID" cascade="all"
+			unique="true"   />
+		<property name="msgNo" column="MSG_NUM" type="string" />
+		<property name="receiptNo" column="RECPT_NUM" type="string" />
+		<property name="enabled" column="ENABLED" />
+		<property name="deleted" column="IS_DELETED" />
+		<property name="isRegistered" column="IS_REGISTRED" />
+		<property name="lastUpdatedUsername" column="UPDATED_USERNAME" />
+		<property name="modifiedTime" column="MODIFIED_TIME" />
+		<property name="branchId" column="BRANCH_ID"/>
+		<property name="createdUsername" column="CREATED_USERNAME" />
+		<property name="createdDate" column="CREATED_DATE" />
+	    <property name="appversion" column="APP_VERSION"/>
+		<property name="logintime" column="LOGIN_TIME"/>
+		<property name="androidVer" column="ANDROID_VERSION"/>
+		<property name="mobileModel" column="MOBILE_MODEL"/>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+</hibernate-mapping>

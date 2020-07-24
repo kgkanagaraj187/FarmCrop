@@ -1,0 +1,1332 @@
+/*
+ * TrainingCompletionReportAction.java
+ * Copyright (c) 2013-2014, SourceTrace Systems, All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of SourceTrace Systems
+ * ("Confidential Information"). You shall not disclose such Confidential Information and shall use
+ * it only in accordance with the terms of the license agreement you entered into with
+ * SourceTrace Systems.
+ */
+package com.sourcetrace.esesw.view.report.agro;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFPicture;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.CellRangeAddress;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.ese.entity.util.ESESystem;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.GrayColor;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.sourcetrace.eses.entity.BranchMaster;
+import com.sourcetrace.eses.entity.Warehouse;
+import com.sourcetrace.eses.inspect.agrocert.Section;
+import com.sourcetrace.eses.service.ICertificationService;
+import com.sourcetrace.eses.service.IFarmerService;
+import com.sourcetrace.eses.service.IPreferencesService;
+import com.sourcetrace.eses.txn.agrocert.Answers;
+import com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers;
+import com.sourcetrace.eses.txn.agrocert.FarmersQuestionAnswers;
+import com.sourcetrace.eses.txn.agrocert.FarmersSectionAnswers;
+import com.sourcetrace.eses.util.DateUtil;
+import com.sourcetrace.eses.util.FileUtil;
+import com.sourcetrace.eses.util.ObjectUtil;
+import com.sourcetrace.eses.util.StringUtil;
+import com.sourcetrace.esesw.entity.profile.Asset;
+import com.sourcetrace.esesw.entity.profile.Farmer;
+import com.sourcetrace.esesw.view.BaseReportAction;
+import com.sourcetrace.esesw.view.IExporter;
+
+/**
+ * The Class FarmerInspectionReportAction.
+ */
+public class FarmerInspectionUtzReportAction extends BaseReportAction {
+	private static final long serialVersionUID = 1L;
+	private static final String CATEGORY_CODE = "CC007";
+
+	private String DETAIL = "detail";
+	private String UPDATE = "update";
+	private String NO_RECORD = "No_Records_Present";
+	private String command;
+	private String id;
+	private String answeredDate;
+	private String groupId;
+	private String farmId;
+	private String farmerNameAndId;
+	private String farmNameAndId;
+	private String wareHouseNameAndId;
+	private String year;
+	private String farmerId;
+	private Set<FarmersSectionAnswers> sections = new HashSet<FarmersSectionAnswers>();
+	private Set<FarmersSectionAnswers> sectionAttributesSet = new LinkedHashSet<FarmersSectionAnswers>();
+	PdfPCell cell;
+	DateFormat df = new SimpleDateFormat(getESEDateFormat());
+	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+
+	private ICertificationService certificationService;
+	private IFarmerService farmerService;
+	private IPreferencesService preferncesService;
+	private Section sectionName;
+	private FarmerCropProdAnswers filter;
+	private FarmerCropProdAnswers farmerCropProdAnswers;
+	private FarmersQuestionAnswers farmersQuestionAnswers;
+
+	private Map<String, String> fields = new HashMap<>();
+	List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
+	private String branchIdParma;
+	private String daterange;
+	private static final SimpleDateFormat fileNameDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	private static final String NUll = null;
+	private InputStream fileInputStream;
+	private List<String> parentSectionName = new ArrayList<>();
+	private String xlsFileName;
+	private String farmerCodeEnabled;
+
+	/**
+	 * @see com.sourcetrace.esesw.view.BaseReportAction#list()
+	 */
+	public String list() throws Exception {
+
+		Calendar currentDate = Calendar.getInstance();
+		Calendar cal = (Calendar) currentDate.clone();
+		cal.set(Calendar.MONTH, currentDate.get(Calendar.MONTH) - 1);
+		DateFormat df = new SimpleDateFormat(DateUtil.DATE_FORMAT);
+		super.startDate = df.format(cal.getTime());
+		super.endDate = df.format(currentDate.getTime());
+
+		daterange = super.startDate + " - " + super.endDate;
+		request.setAttribute(HEADING, getText(LIST));
+
+		setFilter(farmerCropProdAnswers);
+		return LIST;
+	}
+
+	/**
+	 * Data.
+	 * 
+	 * @return the string
+	 * @throws Exception
+	 *             the exception
+	 */
+	@SuppressWarnings("unchecked")
+	public String data() throws Exception {
+
+		groupId = filter.getFarmerId();
+
+		FarmerCropProdAnswers farmerCropProdAnswers = new FarmerCropProdAnswers();
+		farmerCropProdAnswers.setCategoryCode(CATEGORY_CODE);
+		this.filter = farmerCropProdAnswers;
+
+		if (!StringUtil.isEmpty(branchIdParma)) {
+			if (!getIsMultiBranch().equalsIgnoreCase("1")) {
+				List<String> branchList = new ArrayList<>();
+				branchList.add(branchIdParma);
+				filter.setBranchesList(branchList);
+			} else {
+				List<String> branchList = new ArrayList<>();
+				List<BranchMaster> branches = clientService.listChildBranchIds(branchIdParma);
+				branchList.add(branchIdParma);
+				branches.stream().filter(branch -> !StringUtil.isEmpty(branch)).forEach(branch -> {
+					branchList.add(branch.getBranchId());
+				});
+				filter.setBranchesList(branchList);
+			}
+		}
+
+		if (!StringUtil.isEmpty(subBranchIdParma) && !subBranchIdParma.equals("0")) {
+			filter.setBranchId(subBranchIdParma);
+		}
+
+		if (!StringUtil.isEmpty(groupId))
+			this.filter.setFarmerId(groupId);
+
+		super.filter = this.filter;
+		Map data = readData();
+		return sendJSONResponse(data);
+	}
+
+	/**
+	 * Detail.
+	 * 
+	 * @return the string
+	 */
+	public String detail() {
+
+		String view = "";
+		ESESystem preferences = preferncesService.findPrefernceById("1");
+		DateFormat genDate = new SimpleDateFormat(preferences.getPreferences().get(ESESystem.GENERAL_DATE_FORMAT));
+		if (id != null && !id.equals("")) {
+			farmerCropProdAnswers = certificationService.findFarmerCropProdAnswersById(Long.valueOf(id));
+
+			Warehouse wareHouse = farmerService.findWareHouseByFarmerId(farmerCropProdAnswers.getFarmerId());
+			if (wareHouse != null) {
+				wareHouseNameAndId = wareHouse.getName() + " - " + wareHouse.getCode();
+			}
+			if (!StringUtil.isEmpty(farmerCropProdAnswers.getFarmerId())) {
+				if (!StringUtil.isEmpty(farmerCodeEnabled) && farmerCodeEnabled.equalsIgnoreCase("1")) {
+					farmerNameAndId = farmerCropProdAnswers.getFarmerName() + " - "
+							+ farmerCropProdAnswers.getFarmerId();
+
+				} else {
+					farmerNameAndId = farmerCropProdAnswers.getFarmerName();
+				}
+
+			}
+			if (farmerCropProdAnswers.getCertificationStatus() != 0) {
+				year = "year" + farmerCropProdAnswers.getCertificationStatus();
+				year = getText(year);
+			} else {
+				year = "0";
+			}
+			// setAnsweredDate(this.sdf.format(farmerCropProdAnswers.getAnsweredDate()));
+			setAnsweredDate(genDate.format(farmerCropProdAnswers.getAnsweredDate()));
+			if (farmerCropProdAnswers == null) {
+				addActionError(NO_RECORD);
+				return REDIRECT;
+			}
+
+			command = UPDATE;
+			view = DETAIL;
+			request.setAttribute(HEADING, getText(DETAIL));
+		} else {
+			request.setAttribute(HEADING, getText(LIST));
+			return LIST;
+		}
+		return view;
+
+	}
+
+	/**
+	 * Gets the image.
+	 * 
+	 * @return the image
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@SuppressWarnings("deprecation")
+	public String getImage() throws IOException {
+
+		if (id != null && !id.equals("")) {
+
+			farmersQuestionAnswers = certificationService.findFarmerQuestionAswersById(Long.valueOf(id));
+
+			if (!ObjectUtil.isEmpty(farmersQuestionAnswers)) {
+				OutputStream out = response.getOutputStream();
+				out.write(farmersQuestionAnswers.getImage());
+				out.flush();
+				out.close();
+			} else {
+
+				File file = new File(request.getRealPath("/") + "/img/no-image.png");
+				OutputStream out = response.getOutputStream();
+				out.write(FileUtil.getBinaryFileContent(file));
+				out.flush();
+				out.close();
+				System.out.print("No Image");
+			}
+
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * @see com.sourcetrace.esesw.view.BaseReportAction#toJSON(java.lang.Object)
+	 */
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSON(Object obj) {
+
+		JSONObject jsonObject = new JSONObject();
+		FarmerCropProdAnswers farmerCropProdAnsObj = (FarmerCropProdAnswers) obj;
+
+		JSONArray rows = new JSONArray();
+		if (StringUtil.isEmpty(branchIdValue)) {
+			rows.add(branchesMap.get(farmerCropProdAnsObj.getBranchId()));
+		}
+
+		ESESystem preferences = preferncesService.findPrefernceById("1");
+		setFarmerCodeEnabled("0");
+		if (!StringUtil.isEmpty(preferences)) {
+			if (preferences.getPreferences().get(ESESystem.ENABLE_FARMER_CODE) != null) {
+				setFarmerCodeEnabled(preferences.getPreferences().get(ESESystem.ENABLE_FARMER_CODE));
+			}
+		}
+		Warehouse wareHouse = farmerService.findWareHouseByFarmerId(farmerCropProdAnsObj.getFarmerId());
+		if (wareHouse != null) {
+			rows.add(wareHouse.getCode());
+			rows.add(wareHouse.getName());
+		}
+		rows.add(!StringUtil.isEmpty(farmerCropProdAnsObj.getFarmerName()) ? farmerCropProdAnsObj.getFarmerName()
+				: getText("NA"));
+
+		// rows.add(this.sdf.format(farmerCropProdAnsObj.getAnsweredDate()));
+		if (!ObjectUtil.isEmpty(preferences)) {
+			DateFormat genDate = new SimpleDateFormat(preferences.getPreferences().get(ESESystem.GENERAL_DATE_FORMAT));
+			rows.add(!ObjectUtil.isEmpty(farmerCropProdAnsObj.getAnsweredDate())
+					? genDate.format(farmerCropProdAnsObj.getAnsweredDate()).toString() : "");
+		}
+		jsonObject.put("id", farmerCropProdAnsObj.getId());
+
+		jsonObject.put("cell", rows);
+		return jsonObject;
+	}
+
+	/**
+	 * @see com.sourcetrace.esesw.view.BaseReportAction#getId()
+	 */
+	public String getId() {
+
+		return id;
+	}
+
+	/**
+	 * @see com.sourcetrace.esesw.view.BaseReportAction#setId(java.lang.String)
+	 */
+	public void setId(String id) {
+
+		this.id = id;
+	}
+
+	/**
+	 * Gets the answered date.
+	 * 
+	 * @return the answered date
+	 */
+	public String getAnsweredDate() {
+
+		return answeredDate;
+	}
+
+	/**
+	 * Sets the answered date.
+	 * 
+	 * @param answeredDate
+	 *            the new answered date
+	 */
+	public void setAnsweredDate(String answeredDate) {
+
+		this.answeredDate = answeredDate;
+	}
+
+	/**
+	 * Gets the group id.
+	 * 
+	 * @return the group id
+	 */
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	/**
+	 * Sets the group id.
+	 * 
+	 * @param groupId
+	 *            the new group id
+	 */
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	/**
+	 * Gets the certification service.
+	 * 
+	 * @return the certification service
+	 */
+	public ICertificationService getCertificationService() {
+
+		return certificationService;
+	}
+
+	/**
+	 * Sets the certification service.
+	 * 
+	 * @param certificationService
+	 *            the new certification service
+	 */
+	public void setCertificationService(ICertificationService certificationService) {
+
+		this.certificationService = certificationService;
+	}
+
+	/**
+	 * Gets the filter.
+	 * 
+	 * @return the filter
+	 */
+	public FarmerCropProdAnswers getFilter() {
+
+		return filter;
+	}
+
+	/**
+	 * Sets the filter.
+	 * 
+	 * @param filter
+	 *            the new filter
+	 */
+	public void setFilter(FarmerCropProdAnswers filter) {
+
+		this.filter = filter;
+	}
+
+	/**
+	 * Gets the farmer crop prod answers.
+	 * 
+	 * @return the farmer crop prod answers
+	 */
+	public FarmerCropProdAnswers getFarmerCropProdAnswers() {
+
+		return farmerCropProdAnswers;
+	}
+
+	/**
+	 * Sets the farmer crop prod answers.
+	 * 
+	 * @param farmerCropProdAnswers
+	 *            the new farmer crop prod answers
+	 */
+	public void setFarmerCropProdAnswers(FarmerCropProdAnswers farmerCropProdAnswers) {
+
+		this.farmerCropProdAnswers = farmerCropProdAnswers;
+	}
+
+	/**
+	 * Gets the farmers question answers.
+	 * 
+	 * @return the farmers question answers
+	 */
+	public FarmersQuestionAnswers getFarmersQuestionAnswers() {
+
+		return farmersQuestionAnswers;
+	}
+
+	/**
+	 * Sets the farmers question answers.
+	 * 
+	 * @param farmersQuestionAnswers
+	 *            the new farmers question answers
+	 */
+	public void setFarmersQuestionAnswers(FarmersQuestionAnswers farmersQuestionAnswers) {
+
+		this.farmersQuestionAnswers = farmersQuestionAnswers;
+	}
+
+	/**
+	 * Gets the farmer service.
+	 * 
+	 * @return the farmer service
+	 */
+	public IFarmerService getFarmerService() {
+
+		return farmerService;
+	}
+
+	/**
+	 * Sets the farmer service.
+	 * 
+	 * @param farmerService
+	 *            the new farmer service
+	 */
+	public void setFarmerService(IFarmerService farmerService) {
+
+		this.farmerService = farmerService;
+	}
+
+	/**
+	 * Gets the farmers list.
+	 * 
+	 * @return the farmers list
+	 */
+	public Map<String, String> getFarmersList() {
+
+		Map<String, String> warehouseListMap = new LinkedHashMap<String, String>();
+		List<FarmerCropProdAnswers> fcpList = farmerService.listFarmerwithCategoryCode(CATEGORY_CODE);
+		for (FarmerCropProdAnswers fcp : fcpList) {
+			Warehouse warehouse;
+			warehouse = farmerService.findWareHouseByFarmerId(fcp.getFarmerId());
+			if (warehouse != null) {
+				warehouseListMap.put(String.valueOf(warehouse.getCode()),
+						warehouse.getName() + " - " + warehouse.getCode());
+			} else {
+
+				for (FarmerCropProdAnswers fcpa : fcpList) {
+					Farmer farmer = farmerService.findFarmerByFarmerId(fcpa.getFarmId());
+					if (farmer != null) {
+						warehouseListMap.put(String.valueOf(farmer.getFarmerId()),
+								farmer.getFarmerId() + " - " + farmer.getName());
+					}
+				}
+			}
+
+		}
+		return warehouseListMap;
+
+	}
+
+	/**
+	 * Gets the farms list.
+	 * 
+	 * @return the farms list
+	 */
+	public Map<String, String> getFarmsList() {
+
+		Map<String, String> farmListMap = new LinkedHashMap<String, String>();
+		/*
+		 * List<Farm> farmList = farmerService.listFarm(); for (Farm farm :
+		 * farmList) { farmListMap.put(String.valueOf(farm.getId()),
+		 * farm.getFarmName() + " - " + farm.getFarmCode()); }
+		 */
+		return farmListMap;
+
+	}
+
+	/**
+	 * Sets the farm id.
+	 * 
+	 * @param farmId
+	 *            the new farm id
+	 */
+	public void setFarmId(String farmId) {
+
+		this.farmId = farmId;
+	}
+
+	/**
+	 * Gets the farm id.
+	 * 
+	 * @return the farm id
+	 */
+	public String getFarmId() {
+
+		return farmId;
+	}
+
+	/**
+	 * Sets the farmer name and id.
+	 * 
+	 * @param farmerNameAndId
+	 *            the new farmer name and id
+	 */
+	public void setFarmerNameAndId(String farmerNameAndId) {
+
+		this.farmerNameAndId = farmerNameAndId;
+	}
+
+	/**
+	 * Gets the farmer name and id.
+	 * 
+	 * @return the farmer name and id
+	 */
+	public String getFarmerNameAndId() {
+
+		return farmerNameAndId;
+	}
+
+	/**
+	 * Sets the farm name and id.
+	 * 
+	 * @param farmNameAndId
+	 *            the new farm name and id
+	 */
+	public void setFarmNameAndId(String farmNameAndId) {
+
+		this.farmNameAndId = farmNameAndId;
+	}
+
+	/**
+	 * Gets the farm name and id.
+	 * 
+	 * @return the farm name and id
+	 */
+	public String getFarmNameAndId() {
+
+		return farmNameAndId;
+	}
+
+	public String getBranchIdParma() {
+		return branchIdParma;
+	}
+
+	public void setBranchIdParma(String branchIdParma) {
+		this.branchIdParma = branchIdParma;
+	}
+
+	public DateFormat getDf() {
+		return df;
+	}
+
+	public void setDf(DateFormat df) {
+		this.df = df;
+	}
+
+	public String getWareHouseNameAndId() {
+		return wareHouseNameAndId;
+	}
+
+	public void setWareHouseNameAndId(String wareHouseNameAndId) {
+		this.wareHouseNameAndId = wareHouseNameAndId;
+	}
+
+	public InputStream populatePdf() throws DocumentException, IOException {
+		String newLine = "\n";
+		String dashLine = "___________________";
+		Document document = new Document();
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", "attachment;filename=" + getText("FarmerInspectionUTZReport")
+				+ fileNameDateFormat.format(new Date()) + ".pdf");
+		PdfWriter.getInstance(document, response.getOutputStream());
+		farmerCropProdAnswers = certificationService.findFarmerCropProdAnswersById(Long.valueOf(id));
+		if (!ObjectUtil.isEmpty(farmerCropProdAnswers)) {
+			ESESystem preferences = preferncesService.findPrefernceById("1");
+			DateFormat genDate = new SimpleDateFormat(preferences.getPreferences().get(ESESystem.GENERAL_DATE_FORMAT));
+			// title header
+			Font cellFont = null; // font for cells.
+			Font titleFont = null; // font for title text.
+			Paragraph title = null;
+
+			Phrase phraseHeader = new Phrase();
+			PdfPTable exportHeadingTable = new PdfPTable(2);
+			exportHeadingTable.setWidthPercentage(100);
+			exportHeadingTable.setWidths(new int[] { 10, 10 });
+			formHeaderCell(exportHeadingTable, getText("ListFile"), Element.ALIGN_CENTER, Rectangle.BOX);
+			phraseHeader.add(exportHeadingTable);
+
+			System.out.println(document.getPageNumber());
+			loadSectionsForDetail(farmerCropProdAnswers);
+
+			document.open();
+
+			com.itextpdf.text.Image logo = com.itextpdf.text.Image.getInstance(exportLogo());
+			logo.scaleAbsolute(100, 50);
+			logo.setAlignment(Element.ALIGN_CENTER);
+			document.add(logo);
+
+			titleFont = new Font(FontFamily.HELVETICA, 14, Font.BOLD, GrayColor.GRAYBLACK);
+			title = new Paragraph(new Phrase(getText("ExportPDFTitle"), titleFont));
+			title.setAlignment(Element.ALIGN_CENTER);
+			document.add(title);
+			document.add(new Paragraph(
+					new Phrase(" ", new Font(FontFamily.HELVETICA, 15, Font.NORMAL, GrayColor.GRAYBLACK))));
+
+			if (!ObjectUtil.isEmpty(farmerCropProdAnswers)) {
+
+				PdfPTable detailHeaderTable = new PdfPTable(2);
+				detailHeaderTable.setWidths(new int[] { 5, 5 });
+				detailHeaderTable.setWidthPercentage(100);
+
+				// Table Header
+
+				Warehouse wareHouse = farmerService.findWareHouseByFarmerId(farmerCropProdAnswers.getFarmerId());
+
+				if (wareHouse != null) {
+					wareHouseNameAndId = wareHouse.getName() + " - " + wareHouse.getCode();
+				}
+
+				Farmer farmer = farmerService.findFarmerByFarmerId(farmerCropProdAnswers.getFarmId());
+				if (!ObjectUtil.isEmpty(farmer)) {
+					farmerNameAndId = farmer.getFirstName() + " - " + farmer.getFarmerId();
+					if (!StringUtil.isEmpty(farmer.getLastName()))
+						farmerNameAndId = farmer.getFirstName() + " " + farmer.getLastName() + " - "
+								+ farmer.getFarmerId();
+				} else {
+					farmerNameAndId = "";
+				}
+				// Group Name & code
+
+				Font cellFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, GrayColor.GRAYBLACK);
+				cell = new PdfPCell(new Phrase(getText("farmerInspectionUtzReport.groupNameCode"), cellFont1));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setBorder(Rectangle.BOX);
+				cell.setNoWrap(false);
+				detailHeaderTable.addCell(cell);
+				formDataCell(detailHeaderTable, (wareHouseNameAndId), Element.ALIGN_LEFT, Rectangle.BOX);
+
+				// Farmer Name & code
+				if (farmerNameAndId != "") {
+					cell = new PdfPCell(new Phrase(getText("farmerInspectionUtzReport.farmerNameCode"), cellFont1));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					detailHeaderTable.addCell(cell);
+					formDataCell(detailHeaderTable, (farmerNameAndId), Element.ALIGN_LEFT, Rectangle.BOX);
+				}
+
+				// Answered Date
+				cell = new PdfPCell(new Phrase(getText("farmerInspectionUtzReport.answeredDate"), cellFont1));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setBorder(Rectangle.BOX);
+				cell.setNoWrap(false);
+				detailHeaderTable.addCell(cell);
+				/*
+				 * formDataCell(detailHeaderTable,
+				 * (this.sdf.format(farmerCropProdAnswers.getAnsweredDate())),
+				 * Element.ALIGN_LEFT, Rectangle.BOX);
+				 */
+				formDataCell(detailHeaderTable, (genDate.format(farmerCropProdAnswers.getAnsweredDate())),
+						Element.ALIGN_LEFT, Rectangle.BOX);
+
+				cell = new PdfPCell(new Phrase(getText("farmerCropProdAnswers.inspectionYear"), cellFont1));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setBorder(Rectangle.BOX);
+				cell.setNoWrap(false);
+				detailHeaderTable.addCell(cell);
+				String year = "year" + farmerCropProdAnswers.getCertificationStatus();
+				if (farmerCropProdAnswers.getCertificationStatus() == 0) {
+					formDataCell(detailHeaderTable, "0", Element.ALIGN_LEFT, Rectangle.BOX);
+				} else {
+					formDataCell(detailHeaderTable, getText(year), Element.ALIGN_LEFT, Rectangle.BOX);
+				}
+
+				detailHeaderTable.setSpacingAfter(10f);
+				document.add(detailHeaderTable);
+
+				// SECTION TABLE
+				if (!ObjectUtil.isListEmpty(sections)) {
+
+					PdfPTable sectionTable = new PdfPTable(6);
+					sectionTable.setWidths(new int[] { 1, 7, 2, 4, 2, 2 });
+					sectionTable.setWidthPercentage(100);
+
+					PdfPCell cell;
+					Font cellFont5 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, GrayColor.GRAYBLACK);
+					cell = new PdfPCell(new Phrase(getText("sno"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText("questions"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText("answersLabel"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					cell.setColspan(4);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText(""), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					cell.setColspan(2);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText("answers"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText("nonConformityAction"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText("icsPersonal"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					sectionTable.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(getText("Dead Line"), cellFont5));
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(Rectangle.BOX);
+					cell.setNoWrap(false);
+					sectionTable.addCell(cell);
+
+					for (FarmersSectionAnswers section : sections) {
+						if (!ObjectUtil.isEmpty(section)) {
+
+							cell = new PdfPCell(new Phrase(section.getSerialNo(), cellFont5));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setBorder(Rectangle.BOX);
+							cell.setNoWrap(false);
+							sectionTable.addCell(cell);
+
+							cell = new PdfPCell(new Phrase(section.getSectionName(), cellFont5));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setBorder(Rectangle.BOX);
+							cell.setNoWrap(false);
+							sectionTable.addCell(cell);
+
+							formDataCell(sectionTable, (""), Element.ALIGN_LEFT, Rectangle.BOX);
+							formDataCell(sectionTable, (""), Element.ALIGN_LEFT, Rectangle.BOX);
+							formDataCell(sectionTable, (""), Element.ALIGN_LEFT, Rectangle.BOX);
+							formDataCell(sectionTable, (""), Element.ALIGN_LEFT, Rectangle.BOX);
+
+							List<FarmersQuestionAnswers> farmerQuestionList = farmerService
+									.listQuestionBySection(section.getId());
+							for (FarmersQuestionAnswers question : farmerQuestionList) {
+								if (!ObjectUtil.isEmpty(question)) {
+									formDataCell(sectionTable, (question.getSerialNo()), Element.ALIGN_CENTER,
+											Rectangle.BOX);
+									formDataCell(sectionTable, (question.getQuestionName()), Element.ALIGN_LEFT,
+											Rectangle.BOX);
+								}
+								if (!ObjectUtil.isListEmpty(question.getAnswers())) {
+									for (Answers answer : question.getAnswers()) {
+										if (!ObjectUtil.isEmpty(answer)) {
+
+											formDataCell(sectionTable, (getText(answer.getAnswer())),
+													Element.ALIGN_LEFT, Rectangle.BOX);
+											formDataCell(sectionTable, (answer.getAnswer3()), Element.ALIGN_LEFT,
+													Rectangle.BOX);
+											formDataCell(sectionTable, (answer.getAnswer4()), Element.ALIGN_LEFT,
+													Rectangle.BOX);
+											formDataCell(sectionTable, (answer.getAnswer5()), Element.ALIGN_LEFT,
+													Rectangle.BOX);
+
+										}
+									}
+								}
+							}
+						}
+					}
+					sectionTable.setSpacingAfter(10f);
+					document.add(sectionTable);
+
+				}
+
+			}
+		}
+		document.close();
+		return fileInputStream;
+	}
+
+	private void loadSectionsForDetail(FarmerCropProdAnswers farmerCropProdAnswers) {
+		if (!ObjectUtil.isEmpty(farmerCropProdAnswers)) {
+
+			List<FarmersSectionAnswers> sectionList = certificationService
+					.listsectionByFarmerCropProd(farmerCropProdAnswers.getId());
+			Collections.sort(sectionList);
+			sections = new TreeSet<FarmersSectionAnswers>(sectionList);
+			Set<FarmersSectionAnswers> tempSectionSet = new TreeSet<FarmersSectionAnswers>();
+			tempSectionSet = sections;
+			sections = new LinkedHashSet<FarmersSectionAnswers>();
+			for (FarmersSectionAnswers sectionAnswers : tempSectionSet) {
+				if (!ObjectUtil.isEmpty(sectionAnswers) && !StringUtil.isEmpty(sectionAnswers.getSectionCode())) {
+					sections.add(sectionAnswers);
+
+				} else {
+					sectionAttributesSet.add(sectionAnswers);
+				}
+			}
+		}
+	}
+
+	public InputStream getFileInputStream() {
+		return fileInputStream;
+	}
+
+	public void setFileInputStream(InputStream fileInputStream) {
+		this.fileInputStream = fileInputStream;
+	}
+
+	/**
+	 * Form data cell.
+	 * 
+	 * @param table
+	 *            the table
+	 * @param content
+	 *            the content
+	 * @param alignment
+	 *            the alignment
+	 * @param border
+	 *            the border
+	 */
+	private void formDataCell(PdfPTable table, String content, int alignment, int border) {
+		Font cellFont = new Font(FontFamily.HELVETICA, 8, Font.NORMAL, GrayColor.GRAYBLACK);
+		// Normal cell
+		PdfPCell cell = new PdfPCell(new Phrase(content, cellFont));
+		cell.setHorizontalAlignment(alignment);
+		cell.setBorder(border);
+		cell.setNoWrap(false);
+		table.addCell(cell);
+	}
+
+	/**
+	 * Form header cell.
+	 * 
+	 * @param table
+	 *            the table
+	 * @param content
+	 *            the content
+	 * @param alignment
+	 *            the alignment
+	 * @param border
+	 *            the border
+	 */
+	private void formHeaderCell(PdfPTable table, String content, int alignment, int border) {
+		Font cellFont = new Font(FontFamily.HELVETICA, 8, Font.NORMAL, GrayColor.GRAYBLACK);
+		// PAGE HEADER
+		PdfPCell cell = new PdfPCell(new Phrase(content, cellFont));
+		cell.setHorizontalAlignment(alignment);
+		cell.setBorder(border);
+		cell.setNoWrap(false);
+		table.addCell(cell);
+	}
+
+	public Set<FarmersSectionAnswers> getSections() {
+		return sections;
+	}
+
+	public void setSections(Set<FarmersSectionAnswers> sections) {
+		this.sections = sections;
+	}
+
+	public Set<FarmersSectionAnswers> getSectionAttributesSet() {
+		return sectionAttributesSet;
+	}
+
+	public void setSectionAttributesSet(Set<FarmersSectionAnswers> sectionAttributesSet) {
+		this.sectionAttributesSet = sectionAttributesSet;
+	}
+
+	public Section getSectionName() {
+		return sectionName;
+	}
+
+	public void setSectionName(Section sectionName) {
+		this.sectionName = sectionName;
+	}
+
+	public List<String> getParentSectionName() {
+		return parentSectionName;
+	}
+
+	public void setParentSectionName(List<String> parentSectionName) {
+		this.parentSectionName = parentSectionName;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public Map<String, String> getFields() {
+		fields.put("1", getText("answeredDate"));
+		fields.put("2", getLocaleProperty("farmer"));
+
+		/*
+		 * if ((getIsMultiBranch().equalsIgnoreCase("1") &&
+		 * (getIsParentBranch().equals("1")||StringUtil.isEmpty(branchIdValue)))
+		 * ) { fields.put("3", getText("app.branch")); } else if
+		 * (StringUtil.isEmpty(getBranchId())) { fields.put("4",
+		 * getText("app.branch")); }
+		 */
+
+		if (getIsMultiBranch().equalsIgnoreCase("1")) {
+			if (StringUtil.isEmpty(getBranchId())) {
+				fields.put("4", getText("app.branch"));
+			} else if (getIsParentBranch().equals("1")) {
+				fields.put("4", getText("app.subBranch"));
+			}
+
+		} else if (StringUtil.isEmpty(getBranchId())) {
+
+			fields.put("3", getText("app.branch"));
+		}
+
+		return fields;
+	}
+
+	public String populateXLS() throws Exception {
+		InputStream is = getExportDataStream(IExporter.EXPORT_MANUAL);
+		setXlsFileName(getText("farmerInspectionReport") + fileNameDateFormat.format(new Date()));
+		Map<String, InputStream> fileMap = new HashMap<String, InputStream>();
+		fileMap.put(xlsFileName, is);
+		setFileInputStream(FileUtil.createFileInputStreamToZipFile(getText("farmerInspectionReport"), fileMap, ".xls"));
+		return "xls";
+	}
+
+	@SuppressWarnings("unchecked")
+	private InputStream getExportDataStream(String exportType) throws IOException {
+		setMailExport(IExporter.EXPORT_MANUAL.equalsIgnoreCase(exportType) ? true : false);
+		boolean flag = true;
+		DateFormat filterDateFormat = new SimpleDateFormat(getGeneralDateFormat());
+		DecimalFormat df = new DecimalFormat("0.000");
+		DecimalFormat df1 = new DecimalFormat("0.00");
+
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet(getLocaleProperty("farmerInspectionReport"));
+		HSSFPatriarch drawing = sheet.createDrawingPatriarch();
+
+		HSSFCellStyle style1 = wb.createCellStyle();
+		HSSFCellStyle style2 = wb.createCellStyle();
+		HSSFCellStyle style3 = wb.createCellStyle();
+		HSSFCellStyle filterStyle = wb.createCellStyle();
+
+		HSSFFont font1 = wb.createFont();
+		font1.setFontHeightInPoints((short) 22);
+
+		HSSFFont font2 = wb.createFont();
+		font2.setFontHeightInPoints((short) 12);
+
+		HSSFFont font3 = wb.createFont();
+		font3.setFontHeightInPoints((short) 10);
+
+		HSSFFont filterFont = wb.createFont();
+		filterFont.setFontHeightInPoints((short) 12);
+
+		HSSFRow row, titleRow, filterRowTitle, filterRow1, filterRow2, filterRow3, filterRow4, filterRow5;
+		HSSFCell cell;
+
+		int imgRow1 = 0;
+		int imgRow2 = 4;
+		int imgCol1 = 0;
+		int imgCol2 = 1;
+		int titleRow1 = 2;
+		int titleRow2 = 5;
+
+		int rowNum = 2;
+		int colNum = 0;
+
+		branchIdValue = getBranchId(); // set value for branch id.
+		buildBranchMap(); // build branch map to get branch name form branch id.
+
+		sheet.addMergedRegion(new CellRangeAddress(imgRow1, imgRow2, imgCol1, imgCol2));
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, titleRow1, titleRow2));
+
+		sheet.setDefaultColumnWidth(13);
+
+		titleRow = sheet.createRow(rowNum++);
+		cell = titleRow.createCell(2);
+		cell.setCellValue(new HSSFRichTextString(getLocaleProperty("farmerInspectionUTZReportTitle")));
+		cell.setCellStyle(style1);
+		font1.setBoldweight((short) 22);
+		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		style1.setFont(font1);
+
+		farmerId = filter.getFarmerId();
+
+		FarmerCropProdAnswers farmerCropProdAnswers = new FarmerCropProdAnswers();
+		farmerCropProdAnswers.setCategoryCode(CATEGORY_CODE);
+		this.filter = farmerCropProdAnswers;
+
+		super.filter = this.filter;
+
+		if (!StringUtil.isEmpty(farmerId)) {
+			this.filter.setFarmerId(farmerId);
+		}
+
+		if (!StringUtil.isEmpty(branchIdParma)) {
+			if (!getIsMultiBranch().equalsIgnoreCase("1")) {
+				List<String> branchList = new ArrayList<>();
+				branchList.add(branchIdParma);
+				filter.setBranchesList(branchList);
+			} else {
+				List<String> branchList = new ArrayList<>();
+				List<BranchMaster> branches = clientService.listChildBranchIds(branchIdParma);
+				branchList.add(branchIdParma);
+				branches.stream().filter(branch -> !StringUtil.isEmpty(branch)).forEach(branch -> {
+					branchList.add(branch.getBranchId());
+				});
+				filter.setBranchesList(branchList);
+			}
+		}
+
+		if (!StringUtil.isEmpty(subBranchIdParma) && !subBranchIdParma.equals("0")) {
+			filter.setBranchId(subBranchIdParma);
+		}
+
+		if (isMailExport()) {
+			rowNum++;
+			rowNum++;
+			filterRowTitle = sheet.createRow(rowNum++);
+			cell = filterRowTitle.createCell(1);
+			cell.setCellValue(new HSSFRichTextString(getLocaleProperty("filter")));
+			filterFont.setBoldweight((short) 12);
+			filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			filterStyle.setFont(filterFont);
+			cell.setCellStyle(filterStyle);
+
+			filterRow1 = sheet.createRow(rowNum++);
+
+			cell = filterRow1.createCell(1);
+			cell.setCellValue(new HSSFRichTextString(getLocaleProperty("StartingDate")));
+			filterFont.setBoldweight((short) 12);
+			filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			filterStyle.setFont(filterFont);
+			cell.setCellStyle(filterStyle);
+
+			cell = filterRow1.createCell(2);
+			cell.setCellValue(new HSSFRichTextString(filterDateFormat.format(getsDate())));
+			filterFont.setBoldweight((short) 12);
+			filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			filterStyle.setFont(filterFont);
+			cell.setCellStyle(filterStyle);
+
+			filterRow2 = sheet.createRow(rowNum++);
+
+			cell = filterRow2.createCell(1);
+			cell.setCellValue(new HSSFRichTextString(getLocaleProperty("EndingDate")));
+			filterFont.setBoldweight((short) 12);
+			filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			filterStyle.setFont(filterFont);
+			cell.setCellStyle(filterStyle);
+
+			if (!ObjectUtil.isEmpty(geteDate())) {
+				cell = filterRow2.createCell(2);
+				cell.setCellValue(new HSSFRichTextString(filterDateFormat.format(geteDate())));
+				filterFont.setBoldweight((short) 12);
+				filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				filterStyle.setFont(filterFont);
+				cell.setCellStyle(filterStyle);
+			}
+
+			if (!StringUtil.isEmpty(farmerId)) {
+
+				filterRow3 = sheet.createRow(rowNum++);
+
+				cell = filterRow3.createCell(1);
+				cell.setCellValue(new HSSFRichTextString(getLocaleProperty("GroupId")));
+				filterFont.setBoldweight((short) 12);
+				filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				filterStyle.setFont(filterFont);
+				cell.setCellStyle(filterStyle);
+
+				cell = filterRow3.createCell(2);
+				Warehouse wareHouse = farmerService.findWareHouseByFarmerId(farmerId);
+				cell.setCellValue(new HSSFRichTextString(!ObjectUtil.isEmpty(wareHouse) ? wareHouse.getName() : ""));
+				filterFont.setBoldweight((short) 12);
+				filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				filterStyle.setFont(filterFont);
+				cell.setCellStyle(filterStyle);
+			}
+
+			if (!StringUtil.isEmpty(branchIdParma)) {
+
+				filterRow3 = sheet.createRow(rowNum++);
+
+				cell = filterRow3.createCell(1);
+				cell.setCellValue(new HSSFRichTextString(getLocaleProperty("branchId")));
+				filterFont.setBoldweight((short) 12);
+				filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				filterStyle.setFont(filterFont);
+				cell.setCellStyle(filterStyle);
+
+				cell = filterRow3.createCell(2);
+				BranchMaster branch = clientService.findBranchMasterByBranchId(branchIdParma);
+				cell.setCellValue(new HSSFRichTextString(!ObjectUtil.isEmpty(branch) ? branch.getName() : ""));
+				filterFont.setBoldweight((short) 12);
+				filterFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				filterStyle.setFont(filterFont);
+				cell.setCellStyle(filterStyle);
+			}
+
+		}
+
+		Map data = isMailExport() ? readData() : readExportData();
+
+		rowNum++;
+
+		ESESystem preferences = preferncesService.findPrefernceById("1");
+		setFarmerCodeEnabled("0");
+		if (!StringUtil.isEmpty(preferences)) {
+			if (preferences.getPreferences().get(ESESystem.ENABLE_FARMER_CODE) != null) {
+				setFarmerCodeEnabled(preferences.getPreferences().get(ESESystem.ENABLE_FARMER_CODE));
+			}
+		}
+
+		rowNum++;
+
+		HSSFRow mainGridRowHead = sheet.createRow(rowNum++);
+		String mainGridColumnHeaders = getLocaleProperty("farmerInspectionUtz");
+
+		/*
+		 * if(farmerCodeEnabled.equalsIgnoreCase("1")){ mainGridColumnHeaders =
+		 * getLocaleProperty("farmerInspectionUtzFarmerCode"); }else{
+		 * mainGridColumnHeaders = getLocaleProperty("farmerInspectionUtz"); }
+		 */
+
+		int mainGridIterator = 0;
+
+		for (String cellHeader : mainGridColumnHeaders.split("\\,")) {
+
+			cell = mainGridRowHead.createCell(mainGridIterator);
+			cell.setCellValue(new HSSFRichTextString(cellHeader));
+			style2.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+			style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+			cell.setCellStyle(style2);
+			font2.setBoldweight((short) 12);
+			font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			style2.setFont(font2);
+			sheet.setColumnWidth(mainGridIterator, (15 * 550));
+			mainGridIterator++;
+		}
+
+		List<FarmerCropProdAnswers> mainGridRows = (List<FarmerCropProdAnswers>) data.get(ROWS);
+		if (ObjectUtil.isListEmpty(mainGridRows))
+			return null;
+
+		for (FarmerCropProdAnswers farmerCropProdAns : mainGridRows) {
+			row = sheet.createRow(rowNum++);
+			colNum = 0;
+
+			DateFormat genDate = new SimpleDateFormat(preferences.getPreferences().get(ESESystem.GENERAL_DATE_FORMAT));
+
+			if (StringUtil.isEmpty(branchIdValue)) {
+				cell = row.createCell(colNum++);
+				cell.setCellValue(new HSSFRichTextString(getBranchesMap().get(farmerCropProdAns.getBranchId())));
+			}
+
+			Warehouse wareHouse = farmerService.findWareHouseByFarmerId(farmerCropProdAns.getFarmerId());
+
+			cell = row.createCell(colNum++);
+			cell.setCellValue(new HSSFRichTextString(wareHouse.getCode()));
+
+			cell = row.createCell(colNum++);
+			cell.setCellValue(new HSSFRichTextString(wareHouse.getName()));
+
+			if (farmerCropProdAns.getFarmId() != null) {
+
+				/*
+				 * if (!StringUtil.isEmpty(farmerCodeEnabled) &&
+				 * farmerCodeEnabled.equalsIgnoreCase("1")) { cell =
+				 * row.createCell(colNum++); cell.setCellValue(new
+				 * HSSFRichTextString(farmerCropProdAns.getFarmId())); }
+				 */
+
+				Farmer farmer = farmerService.findFarmerByFarmerId(farmerCropProdAns.getFarmId());
+				String farmerName = "";
+				if (!ObjectUtil.isEmpty(farmer)) {
+					farmerName = farmer.getFirstName();
+					if (!StringUtil.isEmpty(farmer.getLastName()))
+						farmerName = farmer.getFirstName() + " " + farmer.getLastName();
+					cell = row.createCell(colNum++);
+					cell.setCellValue(new HSSFRichTextString(!ObjectUtil.isEmpty(farmer)
+							? (!StringUtil.isEmpty(farmerName) ? farmerName : getText("NA")) : getText("NA")));
+
+				} else {
+					cell = row.createCell(colNum++);
+					cell.setCellValue(new HSSFRichTextString("-"));
+				}
+			}
+			if (!ObjectUtil.isEmpty(preferences) && !ObjectUtil.isEmpty(farmerCropProdAns.getAnsweredDate())) {
+				cell = row.createCell(colNum++);
+				cell.setCellValue(new HSSFRichTextString(genDate.format(farmerCropProdAns.getAnsweredDate())));
+
+			}
+
+		}
+
+		int pictureIdx = getPicIndex(wb);
+		HSSFClientAnchor anchor = new HSSFClientAnchor(100, 150, 900, 100, (short) 0, 0, (short) 0, 4);
+		anchor.setAnchorType(1);
+		HSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
+		// picture.resize();
+		String id = ObjectUtil.isEmpty(request) ? String.valueOf(DateUtil.getRevisionNumber())
+				: request.getSession().getId();
+		String makeDir = FileUtil.storeXls(id);
+		String fileName = getLocaleProperty("farmerInspectionReportTitle") + fileNameDateFormat.format(new Date()) + ".xls";
+		FileOutputStream fileOut = new FileOutputStream(makeDir + fileName);
+		wb.write(fileOut);
+		InputStream stream = new FileInputStream(new File(makeDir + fileName));
+		fileOut.close();
+
+		return stream;
+
+	}
+
+	public int getPicIndex(HSSFWorkbook wb) throws IOException {
+
+		int index = -1;
+
+		byte[] picData = null;
+		picData = clientService.findLogoByCode(Asset.APP_LOGO);
+
+		if (picData != null)
+			index = wb.addPicture(picData, HSSFWorkbook.PICTURE_TYPE_JPEG);
+
+		return index;
+	}
+
+	public void setFields(Map<String, String> fields) {
+		this.fields = fields;
+	}
+
+	public IPreferencesService getPreferncesService() {
+		return preferncesService;
+	}
+
+	public void setPreferncesService(IPreferencesService preferncesService) {
+		this.preferncesService = preferncesService;
+	}
+
+	public String getXlsFileName() {
+		return xlsFileName;
+	}
+
+	public void setXlsFileName(String xlsFileName) {
+		this.xlsFileName = xlsFileName;
+	}
+
+	public String getFarmerId() {
+		return farmerId;
+	}
+
+	public void setFarmerId(String farmerId) {
+		this.farmerId = farmerId;
+	}
+
+	public String getFarmerCodeEnabled() {
+		return farmerCodeEnabled;
+	}
+
+	public void setFarmerCodeEnabled(String farmerCodeEnabled) {
+		this.farmerCodeEnabled = farmerCodeEnabled;
+	}
+
+}

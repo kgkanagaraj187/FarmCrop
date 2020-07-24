@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="com.ese.entity.util.ESESystem" table="ESE">
+		<id column="ID" name="id" type="int">
+		</id>
+		<property name="name" column="NAME" />
+		<map name="preferences" table="PREF"   order-by="ESE_ID">
+			<key column="ESE_ID" />
+			<index column="NAME" type="string" />
+			<element type="string" column="VAL" not-null="true" />
+		</map>
+		 <set name="loanInterestDetails" cascade="all">
+                     <key column="ESE_ID" />
+                     <one-to-many class="com.ese.entity.util.LoanInterest" />
+        </set>
+	</class>
+
+	<class name="com.ese.entity.util.FarmerField" table="FARMER_FIELD">
+		<id column="ID" name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="type" column="TYPE" />
+		<property name="typeName" column="TYPE_NAME" />
+		<property name="parent" column="PARENT" />
+		<property name="status" column="STATUS" />
+		<property name="field" column="FIELD" />
+		<property name="others" column="OTHERS" />
+		<property name="farmerProfileExport" column="farmerProfileExport" />
+		
+		<many-to-one name="dataLevel" column="DATA_LEVEL_ID"   />
+	</class>
+
+	<class name="com.ese.entity.util.FarmField" table="FARM_FIELD">
+		<id column="ID" name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="type" column="TYPE" />
+		<property name="typeName" column="TYPE_NAME" />
+		<property name="parent" column="PARENT" />
+		<property name="status" column="STATUS" />
+		<property name="others" column="OTHERS" />
+		<property name="farmerProfileExport" column="farmerProfileExport" />
+		
+	</class>
+
+	<class name="com.sourcetrace.eses.util.log.DeploymentLog" table="DEPLOY_LOG">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property column="LOG_DATE" name="date" />
+		<property column="MODULE" name="module" />
+		<property column="VERSION" name="version" />
+	</class>
+	<class name="com.sourcetrace.eses.util.log.UptimeLog" table="UPTIME_LOG">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property column="STARTUP" name="startup" />
+		<property column="SHUTDOWN" name="shutdown" />
+		<property column="MODULE" name="module" />
+	</class>
+	<class name="com.sourcetrace.eses.util.log.AccessLog" table="ACCESS_LOG">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property column="LOGIN" name="login" />
+		<property column="LOGOUT" name="logout" />
+		<property column="MODULE" name="module" />
+		<property column="USER_ID" name="user" />
+		<property column="IP_ADDRESS" name="userIPAddress" />
+		<property column="STATUS" name="status" />
+	</class>
+	<class name="com.sourcetrace.eses.util.entity.License" table="LICENSE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property column="LIC_KEY" name="key" />
+		<property column="OWNER" name="owner" />
+		<property column="CLIENT" name="client" />
+		<property column="LIC_TYPE" name="type">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.sourcetrace.eses.util.entity.LicenseType</param>
+			</type>
+		</property>
+		<property column="VER" name="version" />
+		<property column="VALID_FROM" name="start" />
+		<property column="VALID_TILL" name="end" />
+	</class>
+	<class name="com.sourcetrace.eses.util.entity.Image" table="IMAGE">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property column="IMG_ID" name="imageId" />
+		<property column="IMG" name="image" not-null="true" type="binary" />
+	</class>
+	<class name="com.sourcetrace.eses.util.entity.ImageInfo" table="IMAGE_INFO">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one cascade="all" column="PHOTO"  
+			name="photo" unique="true" />
+		<many-to-one cascade="all" column="BIOMETRIC"  
+			name="biometric" unique="true" />
+	</class>
+
+	<class name="com.ese.entity.util.Language" table="LANGUAGE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<property name="webStatus" column="WEB_STATUS" />
+		<property name="surveyStatus" column="SURVEY_STATUS" />
+	</class>
+
+	<class name="com.ese.entity.util.LocaleProperty" table="LOCALE_PROPERTY">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="langCode" column="LANG_CODE" />
+		<property name="langValue" column="LANG_VALUE" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.DynamicReportConfig"
+		table="DYNAMIC_REPORT_CONFIG">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="report" column="REPORT" />
+		<property name="fetchType" column="FETCH_TYPE" />
+		<property name="gridType" column="GRID_TYPE" />
+		<property name="status" column="STATUS" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="entityName" column="ENTITY_NAME"/>
+		<property name="xlsName" column="XLS_FILE" />
+		<property name="alias" column="ALIAS" />
+		<property name="parentId" column="PARENT_ID" />
+		<property name="groupProperty" column="GROUP_PROPERTY" />
+		<property name="detailMethod" column="DETAIL_METHOD" />
+		<set name="subGrid" >
+			<key column="PARENT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.DynamicReportConfig" />
+		</set>
+		<set name="dynmaicReportConfigDetails" cascade="all" order-by="ORDERR">
+			<key column="REPORT_CONFIG_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.DynamicReportConfigDetail" />
+		</set>
+		
+		<set name="dynmaicReportConfigFilters" cascade="all" order-by="ORDERR">
+			<key column="REPORT_CONFIG" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.DynamicReportConfigFilter" />
+		</set>
+
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.DynamicReportConfigDetail"
+		table="DYNAMIC_REPORT_CONFIG_DETAIL">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="dynamicReportConfig" column="REPORT_CONFIG_ID"
+			  cascade="all" />
+		<property name="labelName" column="LABEL_NAME" />
+		<property name="field" column="FIELD" />
+		<property name="accessType" column="ACESS_TYPE" />
+		<property name="method" column="METHOD" />
+		<property name="expression" column="EXPRESSION" />
+		<property name="width" column="WIDTH" />
+		<property name="order" column="ORDERR" />
+		<property name="groupProp" column="GROUP_PROP" />
+		<property name="sumProp" column="SUM_PROP" />
+		<property name="isGridAvailabiltiy" column="IS_GRID_AVAILABILITY" />
+		<property name="isExportAvailabiltiy" column="IS_EXPORT_AVAILABILITY" />
+		<property name="status" column="STATUSS" />
+		<property name="parameters" column="PARAMTERS" />
+		<property name="alignment" column="ALIGNMENT" />
+		<property name="isFooterSum" column="IS_FOOTER_SUM" />
+		<property name="isGroupHeader" column="IS_GROUP_HEADER" />
+		<property name="dataType" column="DATA_TYPE" />
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.DynamicReportConfigFilter"
+		table="DYNAMIC_REPORT_CONFIG_FILTER">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="dynamicReportConfig" column="REPORT_CONFIG"
+			  cascade="all" />
+		<property name="field" column="FIELD" />
+		<property name="label" column="LABEL" />
+		<property name="status" column="STATUS" />
+		<property name="method" column="METHOD" />
+		<property name="order" column="ORDERR" />
+		<property name="Type" column="TYPE"/>
+		<property name="isDateFilter" column="IS_DATE_FILTER"/>
+		<property name="defaultFilter" column="DEFAULT_FILTER"/>
+	</class>
+	
+	<class name="com.ese.entity.util.FarmerLocationMapField" table="FARMER_LOCATION_MAP_FIELD">
+		<id column="ID" name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="type" column="TYPE" />
+		<property name="typeName" column="TYPE_NAME" />
+		<property name="parent" column="PARENT" />
+		<property name="status" column="STATUS" />
+	</class>
+
+	<class name="com.ese.entity.util.FarmCropsField" table="FARM_CROPS_FIELD">
+		<id column="ID" name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="type" column="TYPE" />
+		<property name="typeName" column="TYPE_NAME" />
+		<property name="parent" column="PARENT" />
+		<property name="status" column="STATUS" />
+		<property name="farmerProfileExport" column="farmerProfileExport" />
+		
+	</class>
+	
+	<class name="com.ese.entity.util.LoanInterest" table="LOAN_INTEREST">
+             <id column="ID" name="id">
+             <generator class="native" />
+             </id>
+         <property name="minRange" column="MIN_RANGE" />
+         <property name="maxRange" column="MAX_RANGE" />
+         <property name="interest" column="INTEREST" />
+         <many-to-one name="ese" column="ESE_ID"   />
+     </class>
+
+</hibernate-mapping>

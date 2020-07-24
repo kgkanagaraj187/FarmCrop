@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="com.sourcetrace.eses.entity.Profile" table="PROF">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="profileId" column="PROF_ID" />
+		<property name="profileType" column="PROF_TYPE" />
+		<property name="enrolledStationId" column="ENROLL_ID" />
+		<property name="enrolledAgentId" column="ENROLL_AGENT_ID" />
+		<property name="status" column="STATUS" />
+		<many-to-one name="personalInfo" column="PERS_INFO_ID" cascade="all"   />
+		<many-to-one name="contactInfo" column="CONT_INFO_ID" cascade="all"   />
+		<many-to-one name="nomineeInfo" column="NOM_INFO_ID" cascade="all"   />
+		<property name="createTime" column="CRE_TIME" type="timestamp" />
+		<property name="updateTime" column="UPD_TIME" type="timestamp" />
+		<many-to-one name="imageInfo" column="IMAGE_INFO_ID" cascade="all" unique="true"   />
+		<property name="revisionNumber" column="PROF_REV" type="long" />
+		<property name="branchId" column="BRANCH_ID"/>
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedUser" column="UPDATED_USER" />		
+		<many-to-one name="procurementCenter" column="WAREHOUSE_ID"   />
+		
+		<many-to-one name="servicePoint" column="SERVICE_POINT_ID"   />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<joined-subclass name="com.sourcetrace.eses.entity.Agent" table="AGENT_PROF" extends="com.sourcetrace.eses.entity.Profile">
+		<key column="PROF_ID" />
+		<property name="password" column="PASSWORD" />
+		<property name="passwordUDT" column="PASSWORD_UPT" />
+		<property name="farmerCurrentIdSeq" column="FARMER_CURRENT_ID_SEQ" />
+		<property name="farmerAllotedIdSeq" column="FARMER_ALLOTED_ID_SEQ" />
+		<property name="farmerAllotedResIdSeq" column="FARMER_ALLOTED_RES_ID_SEQ" />
+		<property name="shopDealerCurrentIdSeq" column="SHOP_DEALER_CURRENT_ID_SEQ" />
+		<property name="shopDealerAllotedIdSeq" column="SHOP_DEALER_ALLOTED_ID_SEQ" />
+		<property name="shopDealerAllotedResIdSeq" column="SHOP_DEALER_ALLOTED_RES_ID_SEQ" />
+		<property name="farmerCardIdSequence" column="FARMER_CARD_ID_SEQ" />
+		<property name="shopDealerCardIdSequence" column="SHOP_DEALER_CARD_ID_SEQ" />
+		<property name="internalIdSequence" column="INTERNAL_ID_SEQ" />
+		<property name="receiptNumber" column="RECEIPT_NUMBER" />
+		<property name="orderNoSeq" column="ORDER_NO_SEQ" />
+		<property name="deliveryNoSeq" column="DELIVERY_NO_SEQ" />
+		<property name="language" column="LANGUAGE" />
+		<property name="farmerAccountNoSequence" column="FARMER_ACCOUNT_NO_SEQ" />
+		<many-to-one name="agentType" column="AGENT_TYPE_ID"   />
+		<set name="serviceLocations" table="AGENT_SERV_LOC_MAP"  >
+			<key column="AGENT_ID" />
+			<many-to-many column="SERV_LOC_ID" class="com.sourcetrace.esesw.entity.profile.ServiceLocation" />
+		</set>
+		<property name="txnMode" column="MODE" />
+		<property name="bodStatus" column="BOD_STATUS" />
+		<set name="wareHouses" table="AGENT_WAREHOUSE_MAP"  >
+			<key column="AGENT_ID" />
+			<many-to-many column="WAREHOUSE_ID" class="com.sourcetrace.eses.entity.Warehouse" />
+		</set>
+		
+		<!-- <set name="surveys" sort="natural" cascade="all" lazy="true">
+			<key column="AGENT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.AgentSurveyMapping" />
+		</set> -->
+		
+		<set name="trainingTemplates" table="PERS_INFO_TRAINING_MAP"  >
+			<key column="PERS_INFO_ID"/>
+			<many-to-many column="TRAINING_ID" class="com.ese.entity.txn.training.FarmerTraining"/>
+		</set>
+		<property name="trainingExists" column="IS_TRAINING_AVAILABLE" />
+		<property name="version" column="VERSION" />
+	</joined-subclass>
+
+	<class name="com.sourcetrace.eses.entity.AgentType" table="AGENT_TYPE">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+	</class>
+	<class name="com.sourcetrace.eses.inspect.agrocert.AgentSurveyMapping" table="AGENT_SURVEY_MAP">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="surveyMaster" column="SURVEY_ID"   />
+		<many-to-one name="agent" column="AGENT_ID"   />
+		<property name="surveyOrder" column="SURVEY_ORDER" />	
+	</class>
+	<!-- <class name="com.sourcetrace.eses.entity.LocationHistory" table="LOC_HISTORY">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="serialNumber" column="SERIAL_NO" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="createdTime" column="CREATED_TIME" />
+		<many-to-one name="profile" column="AGENT_ID" property-ref="profileId" insert="false" update="false"/>
+		<many-to-one name="device" column="SERIAL_NUMBER" property-ref="serialNumber" insert="false" update="false"/>
+	</class> -->
+
+</hibernate-mapping>

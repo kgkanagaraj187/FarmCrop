@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util
+	    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- Report Services -->
+	<bean id="stateListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="stateReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.State" />
+	</bean>
+
+	<bean id="countryListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="countryReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Country" />
+	</bean>
+
+
+	<bean id="deviceReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="deviceReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.Device" />
+
+	</bean>
+
+	<bean id="customerListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="customerReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.Customer" />
+	</bean>
+
+	<bean id="samithiListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="samithiReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.Warehouse" />
+	</bean>
+
+	<bean id="vendorListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="vendorReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Vendor" />
+	</bean>
+
+	<bean id="cooperativeListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cooperativeReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.Warehouse" />
+	</bean>
+
+	<bean id="warehouseStockReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="warehouseStockReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.WarehouseProduct" />
+		<!-- <property name="filterDateProperty" value="inspectionDate" /> -->
+	</bean>
+
+	<bean id="fieldStaffStockReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="fieldStaffStockReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.WarehouseProduct" />
+		<!-- <property name="filterDateProperty" value="txnTime" /> -->
+	</bean>
+
+	<bean id="warehouseStockEntryReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="warehouseStockEntryReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.WarehousePaymentDetails" />
+		<property name="filterDateProperty" value="wpa.trxnDate" />
+	</bean>
+
+	<bean id="distributionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="distributionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.Distribution" />
+		<property name="filterDateProperty" value="txnTime" />
+	</bean>
+
+	<bean id="procurementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.Procurement" />
+		<property name="filterDateProperty" value="agroTxn.txnTime" />
+	</bean>
+
+	<bean id="procurementService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.Procurement" />
+		<property name="filterDateProperty" value="agroTxn.txnTime" />
+	</bean>
+
+	<bean id="procurementStockReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementStockReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.CityWarehouse" />
+
+	</bean>
+
+	<bean id="pmtReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="pmtReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.order.entity.txn.PMT" />
+		<property name="filterDateProperty" value="" />
+
+	</bean>
+
+
+	<bean id="periodicInspectionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="periodicInspectionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.PeriodicInspection" />
+		<property name="filterDateProperty" value="inspectionDate" />
+
+	</bean>
+
+	<bean id="agentBalanceReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="agentBalanceReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.AgentBalanceReport" />
+		<property name="filterDateProperty" value="txnTime" />
+
+	</bean>
+
+	<bean id="fieldStaffManagementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="fieldStaffManagementReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.LocationHistory" />
+		<property name="filterDateProperty" value="txnTime" />
+
+	</bean>
+
+	<bean id="offlineFarmerReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="offlineFarmerEnrollmentReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farmer" />
+
+	</bean>
+
+	<bean id="offlineDistributionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="offlineDistributionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.OfflineDistribution" />
+		<property name="filterDateProperty" value="distributionDate" />
+
+	</bean>
+
+	<bean id="offlineProcurementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="offlineProcurementReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.OfflineProcurement" />
+		<property name="filterDateProperty" value="procurementDate" />
+
+	</bean>
+
+	<bean id="warehouseStockReturnReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="warehouseStockReturnReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.WarehouseStockReturnDetails" />
+		<property name="filterDateProperty" value="wsr.trxnDate" />
+
+	</bean>
+
+	<bean id="subCategoryListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="subCategoryServiceReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.profile.SubCategory" />
+
+	</bean>
+
+	<bean id="localityListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="localityReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.Locality" />
+	</bean>
+
+	<bean id="municipalityListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="municipalityReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.Municipality" />
+	</bean>
+
+	<bean id="gramPanchayatListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="gramPanchayatListReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.GramPanchayat" />
+
+	</bean>
+
+	<bean id="villageListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="villageListReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Village" />
+	</bean>
+
+	<bean id="warehouseProductListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="warehouseProductListReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.WarehousePayment" />
+		<property name="filterDateProperty" value="trxnDate" />
+
+
+	</bean>
+
+	<bean id="agentListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="agentReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.Agent" />
+	</bean>
+
+	<bean id="farmerListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerListReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farmer" />
+	</bean>
+
+	<bean id="farmListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmListReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farm" />
+	</bean>
+
+	<bean id="farmInventoryListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmInventoryReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmInventory" />
+	</bean>
+
+	<bean id="animalHusbandaryListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="animalHusbandaryReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.AnimalHusbandary" />
+	</bean>
+	
+	<bean id="inspectionCheckListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="inspectionCheckReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmerDynamicData" />
+	</bean>
+	
+		<bean id="fieldHistoryListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="fieldHistoryReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmerDynamicData" />
+	</bean>
+
+	<bean id="cropYieldListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropYieldReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.txn.agrocert.CropYield" />
+	</bean>
+
+	<bean id="farmerFamilyListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerFamilyReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmerFamily" />
+
+	</bean>
+
+	<bean id="roleListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="roleReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.umgmt.entity.Role" />
+	</bean>
+
+	<bean id="userListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="userReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.umgmt.entity.User" />
+	</bean>
+
+	<bean id="procurementProductListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementProductReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ProcurementProduct" />
+
+	</bean>
+	<bean name="licenseKeyGenerator" class="com.sourcetrace.util.LicenseKeyGenerator">
+		<property name="tripleDES" ref="tripleDES" />
+	</bean>
+
+	<!-- procurementVarietyListService ProcurementVariety -->
+	<bean id="procurementVarietyListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementVarietyReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ProcurementVariety" />
+
+	</bean>
+
+	<!-- procurementGradeListService ProcurementGrade -->
+	<bean id="procurementGradeListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementGradeReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ProcurementGrade" />
+
+	</bean>
+
+	<bean id="customerProjectListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="customerProjectReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.CustomerProject" />
+
+	</bean>
+
+	<bean id="productListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="productServiceReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.util.profile.Product" />
+
+	</bean>
+
+	<bean id="farmCropsListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmCropsReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+		<property name="filterDateProperty" value="sowingDate" />	
+	</bean>
+
+	<bean id="catalogueListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="catalogueReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.FarmCatalogue" />
+	</bean>
+
+	<bean id="harvestSeasonListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="harvestSeasonListReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.HarvestSeason" />
+	</bean>
+
+	<bean id="cropHarvestReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropHarvestReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.profile.CropHarvest" />
+		<property name="filterDateProperty" value="harvestDate" />
+	</bean>
+
+	<bean id="cBRReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cBRReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farm" />
+	</bean>
+
+	<bean id="cropSaleReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropSaleReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.profile.CropSupply" />
+		<property name="filterDateProperty" value="dateOfSale" />
+	</bean>
+
+	<bean id="farmCropsService" class="com.sourcetrace.eses.service.FarmCropsService">
+		<property name="farmCropsDAO" ref="farmCropsDAO" />
+	</bean>
+
+
+	<bean id="cultivationReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cultivationReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.Cultivation" />
+		<!-- <property name="filterDateProperty" value="expenseDate" /> -->
+	</bean>
+
+	<bean id="farmerIncomeReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerIncomeReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.order.entity.txn.Cultivation" />
+	</bean>
+
+	<bean id="farmerCropReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerCropReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+	<property name="filterDateProperty" value="sowingDate" />
+
+	</bean>
+
+	<bean name="idGenerator" class="com.sourcetrace.eses.service.UniqueIDGenerator">
+		<property name="sequenceDAO" ref="sequenceDAO" />
+		<property name="clientDAO" ref="clientDAO" />
+	</bean>
+
+	<bean id="catalogueService" class="com.sourcetrace.eses.service.CatalogueService">
+		<property name="catalogueDAO" ref="catalogueDAO" />
+	</bean>
+
+	<bean id="categoryService" class="com.sourcetrace.eses.service.CategoryService">
+		<property name="categoryDAO" ref="categoryDAO" />
+	</bean>
+
+	<bean id="cropHarvestServiceReport" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropHarvestServiceReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.profile.CropHarvest" />
+	</bean>
+
+	<bean id="cropSaleServiceReport" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropSaleServiceReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.profile.CropSupply" />
+	</bean>
+
+
+
+	<bean id="farmerTrainingSelectionListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerTrainingSelectionListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.FarmerTraining" />
+
+	</bean>
+
+	<bean id="trainingService" class="com.sourcetrace.eses.service.TrainingService">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean id="reportMailConfigurationListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="reportMailConfigurationListReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ReportMailConfiguration" />
+	</bean>
+
+	<bean id="trainingTopicListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="trainingTopicListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.TrainingTopic" />
+	</bean>
+
+	<bean id="trainingCriteriaCategoryListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="trainingCriteriaCategoryListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.TopicCategory" />
+	</bean>
+
+	<bean id="targetGroupListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="targetGroupListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.TargetGroup" />
+	</bean>
+
+	<bean id="trainingMethodListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="trainingMethodListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.TrainingMethod" />
+	</bean>
+
+	<bean id="branchMasterListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="branchMasterReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.BranchMaster" />
+	</bean>
+
+	<bean id="productDistributionService" class="com.sourcetrace.eses.service.ProductDistributionService">
+		<property name="productDistributionDAO" ref="productDistributionDAO" />
+		<property name="accountDAO" ref="accountDAO" />
+		<property name="agentDAO" ref="agentDAO" />
+		<property name="idGenerator" ref="idGenerator" />
+		<property name="farmerDAO" ref="farmerDAO" />
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+	<bean id="trainingCompletionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="trainingCompletionReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.TrainingStatus" />
+		<property name="filterDateProperty" value="trainingDate" />
+	</bean>
+
+	<bean id="offlineTrainingCompletionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="offlineTrainingCompletionReportDAO" />
+		<property name="reportEntity"
+			value="com.ese.entity.txn.training.OfflineTrainingStatus" />
+		<property name="filterDateProperty" value="trainingDate" />
+	</bean>
+
+	<bean id="farmerInspectionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+	<bean id="farmerInspectionOrganicReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionOrganicReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="farmerInspectionNpopReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionNpopReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="farmerInspectionIcsReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionIcsReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="topicCriteriaListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="topicCriteriaListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.Topic" />
+		<property name="filterExcludeProperties">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="masterDataService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="masterDataReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.MasterData" />
+	</bean>
+
+
+	<bean id="farmerListCropsService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerListCropReportDao" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farmer" />
+    	 <property name="filterDateProperty" value="" />
+	</bean>
+
+	<bean id="agentCashFlowReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="agentCashFlowListReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.AgentCashFlow" />
+	</bean>
+
+	<bean id="cropYieldVillageReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropYieldVillageReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="cropYieldCropReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropYieldCropReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="farmerBalanceReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerBalanceReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.AgroTransaction" />
+		 <property name="filterDateProperty" value="txnTime" /> 
+	</bean>
+
+	<bean name="locationReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="locationReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.util.entity.Location" />
+	</bean>
+
+	<bean id="farmerInspectionNopReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionNopReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="farmerInspectionNopGroupReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionNopGroupReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="failedInspectionQuestionsReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="failedInspectionQuestionsReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FailedQuestions" />
+	</bean>
+
+	<bean id="farmerFailedInspectionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerFailedInspectionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerFailedQuestions" />
+	</bean>
+	<bean id="distributionToFiledStaffService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="distributionToFiledStaffDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.DistributionDetail" />
+	</bean>
+
+	<bean id="distributionService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="distributionToFarmerDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.Distribution" />
+		<!-- <property name="filterDateProperty" value="txnTime" /> -->
+	</bean>
+	<bean id="sowingReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="sowingReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+	</bean>
+	<bean id="farmerInspectionUtzReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerInspectionUtzReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+	<bean id="sMSListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="sMSListReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.sms.SMSHistoryDetail" />
+	</bean>
+	<bean id="pesticideUsageReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="pesticideUsageReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.PeriodicInspection" />
+		<property name="filterDateProperty" value="inspectionDate" />
+	</bean>
+	<bean id="bciFieldMonitoringReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="bciFieldMonitoringReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farm" />
+	</bean>
+	<bean id="fieldStaffAccessReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="fieldStaffAccessReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.AgentAccessLog" />
+		<property name="filterDateProperty" value="lastTxnTime" />
+		<!-- <property name="filterDateProperty" value="txnTime" /> -->
+	</bean>
+
+	<bean id="researchStationListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="researchStationReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ResearchStation" />
+	</bean>
+
+	<bean id="costFarmingReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="costFarmingReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.CostFarming" />
+		<property name="filterDateProperty" value="collectionDate" />
+
+	</bean>
+
+	<bean id="cowReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cowReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Cow" />
+	</bean>
+
+	<bean id="cowInspReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cowInspectionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.CowInspection" />
+		<property name="filterDateProperty" value="currentInspDate" />
+	</bean>
+
+	<bean id="sensitizingReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="sensitizingReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.Sensitizing" />
+		<!-- <property name="filterDateProperty" value="createdDt" /> -->
+	</bean>
+
+	<bean id="milkProductionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cowInspectionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.CowInspection" />
+	</bean>
+
+
+	<bean id="samithiAccessReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="samithiAccessReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.entity.Warehouse" />
+		<!-- <property name="filterDateProperty" value="txnTime" /> -->
+	</bean>
+
+
+	<bean id="yieldEstimationReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="yieldEstimationReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+	</bean>
+
+	<bean id="farmerIndividualBalanceReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerIndividualBalanceReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.AgroTransaction" />
+		<property name="filterDateProperty" value="txnTime" />
+	</bean>
+
+	<!-- <bean id="productReturnFromFiledStaffService" class="com.sourcetrace.eses.service.ReportService"> 
+		<property name="reportDAO" ref="productReturnReportDAO"/> <property name="reportEntity" 
+		value="com.sourcetrace.eses.order.entity.txn.ProductReturnDetail" /> </bean> -->
+
+	<bean id="productReturnReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="productReturnReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.ProductReturn" />
+		<property name="filterDateProperty" value="txnTime" />
+	</bean>
+
+	<bean id="globalReportReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="globalReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.GlobalReport" />
+
+	</bean>
+
+	<bean id="trainingMaterialReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="trainingMaterialDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.TrainingMaterial" />
+	</bean>
+	<bean id="observationReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="observationsListDAO" />
+		<property name="reportEntity" value="com.ese.entity.txn.training.Observations" />
+	</bean>
+
+	<bean id="paymentReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="paymentReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.AgroTransaction" />
+		<property name="filterDateProperty" value="txnTime" />
+	</bean>
+
+
+	<bean id="farmerFeedBackReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerFeedBackReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.entity.FarmerFeedbackEntity" />
+		<property name="filterDateProperty" value="answeredDate" />
+		<property name="filterExcludeProperties">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="surveyMasterListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="surveyMasterReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.inspect.agrocert.SurveyMaster" />
+		<property name="filterExcludeProperties">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="questionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="questionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.inspect.agrocert.SurveyQuestion" />
+	</bean>
+
+	<bean id="surveyReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="surveyReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.txn.agrocert.SurveyFarmerCropProdAnswers" />
+		<!-- <property name="filterDateProperty" value="createdDt" /> -->
+	</bean>
+
+	<bean id="farmerActivityListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerActivityReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.profile.ViewFarmerActivity" />
+	</bean>
+
+	<bean id="supplierProcurementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="supplierProcurementReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.SupplierProcurement" />
+		<property name="filterDateProperty" value="agroTxn.txnTime" />
+	</bean>
+	<bean id="supplierProcurementService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="supplierProcurementDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.SupplierProcurement" />
+		<property name="filterDateProperty" value="agroTxn.txnTime" />
+	</bean>
+
+	<bean id="procurementTraceabilityStockReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementTraceabilityStockReportDAO" />
+		<property name="reportEntity"
+			value="com.ese.entity.traceability.ProcurementTraceabilityStockDetails" />
+
+	</bean>
+
+	<!-- <bean id="shgListService" class="com.sourcetrace.eses.service.ReportService"> 
+		<property name="reportDAO" ref="shgListReportDAO" /> <property name="reportEntity" 
+		value="com.sourcetrace.esesw.entity.profile.Shg" /> </bean> -->
+
+	<bean id="procurementTraceabilityReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="procurementTraceabilityReportDAO" />
+		<property name="reportEntity"
+			value="com.ese.entity.traceability.ProcurementTraceabilityDetails" />
+		<property name="filterDateProperty" value="pt.procurementDate" />
+	</bean>
+
+	<bean id="icsFarmerDairyReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="icsFarmerDairyReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmerDynamicData" />
+	</bean>
+
+	<bean id="gmoListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="gmoReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.GMO" />
+	</bean>
+
+	<bean id="ginnerQuantityListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="ginnerQuantitySoldReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.GinnerQuantitySold" />
+	</bean>
+
+	<bean id="dynamicCertificationReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="dynamicCertificationReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmerDynamicData" />
+			<property name="filterDateProperty" value="date" />
+	</bean>
+
+	<bean id="heapStockReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="heapStockReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.traceability.HeapData" />
+
+	</bean>
+
+	<bean id="ginningReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="ginningReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.traceability.GinningProcess" />
+	</bean>
+
+	<bean id="creationToolService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="creationToolReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.entity.DynamicFieldConfig" />
+	</bean>
+
+	<bean id="cottonPriceListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cottonPriceReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.CottonPrice" />
+	</bean>
+	<bean id="dynamicCertificationListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="dynamicCertificationReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmerDynamicData" />		
+	</bean>
+
+	<bean id="dynamicMenuFieldListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="dynamicMenuFieldListReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.entity.DynamicFeildMenuConfig" />
+	</bean>
+	
+	<bean id="spinningReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="spinningReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.traceability.SpinningTransfer" />
+	</bean>
+	
+	<bean id="farmCropsMasterListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmCropsMasterListDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCropsMaster" />
+	</bean>
+	
+	<bean id="forecastAdvisorListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="forecastAdvisorReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.order.entity.txn.ForecastAdvisoryDetails" />
+	</bean>
+	
+	<bean id="distributionBalanceListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="distributionBalanceReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.DistributionBalance" />
+	</bean>
+	<bean id="dynamicViewReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="dynamicViewReportDAO" />
+	</bean>
+		<bean id="distributionStockTransferReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="distributionStockTransferReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.order.entity.txn.DistributionStock" />
+		 <property name="filterDateProperty" value="txnTime" />
+	</bean>
+	
+	<bean id="coldStorageEntryService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="coldStorageEntryDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.entity.ColdStorage" />
+	
+	</bean>
+		<bean id="cropCalendarService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="cropCalendarDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.CropCalendar" />
+		
+	</bean>
+	<bean id="farmerTraceabilityReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerTraceabilityReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.Farmer" />
+	</bean>
+	
+	<bean id="baleGenerationReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportEntity" value="com.ese.entity.traceability.BaleGeneration" />
+	</bean>
+	
+	<bean id="farmHistoryListService" class="com.sourcetrace.eses.service.ReportService">
+	     <property name="reportDAO" ref="farmHistoryListReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.FarmerLandDetails" />
+	</bean>
+	
+	<bean id="traceabilityReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="traceabilityReportDAO" />
+		<property name="reportEntity" value="com.ese.entity.traceability.FarmerTraceability" />
+	</bean>
+	
+	<bean id="moleculeProcessReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="moleculeProcessReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.eses.txn.agrocert.CropYield" />
+	</bean>
+	
+		<bean id="ndviListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="ndviReportDAO" />
+		<property name="reportEntity" value="com.sourcetrace.esesw.entity.profile.NdviProcess" />
+	</bean>
+		<bean id="loanDistributionService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="loanDistributionDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.LoanDistribution" />
+		<property name="filterDateProperty" value="agroTxn.txnTime" />
+	</bean>
+		<bean id="loanDistributionReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="loanDistributionReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.order.entity.txn.LoanDistribution" />
+		<property name="filterDateProperty" value="agroTxn.txnTime" />
+	</bean>
+	
+	<bean id="icsSummaryReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="icsSummaryReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmCrops" />
+	</bean>
+	<bean id="certificationDetailsListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="certificationDetailsReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.FarmIcsConversion" />
+	</bean>
+	
+	<bean id="samithiFarmerDetailsListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="samithiFarmerDetailsReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.Farmer" />
+	</bean>
+		<bean id="samithiIcsListService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="samithiIcsReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.eses.entity.SamithiIcs" />
+	</bean>
+	<bean id="farmerLoanStatementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerLoanStatementReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ESEAccount" />
+		<!-- <property name="filterDateProperty" value="txnTime" /> -->
+	</bean>
+	<bean id="farmerStatementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="farmerStatementReportDAO" />
+		<property name="reportEntity"
+			value="com.sourcetrace.esesw.entity.profile.ESEAccount" />
+		<!-- <property name="filterDateProperty" value="txnTime" /> -->
+	</bean>
+	<bean id="loanManagementReportService" class="com.sourcetrace.eses.service.ReportService">
+		<property name="reportDAO" ref="loanManagementReportDAO" />
+		<property name="reportEntity"
+			value="com.ese.entity.util.LoanLedger" />
+		<property name="filterDateProperty" value="txnTime" />
+	</bean>
+</beans>
+

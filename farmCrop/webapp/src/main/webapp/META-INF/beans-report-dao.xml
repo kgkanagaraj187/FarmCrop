@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util
+	    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- DAOS -->
+
+	<bean id="eseDAO" class="com.sourcetrace.eses.dao.ESEDAO"
+		abstract="true">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="stateReportDAO" class="com.sourcetrace.esesw.dao.report.StateReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="countryReportDAO" class="com.sourcetrace.esesw.dao.report.CountryReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="sequenceDAO" class="com.sourcetrace.eses.dao.SequenceDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="deviceReportDAO" class="com.sourcetrace.esesw.dao.report.DeviceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="agentReportDAO" class="com.sourcetrace.esesw.dao.report.AgentReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="accountDAO" class="com.sourcetrace.eses.dao.AccountDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="clientDAO" class="com.sourcetrace.eses.dao.ClientDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="deviceDAO" class="com.sourcetrace.eses.dao.DeviceDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="productDAO" class="com.sourcetrace.eses.dao.ProductDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="productDistributionDAO" class="com.sourcetrace.eses.dao.ProductDistributionDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerDAO" class="com.sourcetrace.eses.dao.FarmerDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- <bean id="systemDAO" class="com.sourcetrace.eses.dao.ESESystemDAO"> 
+		<property name="sessionFactory" ref="sessionFactory" /> </bean> -->
+
+	<bean id="customerReportDAO" class="com.sourcetrace.esesw.dao.report.CustomerReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="samithiReportDAO" class="com.sourcetrace.esesw.dao.report.SamithiReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="warehouseStockReportDAO"
+		class="com.sourcetrace.esesw.dao.report.WarehouseStockReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="fieldStaffStockReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FieldStaffStockReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="warehouseStockEntryReportDAO"
+		class="com.sourcetrace.esesw.dao.report.WarehouseStockEntryReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="distributionReportDAO" class="com.sourcetrace.esesw.dao.report.DistributionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="procurementReportDAO" class="com.sourcetrace.esesw.dao.report.ProcurementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="procurementDAO" class="com.sourcetrace.esesw.dao.report.ProcurementDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="procurementStockReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProcurementStockReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="pmtReportDAO" class="com.sourcetrace.esesw.dao.report.PMTReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="periodicInspectionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.PeriodicInspectionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="agentBalanceReportDAO" class="com.sourcetrace.esesw.dao.report.AgentBalanceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="fieldStaffManagementReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FieldStaffManagementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="offlineFarmerEnrollmentReportDAO"
+		class="com.sourcetrace.esesw.dao.report.OfflineFarmerEnrollmentReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="offlineDistributionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.OfflineDistributionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="offlineProcurementReportDAO"
+		class="com.sourcetrace.esesw.dao.report.OfflineProcurementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="warehouseStockReturnReportDAO"
+		class="com.sourcetrace.esesw.dao.report.WarehouseStockReturnReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="vendorReportDAO" class="com.ese.dao.report.VendorReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cooperativeReportDAO" class="com.sourcetrace.esesw.dao.report.CooperativeReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="subCategoryServiceReportDAO"
+		class="com.sourcetrace.esesw.dao.report.SubCategoryServiceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="localityReportDAO" class="com.sourcetrace.esesw.dao.report.LocalityReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="municipalityReportDAO" class="com.sourcetrace.esesw.dao.report.MunicipalityReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="gramPanchayatListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.GramPanchayatListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="villageListReportDAO" class="com.sourcetrace.esesw.dao.report.VillageListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="productDistributionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProductDistributionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerListReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+
+
+	<bean id="farmListReportDAO" class="com.sourcetrace.esesw.dao.report.FarmListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="certificationDAO" class="com.sourcetrace.eses.dao.CertificationDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmInventoryReportDAO" class="com.sourcetrace.esesw.dao.report.FarmInventoryReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="animalHusbandaryReportDAO"
+		class="com.sourcetrace.esesw.dao.report.AnimalHusbandaryReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cropYieldReportDAO" class="com.sourcetrace.esesw.dao.report.CropYieldReport1DAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerFamilyReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerFamilyReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="warehouseProductListReportDAO" class="com.ese.dao.report.WarehouseProductListRepotDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="roleReportDAO" class="com.sourcetrace.esesw.dao.report.RoleReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="userReportDAO" class="com.sourcetrace.esesw.dao.report.UserReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="userCredReportDAO" class="com.sourcetrace.esesw.dao.report.UserReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="userDAO" class="com.sourcetrace.eses.dao.UserDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="menuDAO" class="com.sourcetrace.eses.dao.MenuDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="roleDAO" class="com.sourcetrace.eses.dao.RoleDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="licenseDAO" class="com.ese.dao.util.LicenseDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="locationDAO" class="com.sourcetrace.eses.dao.LocationDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="procurementProductReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProcurementProductReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="procurementVarietyReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProcurementVarietyReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="procurementGradeReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProcurementGradeReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="customerProjectReportDAO"
+		class="com.sourcetrace.esesw.dao.report.CustomerProjectReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="productServiceReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProductServiceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmCropsReportDAO" class="com.sourcetrace.esesw.dao.report.FarmCropsReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="harvestSeasonListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.HarvestSeasonListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="catalogueDAO" class="com.sourcetrace.eses.dao.CatalogueDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="catalogueReportDAO" class="com.sourcetrace.esesw.dao.report.CatalogueReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cropHarvestReportDAO" class="com.sourcetrace.esesw.dao.report.CropHarvestReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cBRReportDAO" class="com.sourcetrace.esesw.dao.report.CBRReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cropSaleReportDAO" class="com.sourcetrace.esesw.dao.report.CropSaleReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cultivationReportDAO" class="com.sourcetrace.esesw.dao.report.CultivationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerIncomeReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerIncomeReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerCropReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerCropReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmCropsDAO" class="com.sourcetrace.eses.dao.FarmCropsDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="categoryDAO" class="com.sourcetrace.eses.dao.CategoryDAO"
+		parent="eseDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cropHarvestServiceReportDAO"
+		class="com.sourcetrace.esesw.dao.report.CropHarvestServiceReportDAO"
+		parent="eseDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="cropSaleServiceReportDAO"
+		class="com.sourcetrace.esesw.dao.report.CropSaleServiceReportDAO"
+		parent="eseDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+
+	<bean id="farmerTrainingSelectionListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerTrainingSelectionListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="trainingDAO" class="com.sourcetrace.eses.dao.TrainingDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="reportMailConfigurationListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ReportMailConfigurationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="trainingTopicListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.TrainingTopicListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="trainingCriteriaCategoryListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.TrainingCriteriaCategoryListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="targetGroupListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.TargetGroupListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="trainingMethodListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.TrainingMethodListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="branchMasterReportDAO" class="com.sourcetrace.esesw.dao.report.BranchMasterReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="trainingCompletionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.TrainingCompletionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="offlineTrainingCompletionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.OfflineTrainingCompletionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionOrganicReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionOrganicReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionNpopReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionNpopReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionIcsReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionIcsReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="topicCriteriaListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.TopicCriteriaListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="masterDataReportDAO" class="com.sourcetrace.esesw.dao.report.MasterDataReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerListCropReportDao"
+		class="com.sourcetrace.esesw.dao.report.FarmerListCropReportDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="agentCashFlowListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.AgentCashFlowListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cropYieldVillageReportDAO"
+		class="com.sourcetrace.esesw.dao.report.CropYieldVillageReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerBalanceReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerBalanceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cropYieldCropReportDAO" class="com.sourcetrace.esesw.dao.report.CropYieldCropReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionNopReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionNopReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionNopGroupReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionNopGroupReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="failedInspectionQuestionsReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FailedInspectionQuestionsReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="farmerFailedInspectionReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerFailedInspectionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="distributionToFiledStaffDAO"
+		class="com.sourcetrace.esesw.dao.report.DistributionToFiledStaffDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="distributionToFarmerDAO"
+		class="com.sourcetrace.esesw.dao.report.DistributionToFarmerDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="sowingReportDAO" class="com.sourcetrace.esesw.dao.report.SowingReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerInspectionUtzReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerInspectionUtzReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="sMSListReportDAO" class="com.sourcetrace.esesw.dao.report.SmsAlertReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="pesticideUsageReportDAO"
+		class="com.sourcetrace.esesw.dao.report.PesticideUsageReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="bciFieldMonitoringReportDAO"
+		class="com.sourcetrace.esesw.dao.report.BciFieldMonitoringReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="fieldStaffAccessReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FieldstaffAccessReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="researchStationReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ResearchStationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="costFarmingReportDAO" class="com.sourcetrace.esesw.dao.report.CostFarmingReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cowReportDAO" class="com.sourcetrace.esesw.dao.report.CowReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cowInspectionReportDAO" class="com.sourcetrace.esesw.dao.report.CowInspectionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="sensitizingReportDAO" class="com.sourcetrace.esesw.dao.report.SensitizingReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="samithiAccessReportDAO" class="com.sourcetrace.esesw.dao.report.SamithiAccessReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="yieldEstimationReportDAO"
+		class="com.sourcetrace.esesw.dao.report.YieldEstimationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerIndividualBalanceReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerIndividualBalanceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="productReturnReportDAO" class="com.sourcetrace.esesw.dao.report.ProductReturnReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="globalReportDAO" class="com.sourcetrace.esesw.dao.report.GlobalReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="trainingMaterialDAO" class="com.sourcetrace.esesw.dao.report.TrainingMaterialDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="observationsListDAO" class="com.sourcetrace.esesw.dao.report.ObservationsListDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="paymentReportDAO" class="com.sourcetrace.esesw.dao.report.PaymentReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="farmerFeedBackReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerFeedBackReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="questionReportDAO" class="com.sourcetrace.esesw.dao.report.QuestionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="surveyMasterReportDAO" class="com.sourcetrace.esesw.dao.report.SurveyMasterReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="surveyReportDAO" class="com.sourcetrace.esesw.dao.report.SurveyReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="farmerActivityReportDAO"
+		class="com.sourcetrace.esesw.dao.report.FarmerActivityReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="supplierProcurementReportDAO"
+		class="com.sourcetrace.esesw.dao.report.SupplierProcurementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="supplierProcurementDAO" class="com.sourcetrace.esesw.dao.report.SupplierProcurementDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="procurementTraceabilityReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProcurementTraceabilityReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="procurementTraceabilityStockReportDAO"
+		class="com.sourcetrace.esesw.dao.report.ProcurementTraceabilityStockReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="icsFarmerDairyReportDAO"
+		class="com.sourcetrace.esesw.dao.report.IcsFarmerDairyReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="gmoReportDAO" class="com.sourcetrace.esesw.dao.report.GMOReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="ginnerQuantitySoldReportDAO"
+		class="com.sourcetrace.esesw.dao.report.GinnerQuantitySoldReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="dynamicCertificationReportDAO"
+		class="com.sourcetrace.esesw.dao.report.DynamicCertificationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="inspectionCheckReportDAO"
+		class="com.sourcetrace.esesw.dao.report.DynamicCertificationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+		<bean id="fieldHistoryReportDAO"
+		class="com.sourcetrace.esesw.dao.report.DynamicCertificationReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="heapStockReportDAO" class="com.sourcetrace.esesw.dao.report.HeapStockReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="ginningReportDAO" class="com.sourcetrace.esesw.dao.report.GinningReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="creationToolReportDAO" class="com.sourcetrace.esesw.dao.report.CreationToolReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="cottonPriceReportDAO" class="com.sourcetrace.esesw.dao.report.CottonPriceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+<bean id="dynamicCertificationListReportDAO" class="com.ese.dao.report.DynamicCertificationListRepotDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="dynamicMenuFieldListReportDAO"
+		class="com.sourcetrace.esesw.dao.report.DynamicMenuFieldListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="spinningReportDAO" class="com.sourcetrace.esesw.dao.report.SpinningReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="farmCropsMasterListDAO" class="com.sourcetrace.esesw.dao.report.FarmCropsMasterListDAO">
+	<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="forecastAdvisorReportDAO" class="com.sourcetrace.esesw.dao.report.ForecastAdvisorReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="distributionBalanceReportDAO" class="com.sourcetrace.esesw.dao.report.DistributionBalanceReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="dynamicViewReportDAO" class="com.sourcetrace.esesw.dao.report.DynamicViewReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="distributionStockTransferReportDAO" class="com.sourcetrace.esesw.dao.report.DistributionStockTransferReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="coldStorageEntryDAO" class="com.sourcetrace.esesw.dao.report.ColdStorageEntryDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="cropCalendarDAO" class="com.sourcetrace.esesw.dao.report.CropCalendarDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="farmerTraceabilityReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerTraceabilityReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="farmHistoryListReportDAO" class="com.sourcetrace.esesw.dao.report.FarmHistoryListReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+		
+	<bean id="traceabilityReportDAO" class="com.sourcetrace.esesw.dao.report.TraceabilityReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+		<bean id="moleculeProcessReportDAO" class="com.sourcetrace.esesw.dao.report.MoleculeProcessReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="ndviReportDAO" class="com.sourcetrace.esesw.dao.report.NDVIReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>	
+	<bean id="loanDistributionDAO" class="com.sourcetrace.esesw.dao.report.LoanDistributionDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+		<bean id="loanDistributionReportDAO" class="com.sourcetrace.esesw.dao.report.LoanDistributionReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="icsSummaryReportDAO" class="com.sourcetrace.esesw.dao.report.ICSSummaryReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="certificationDetailsReportDAO"
+		class="com.sourcetrace.esesw.dao.report.CertificationDetailsReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="samithiFarmerDetailsReportDAO"
+		class="com.sourcetrace.esesw.dao.report.SamithiFarmerDetailsReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+		<bean id="samithiIcsReportDAO"
+		class="com.sourcetrace.esesw.dao.report.SamithiIcsReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="farmerLoanStatementReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerLoanStatementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="farmerStatementReportDAO" class="com.sourcetrace.esesw.dao.report.FarmerStatementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="loanManagementReportDAO" class="com.sourcetrace.esesw.dao.report.LoanManagementReportDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

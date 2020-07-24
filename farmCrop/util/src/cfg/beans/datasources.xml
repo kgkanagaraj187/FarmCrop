@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+
+	
+
+	<bean id="kpfDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_kpf?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	<bean id="chetnaDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_chetna?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	<bean id="lalteerDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_lalteer?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	<bean id="awiDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_awi?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	<bean id="mcashDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_mcash?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	
+
+	<bean id="prathibaDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_prathiba?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	
+
+	
+
+
+
+
+	
+
+
+	
+	<bean id="crsDemoDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_crs_demo?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="iccoaDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_iccoa?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	
+	
+	<bean id="wilmarDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_wilmar?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	
+	
+	<bean id="gardataDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_gar?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	<bean id="efkDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_efk?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	<bean id="componesaDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_componesa?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	<bean id="worldvisionDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_world_vision?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	<bean id="fruitmasterDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_fruit_master?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="welspunDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_wel_spun_qa?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="olivadoDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_olivado?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="iffcoDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_iffco?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="cofBoardDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_cofboard?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="griffithDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_griffith?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="simfedDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_simfed?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="wubDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_wub?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="stickyDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_sticky?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="simfedQsealDataSource" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_simfedQseal?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="symriseDataSoure" parent="parentDataSource">
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/eses_symrise?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="ocpDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_ocp?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="gsmaDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_gsma?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="ecoagriDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_eco_agripreneurs?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	<bean id="livelihoodDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_livelihood?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+		<bean id="susagriDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_sus_agri?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="mesetDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_meset?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="avtDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_avt?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="farmAggDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_farm_agg?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<bean id="kenyafpoDataSoure" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/eses_kenyafpo?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+	
+	<!-- Datasources-Tenant Map -->
+ 
+	<util:map id="datasources">
+		 <entry key="agro" value-ref="dataSource" />
+		 <entry key="pratibha" value-ref="prathibaDataSource" />
+		 <entry key="wilmar" value-ref="wilmarDataSource" />
+		 <entry key="symrise" value-ref="symriseDataSoure" />
+		 <entry key="awi" value-ref="awiDataSource" />
+		 <entry key="chetna" value-ref="chetnaDataSource" />
+		 
+		
+	    <entry key="kpf" value-ref="kpfDataSource" />
+		<entry key="pratibha" value-ref="prathibaDataSource" />
+		<entry key="crsdemo" value-ref="crsDemoDataSource" />		
+		<entry key="iccoa" value-ref="iccoaDataSource" />
+		<entry key="gar" value-ref="gardataDataSource" />
+		<entry key="efk" value-ref="efkDataSource" />
+		<entry key="componesa" value-ref="componesaDataSource" />
+		<entry key="worldvision" value-ref="worldvisionDataSource" />
+		<entry key="fruitmaster" value-ref="fruitmasterDataSource" />
+		<entry key="welspun" value-ref="welspunDataSource" />
+		<entry key="olivado" value-ref="olivadoDataSource" />
+		<entry key="iffco" value-ref="iffcoDataSource" />
+		<entry key="cofBoard" value-ref="cofBoardDataSource" />
+		<entry key="griffith" value-ref="griffithDataSource" />
+		<entry key="simfed" value-ref="simfedDataSource" />
+		<entry key="wub" value-ref="wubDataSource" />
+		<entry key="simfedQseal" value-ref="simfedQsealDataSource" />
+		<entry key="ocp" value-ref="ocpDataSoure" />
+		<entry key="gsma" value-ref="gsmaDataSoure" />
+		<entry key="ecoagri" value-ref="ecoagriDataSoure" />
+		<entry key="livelihood" value-ref="livelihoodDataSoure" />
+		<entry key="susagri" value-ref="susagriDataSoure" />
+		<entry key="meset" value-ref="mesetDataSoure" />
+		<entry key="avt" value-ref="avtDataSoure" />
+		<entry key="kenyafpo" value-ref="kenyafpoDataSoure" />
+		<entry key="farmAgg" value-ref="farmAggDataSoure" />
+	</util:map>
+
+
+
+</beans>

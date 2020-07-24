@@ -1,0 +1,16 @@
+Dear ${firstName} ,
+Warm welcome to ESE-Server. 
+
+
+Your User Name: ${userName}
+
+Registered Personal details : 
+
+First Name: ${firstName}
+Second Name: ${middleName}
+Last Name: ${lastName}
+Second Last Name: ${secondLastName}
+
+
+Regards,
+STSIndia

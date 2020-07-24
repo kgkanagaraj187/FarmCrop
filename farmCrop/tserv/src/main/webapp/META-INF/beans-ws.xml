@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+  http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd  
+  http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+  http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-2.0.xsd
+  http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+	<!-- General RESTFUL Web Service Configuration -->
+	<jaxrs:server id="restContainer" address="/rs">
+		<jaxrs:features>
+			<cxf:logging limit="-1" />
+			
+		</jaxrs:features>
+		<jaxrs:inInterceptors>
+			<ref bean="loggerInterceptor" />
+			<ref bean="txnRequestLogInterceptor" />
+			<ref bean="txnInterceptor" />
+			<ref bean="txnDeviceInterceptor" />
+			<ref bean="txnAgentInterceptor" />
+			<!-- <ref bean="txnServicePointInterceptor" /> -->
+			<ref bean="txnCredentialInterceptor" />
+			<ref bean="txnDuplicateInterceptor" />
+			<ref bean="txnAcessInterceptor" />
+		</jaxrs:inInterceptors>
+		<jaxrs:outFaultInterceptors>
+			<ref bean="txnFaultInterceptor" />
+		</jaxrs:outFaultInterceptors>
+		<jaxrs:providers>
+			<ref bean="jaxbProvider" />
+			<ref bean="jsonProvider" />
+			<ref bean="exceptionMapperImpl" />
+		</jaxrs:providers>
+		<jaxrs:serviceBeans>
+			<ref bean="txnProcessService" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+
+	 <!-- RESTFUL Web Service Configuration : Location Tracking-->
+	<jaxrs:server id="restLocContainer" name="TxnLocationProcessService"
+		serviceName="ITxnLocationProcessService" address="/rsl">
+		<jaxrs:features>
+			<cxf:logging />
+		</jaxrs:features>
+			<jaxrs:inInterceptors>
+			<ref bean="loggerInterceptor" />
+		
+		</jaxrs:inInterceptors>
+		<jaxrs:serviceBeans>
+			<ref bean="txnLocationProcessService" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+
+
+	<!-- RESTFUL Web Service Configuration : Location Tracking -->
+	<jaxrs:server id="restTraceabilityContainer" name="TxnTraceabilityProcessService"
+		serviceName="ITxnTraceabilityProcessService" address="/rst">
+		<jaxrs:features>
+			<cxf:logging />
+		</jaxrs:features>
+		<jaxrs:serviceBeans>
+			<ref bean="txnTraceabilityProcessService" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+	
+	<jaxrs:server id="restFarmerDetails" name="TxnFarmerDetailService"
+		serviceName="TxnFarmerDetailService" address="/FarmerDetails">
+		<jaxrs:features>
+			<cxf:logging />
+		</jaxrs:features>
+		<jaxrs:serviceBeans>
+			<ref bean="txnFarmerDetailService" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+	
+	<bean id="txnFarmerDetailService" class="com.sourcetrace.eses.service.TxnFarmerDetailService" />
+
+	<bean id="txnLocationProcessService" class="com.sourcetrace.eses.service.TxnLocationProcessService" />
+
+	<bean id="txnTraceabilityProcessService" class="com.sourcetrace.eses.service.TxnTraceabilityProcessService">
+		<property name="txnAdapterMap">
+			<map>
+				<entry key="1001" value-ref="supplierProcurementDownload" />
+				<entry key="1002" value-ref="supplierProductsDownload" />
+			</map>
+		</property>
+	</bean>
+	
+	<!-- RESTFUL Web Service Configuration : Location Tracking -->
+	<jaxrs:server id="restFarmerTraceDetailsContainer" name="TxnFarmerTraceDetailsProcessService"
+		serviceName="ITxnFarmerTraceDetailsProcessService" address="/rsk">
+		<jaxrs:features>
+			<cxf:logging />
+		</jaxrs:features>
+		<jaxrs:serviceBeans>
+			<ref bean="txnFarmerTraceDetailsProcessService" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+	
+	<jaxrs:server id="restServicesScheduler" address="/rss">
+		<jaxrs:providers>
+	       <ref bean="jaxbProvider" />
+			<ref bean="jsonProvider" />
+	    </jaxrs:providers>
+		<jaxrs:features>
+			<cxf:logging />
+		</jaxrs:features>
+			<jaxrs:inInterceptors>
+			<ref bean="loggerInterceptor"/>
+		</jaxrs:inInterceptors>
+			<jaxrs:serviceBeans>
+			<ref bean="txnSchedulerService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:outFaultInterceptors>
+			<ref bean="txnFaultInterceptor" />
+		</jaxrs:outFaultInterceptors>
+	</jaxrs:server>
+	
+	
+	<bean id="txnSchedulerService" class="com.sourcetrace.eses.service.TxnSchedulerService">
+		<property name="txnAdapterMap">
+			<map>
+					<entry key="301" value-ref="agentLogin" />
+				<entry key="322" value-ref="syncLogin" />
+				<entry key="302" value-ref="productsDownload" />
+				<entry key="305" value-ref="locationDownloadAdapter" />
+				<entry key="308" value-ref="farmerEnrollment" />
+				<entry key="314" value-ref="productDistribution" />
+				<entry key="315" value-ref="farmerDownload" />
+				<entry key="316" value-ref="procurementProductUpload" />
+				<entry key="317" value-ref="warehouseStockDownload" />
+				<entry key="318" value-ref="procurementMTNTAdapter" />
+
+				<entry key="320" value-ref="agentLogout" />
+				<entry key="321" value-ref="villageWarehouseStockDownload" />
+				<entry key="328" value-ref="farmerOutstandingBalanceDownload" />
+				<entry key="329" value-ref="agentMovementAdapter" />
+				<entry key="331" value-ref="farmerTransactionHistoryAdapter" />
+				<entry key="332" value-ref="seasonDownload" />
+				<entry key="344" value-ref="productReturnFromFarmer" />
+				<entry key="345" value-ref="productDistribution" />
+				<entry key="346" value-ref="cropInspectionUpload" />
+				<entry key="347" value-ref="coOperativeDownload" />
+
+				<entry key="348" value-ref="trainingCriteriaCategoryDownload" />
+				<entry key="349" value-ref="trainingCriteriaDownload" />
+				<entry key="350" value-ref="plannerDownload" />
+				<entry key="351" value-ref="trainingStatusAdapter" />
+
+				<entry key="355" value-ref="procurementProductDownload" />
+				<entry key="356" value-ref="clientProjectDownload" />
+				<entry key="357" value-ref="farmerVerification" />
+				<entry key="358" value-ref="passwordChangeAdapter" />
+				<entry key="359" value-ref="existingFarmerEnrollment" />
+				<entry key="360" value-ref="periodicInspectionAdapter" />
+				<entry key="363" value-ref="farmCropHarvestAdapter" />
+				<entry key="364" value-ref="productSalesAdapter" />
+				<entry key="366" value-ref="cultivationAdapter" />
+				<entry key="367" value-ref="catalogueDownload" />
+				<entry key="368" value-ref="supplierDownload" />
+				<entry key="334" value-ref="paymentAdapter" />
+				<entry key="369" value-ref="cowEnrollment" />
+				<entry key="370" value-ref="researchStationDownload" />
+				<entry key="371" value-ref="cowInspectionAdapter" />
+				<entry key="373" value-ref="costFarmingAdapter" />
+
+				<entry key="374" value-ref="sensitizingAdapter" />
+				<entry key="375" value-ref="farmerEditAdapter" />
+				<entry key="376" value-ref="dynamicFieldsDownload" />
+				<entry key="377" value-ref="farmerFeedback" />
+				<entry key="378" value-ref="supplierProcurementAdapter" />
+
+				<entry key="379" value-ref="dynamicComponentDownload" />
+				<entry key="381" value-ref="dynamicTxnAdapter" />
+				<entry key="382" value-ref="farmerHealthCare" />
+				<entry key="383" value-ref="procurementTraceabilityAdapter" />
+				<entry key="384" value-ref="dynamicTxnAdapter" />
+				<entry key="385" value-ref="farmDownload" />
+				<entry key="386" value-ref="farmCropsDownload" />
+				<entry key="387" value-ref="dynamicCertificationTxn" />
+
+				<entry key="390" value-ref="transferTraceabilityAdapter" />
+
+				<entry key="388" value-ref="transferStockDownload" />
+				<entry key="389" value-ref="productReceptionAdapter" />
+				<entry key="391" value-ref="dynamicTxnAdapter" />
+				<entry key="392" value-ref="ginningAdapter" />
+				<entry key="393" value-ref="baleGenerationAdapter"/>
+				<entry key="394" value-ref="transferSpinningAdapter"/>
+				<entry key="500" value-ref="dynamicTxnAdapter" />
+					<entry key="501" value-ref="dynamicFollowUpAdapter" />
+				<entry key="395" value-ref="productDistribution" />
+				<entry key="396" value-ref="eventCalendarAdapter" />
+				<entry key="397" value-ref="eventCalendarAdapter" />
+				<entry key="398" value-ref="farmCropCalendarAdapter" />
+			</map>
+		</property>
+	</bean>
+	<bean id="txnFarmerTraceDetailsProcessService" class="com.sourcetrace.eses.service.TxnFarmerTraceDetailsProcessService">
+		<property name="txnAdapterMap">
+			<map>
+				<entry key="3001" value-ref="farmerTraceDetailsDownload" />
+				<entry key="3002" value-ref="traceabilityDataDownload" />
+				
+			</map>
+		</property>
+	</bean>
+
+	<bean id="txnProcessService" class="com.sourcetrace.eses.service.TxnProcessServiceImpl">
+		<property name="txnAdapterMap">
+			<map>
+				<entry key="301" value-ref="agentLogin" />
+				<entry key="322" value-ref="syncLogin" />
+				<entry key="302" value-ref="productsDownload" />
+				<entry key="305" value-ref="locationDownloadAdapter" />
+				<entry key="308" value-ref="farmerEnrollment" />
+				<entry key="314" value-ref="productDistribution" />
+				<entry key="315" value-ref="farmerDownload" />
+				<entry key="316" value-ref="procurementProductUpload" />
+				<entry key="317" value-ref="warehouseStockDownload" />
+				<entry key="318" value-ref="procurementMTNTAdapter" />
+
+				<entry key="320" value-ref="agentLogout" />
+				<entry key="321" value-ref="villageWarehouseStockDownload" />
+				<entry key="328" value-ref="farmerOutstandingBalanceDownload" />
+				<entry key="329" value-ref="agentMovementAdapter" />
+				<entry key="331" value-ref="farmerTransactionHistoryAdapter" />
+				<entry key="332" value-ref="seasonDownload" />
+				<entry key="344" value-ref="productReturnFromFarmer" />
+				<entry key="345" value-ref="productDistribution" />
+				<entry key="346" value-ref="cropInspectionUpload" />
+				<entry key="347" value-ref="coOperativeDownload" />
+
+				<entry key="348" value-ref="trainingCriteriaCategoryDownload" />
+				<entry key="349" value-ref="trainingCriteriaDownload" />
+				<entry key="350" value-ref="plannerDownload" />
+				<entry key="351" value-ref="trainingStatusAdapter" />
+
+				<entry key="355" value-ref="procurementProductDownload" />
+				<entry key="356" value-ref="clientProjectDownload" />
+				<entry key="357" value-ref="farmerVerification" />
+				<entry key="358" value-ref="passwordChangeAdapter" />
+				<entry key="359" value-ref="existingFarmerEnrollment" />
+				<entry key="360" value-ref="periodicInspectionAdapter" />
+				<entry key="363" value-ref="farmCropHarvestAdapter" />
+				<entry key="364" value-ref="productSalesAdapter" />
+				<entry key="366" value-ref="cultivationAdapter" />
+				<entry key="367" value-ref="catalogueDownload" />
+				<entry key="368" value-ref="supplierDownload" />
+				<entry key="334" value-ref="paymentAdapter" />
+				<entry key="369" value-ref="cowEnrollment" />
+				<entry key="370" value-ref="researchStationDownload" />
+				<entry key="371" value-ref="cowInspectionAdapter" />
+				<entry key="373" value-ref="costFarmingAdapter" />
+
+				<entry key="374" value-ref="sensitizingAdapter" />
+				<entry key="375" value-ref="farmerEditAdapter" />
+				<entry key="376" value-ref="dynamicFieldsDownload" />
+				<entry key="377" value-ref="farmerFeedback" />
+				<entry key="378" value-ref="supplierProcurementAdapter" />
+
+				<entry key="379" value-ref="dynamicComponentDownload" />
+				<entry key="381" value-ref="dynamicTxnAdapter" />
+				<entry key="382" value-ref="farmerHealthCare" />
+				<entry key="383" value-ref="procurementTraceabilityAdapter" />
+				<entry key="384" value-ref="dynamicTxnAdapter" />
+				<entry key="385" value-ref="farmDownload" />
+				<entry key="386" value-ref="farmCropsDownload" />
+				<entry key="387" value-ref="dynamicCertificationTxn" />
+
+				<entry key="390" value-ref="transferTraceabilityAdapter" />
+
+				<entry key="388" value-ref="transferStockDownload" />
+				<entry key="389" value-ref="productReceptionAdapter" />
+				<entry key="391" value-ref="dynamicTxnAdapter" />
+				<entry key="392" value-ref="ginningAdapter" />
+				<entry key="393" value-ref="baleGenerationAdapter"/>
+				<entry key="394" value-ref="transferSpinningAdapter"/>
+				<entry key="500" value-ref="dynamicTxnAdapter" />
+					<entry key="501" value-ref="dynamicFollowUpAdapter" />
+				<entry key="395" value-ref="productDistribution" />
+				<entry key="396" value-ref="eventCalendarAdapter" />
+				<entry key="397" value-ref="eventCalendarAdapter" />
+				<entry key="398" value-ref="farmCropCalendarAdapter" />
+<!-- <entry key="400" value-ref="appInitialiser" /> -->
+			</map>
+		</property>
+	</bean>
+
+	<!-- to support Java-to-XML and vice-versa conversion -->
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider" />
+
+	<!-- to support Java-to-JSON and vice-versa conversion -->
+	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+		<property name="serializeAsArray" value="true" />
+		<property name="arrayKeys" value="provider" />
+		<property name="convertTypesToStrings" value="true" />
+	</bean>
+
+	<bean id="exceptionMapperImpl" class="com.sourcetrace.eses.txn.exception.ExceptionMapperImpl" />
+	<bean id="txnFaultInterceptor" class="com.sourcetrace.eses.txn.exception.TxnFaultInterceptor" />
+
+	<!-- Mapping Logger Interceptor -->
+	<bean id="loggerInterceptor" class="com.sourcetrace.eses.interceptors.LoggerInterceptor">
+		<property name="limit" value="-1" />
+	</bean>
+
+	<bean id="txnInterceptor" class="com.sourcetrace.eses.interceptors.TxnInterceptor">
+		<property name="txnTypeValidationMap">
+			<map>
+				<entry key="301" value="adminTxn" />
+				<entry key="302" value="agentTxn" />
+				<entry key="303" value="adminTxn" />
+				<entry key="304" value="agentTxn" />
+			</map>
+		</property>
+	</bean>
+	<bean id="txnCredentialInterceptor"
+		class="com.sourcetrace.eses.interceptors.TxnCredentialInterceptor">
+		<property name="txnCredMap">
+			<map>
+				<entry key="301" value="token" />
+				<entry key="302" value="token" />
+				<entry key="303" value="token" />
+				<entry key="304" value="token" />
+				<entry key="305" value="token" />
+				<entry key="306" value="token" />
+				<entry key="307" value="token" />
+				<entry key="308" value="token" />
+				<entry key="309" value="token" />
+				<entry key="310" value="token" />
+				<entry key="311" value="token" />
+				<entry key="312" value="token" />
+				<entry key="313" value="token" />
+				<entry key="314" value="token" />
+				<entry key="315" value="token" />
+				<entry key="316" value="token" />
+				<entry key="317" value="token" />
+				<entry key="318" value="token" />
+				<entry key="319" value="token" />
+				<entry key="320" value="token" />
+				<entry key="321" value="token" />
+				<entry key="322" value="token" />
+				<entry key="323" value="token" />
+				<entry key="324" value="token" />
+				<entry key="325" value="token" />
+				<entry key="326" value="none" />
+				<entry key="327" value="none" />
+				<entry key="328" value="token" />
+				<entry key="329" value="token" />
+				<entry key="330" value="token" />
+				<entry key="331" value="token" />
+				<entry key="332" value="token" />
+				<entry key="333" value="token" />
+				<entry key="334" value="token" />
+				<entry key="335" value="token" />
+				<entry key="336" value="token" />
+				<entry key="337" value="token" />
+				<entry key="338" value="token" />
+				<entry key="339" value="token" />
+				<entry key="340" value="token" />
+				<entry key="341" value="token" />
+				<entry key="342" value="token" />
+				<entry key="343" value="token" />
+				<entry key="344" value="token" />
+				<entry key="345" value="token" />
+				<entry key="346" value="token" />
+				<entry key="347" value="token" />
+				<entry key="348" value="token" />
+				<entry key="349" value="token" />
+				<entry key="350" value="token" />
+				<entry key="351" value="token" />
+				<entry key="355" value="token" />
+				<entry key="356" value="token" />
+				<entry key="360" value="token" />
+				<entry key="361" value="token" />
+				<entry key="362" value="token" />
+				<entry key="363" value="token" />
+				<entry key="364" value="token" />
+				<entry key="366" value="token" />
+				<entry key="367" value="token" />
+				<entry key="368" value="token" />
+				<entry key="369" value="token" />
+				<entry key="370" value="token" />
+				<entry key="371" value="token" />
+				<entry key="373" value="token" />
+				<entry key="374" value="token" />
+				<entry key="378" value="token" />
+				<entry key="379" value="token" />
+				<entry key="385" value="token" />
+				<entry key="386" value="token" />
+				<entry key="387" value="token" />
+				<entry key="390" value="token" />
+				<entry key="388" value="token" />
+				<entry key="389" value="token" />
+				<entry key="392" value="token" />
+				<entry key="393" value="token" />
+				<entry key="394" value="token" />
+				<entry key="500" value="token" />
+				<entry key="396" value="token" />
+				<entry key="397" value="token" />
+				<entry key="398" value="token" />
+			</map>
+		</property>
+	</bean>
+	<bean id="txnDuplicateInterceptor"
+		class="com.sourcetrace.eses.interceptors.TxnDuplicateInterceptor">
+		<property name="msgNoSet">
+			<set>
+				<value>304</value>
+				<value>310</value>
+				<value>311</value>
+				<value>312</value>
+				<value>314</value>
+				<value>316</value>
+				<value>318</value>
+				<value>319</value>
+				<value>334</value>
+				<value>336</value>
+				<value>338</value>
+				<value>340</value>
+				<value>342</value>
+				<value>344</value>
+				<value>345</value>
+				<value>346</value>
+				<value>351</value>
+				<value>360</value>
+				<value>361</value>
+				<value>362</value>
+				<value>363</value>
+				<value>364</value>
+				<value>366</value>
+				<value>367</value>
+				<value>368</value>
+				<value>371</value>
+				<value>373</value>
+				<value>374</value>
+				<value>378</value>
+				<value>383</value>
+				<value>387</value>
+
+				<value>390</value>
+				<value>392</value>
+				<value>393</value>
+				<value>394</value>
+				<value>388</value>
+				<value>389</value>
+				<value>500</value>
+				<value>396</value>
+				<value>397</value>
+				<value>398</value>
+
+			</set>
+		</property>
+	</bean>
+
+	<bean id="txnAcessInterceptor" class="com.sourcetrace.eses.interceptors.TxnAcessInterceptor">
+		<property name="txnSet">
+			<set>
+				<value>301</value>
+				<value>308</value>
+				<value>359</value>
+				<value>357</value>
+				<value>314</value>
+				<value>316</value>
+				<value>363</value>
+				<value>364</value>
+				<value>366</value>
+				<value>318</value>
+				<value>319</value>
+				<value>320</value>
+				<value>351</value>
+				<value>329</value>
+				<value>334</value>
+				<value>346</value>
+				<value>360</value>
+				<value>362</value>
+				<value>369</value>
+				<value>371</value>
+				<value>373</value>
+				<value>374</value>
+				<value>378</value>
+				<value>390</value>
+				<value>392</value>
+				<value>393</value>
+				<value>394</value>
+				<value>500</value>
+				<value>396</value>
+				<value>397</value>
+				<value>398</value>
+			</set>
+		</property>
+	</bean>
+	<bean id="syncLogin" class="com.sourcetrace.eses.adapter.core.SyncLogin">
+		<property name="txnMap">
+			<map>
+				<entry key="0" value-ref="productsDownload" />
+				<entry key="1" value-ref="seasonDownload" />
+				<entry key="2" value-ref="locationDownloadAdapter" />
+				<entry key="3" value-ref="warehouseStockDownload" />
+				<entry key="4" value-ref="villageWarehouseStockDownload" />
+				<entry key="5" value-ref="farmerOutstandingBalanceDownload" />
+				<entry key="6" value-ref="procurementProductDownload" />
+				<entry key="7" value-ref="buyerDownload" />
+				<entry key="8" value-ref="catalogueDownload" />
+				<entry key="9" value-ref="coOperativeDownload" />
+				<entry key="10" value-ref="supplierDownload" />
+		        <entry key="12" value-ref="plannerDownload" />
+				<entry key="15" value-ref="transferStockDownload" />
+				<entry key="16" value-ref="farmerDistributionBalanceDownload" />
+				<entry key="17" value-ref="eventCalendarDownload" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="agentLogin" class="com.sourcetrace.eses.adapter.core.AgentLogin">
+		<property name="txnMap">
+			<map>
+				<entry key="14" value-ref="dynamicComponentDownload" />
+			
+			</map>
+		</property>
+	</bean>
+	<!-- <bean id="appInitialiser" class="com.sourcetrace.eses.adapter.core.AppInitialiser">
+		<property name="txnMap">
+			<map>
+				<entry key="0" value-ref="productsDownload" />
+				<entry key="1" value-ref="seasonDownload" />
+				<entry key="2" value-ref="locationDownloadAdapter" />
+				<entry key="6" value-ref="procurementProductDownload" />
+				<entry key="7" value-ref="buyerDownload" />
+				<entry key="8" value-ref="catalogueDownload" />
+				<entry key="9" value-ref="coOperativeDownload" />
+				<entry key="10" value-ref="supplierDownload" />
+			<entry key="2" value-ref="locationDownloadAdapter" />
+			</map>
+		</property>
+	</bean> -->
+	
+	 <bean id="swagger2FeatureFs" class="com.sourcetrace.eses.interceptors.CutomSwaggerFeature">
+        <!-- customize some of the properties -->
+       <property name="basePath" value="/agrotxn/rs"/>
+        <property name="contact" value="sts@sourcetrace.com"/>
+        <property name="description" value="API for Mobile Integration"/>
+        <property name="prettyPrint" value="true"/>
+         <property name="title" value="Source Trace API'S"/>
+         <property name="scan" value="true"/>
+       </bean>
+
+</beans>

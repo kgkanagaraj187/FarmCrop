@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.sourcetrace.esesw.entity.profile.Country" table="COUNTRY">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<property name="isActive" column="IS_ACTIVE" />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="branchId" column="BRANCH_ID"/>
+		<set name="states" cascade="all">
+			<key column="COUNTRY_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.State"/>
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.profile.State" table="STATE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<many-to-one name="country" column="COUNTRY_ID" not-null="true"  />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="localities" cascade="all">
+			<key column="STATE_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.Locality" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.util.entity.ServicePlaceType"
+		table="SERV_PLACE_TYPE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" unique="true" />
+		<property name="name" column="NAME" />
+	</class>
+
+	<class name="com.sourcetrace.eses.util.entity.ServicePlace"
+		table="SERV_PLACE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" unique="true" />
+		<property name="name" column="NAME" unique="true" />
+		<many-to-one name="servPlaceType" column="SERV_PLACE_TYPE_ID"
+			not-null="true"   />
+
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.profile.Locality" table="LOCATION_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<many-to-one name="state" column="STATE_ID" not-null="true"  />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="municipalities" cascade="all"  >
+			<key column="LOCATION_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.Municipality" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.esesw.entity.profile.Municipality"
+		table="CITY">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="code" column="CODE" />
+		<property name="postalCode" column="POSTAL_CODE" />
+		<many-to-one name="locality" column="LOCATION_ID"
+			not-null="true"   />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="villages" cascade="all"  >
+			<key column="CITY_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.Village" />
+		</set>
+		<set name="gramPanchayats" cascade="all">
+			<key column="CITY_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.GramPanchayat" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.profile.GramPanchayat"
+		table="GRAM_PANCHAYAT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="code" column="CODE" />
+		<many-to-one name="city" column="CITY_ID" not-null="true"  />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="villages" cascade="all"  >
+			<key column="GRAM_PANCHAYAT_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.Village" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.profile.Village" table="VILLAGE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="code" column="CODE" />
+		<many-to-one name="city" column="CITY_ID"  />
+		<many-to-one name="gramPanchayat" column="GRAM_PANCHAYAT_ID"  />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="seq" column="SEQ" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	<class name="com.sourcetrace.esesw.entity.profile.ServiceLocation"
+		table="SERV_LOC">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" unique="true" />
+		<property name="name" column="NAME" unique="true" />
+		<many-to-one name="servicePoint" column="SERV_POINT_ID"
+			  />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+	</class>
+	<class name="com.sourcetrace.esesw.entity.profile.ServicePoint"
+		table="SERV_POINT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" unique="true" />
+		<property name="name" column="NAME" unique="true" />
+		<many-to-one name="type" column="SERV_PLACE_TYPE_ID"
+			not-null="true"   />
+		<many-to-one name="city" column="CITY_ID" not-null="true"
+			  />
+	</class>
+	<class name="com.sourcetrace.esesw.entity.profile.ServicePointType"
+		table="SERV_POINT_TYPE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+	</class>
+</hibernate-mapping>

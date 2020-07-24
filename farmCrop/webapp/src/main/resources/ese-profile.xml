@@ -1,0 +1,1704 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"       
+          "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+<constant name="struts.multipart.maxSize" value="104857600" />
+	<package name="ese_user" namespace="/" extends="ese">
+		<default-interceptor-ref name="eseStack" />
+
+		<action name="licenseAgreement" class="licenseAction">
+			<result name="success">/jsp/license.jsp</result>
+		</action>
+
+		<action name="license_*" method="{1}" class="licenseAction">
+			<result name="list">/jsp/common/license.jsp</result>
+			<result name="success">/jsp/common/license.jsp</result>
+			<result name="redirect" type="redirectAction">login_execute</result>
+		</action>
+
+		<action name="changePassword_*" method="{1}" class="changePasswordAction">
+			<result name="input">/jsp/changePassword.jsp</result>
+			<result name="success" type="redirect">
+				<param name="location">logout</param>
+			</result>
+		</action>
+
+		<action name="login_*_*" method="{1}" class="loginAction">
+			<result name="input">/jsp/login.jsp</result>
+			<result name="emptyTenant">/jsp/404.jsp</result>
+			<result name="pageExpired">/jsp/expired.jsp</result>
+			<result name="redirect" type="redirectAction">dashboard_list</result>
+			<result name="red_url" type="redirectAction">${url}</result>
+			<param name="tenantId">{2}</param>
+		</action>
+		
+		<action name="email_*" method="{1}" class="loginAction">
+			<result name="success">/jsp/login.jsp</result>
+		</action>
+
+	</package>
+
+	<package name="ese_profile" namespace="/" extends="ese">
+		<default-interceptor-ref name="eseStack" />
+
+		<action name="home_*" method="{1}" class="homeAction">
+			<result name="list">/jsp/switch/home.jsp</result>
+			<result name="dashboard" type="redirectAction">dashboard_list</result>
+			<result name="resetPassword" type="redirectAction">dashboard_list</result>
+		</action>
+
+		<action name="dashboard_*" method="{1}" class="dashboardAction">
+			<result name="success">/jsp/switch/dashboard.jsp</result>
+			<result name="list">/jsp/switch/dashboard.jsp</result>
+		</action>
+
+		 <action name="farmerLocation_*" method="{1}" class="farmerLocationAction">
+			<result name="success">/jsp/switch/farmerLocation.jsp</result>
+			<result name="list">/jsp/switch/farmerLocation.jsp</result>
+		<!-- 	<result name="plotting">/jsp/profile/farmerPlotting.jsp</result> -->
+		</action>
+
+		<action name="farmerPlotting_*" method="{1}" class="farmerPlottingAction">
+			<result name="success">/jsp/switch/farmerPlotting.jsp</result>
+			<result name="list">/jsp/profile/farmerPlotting.jsp</result>
+			<result name="plotting">/jsp/profile/farmerPlotting.jsp</result>
+		</action>
+
+		<action name="state_*" method="{1}" class="stateAction">
+			<result name="success">/jsp/switch/general/state.jsp</result>
+			<result name="input">/jsp/switch/general/state.jsp</result>
+			<result name="list">/jsp/switch/general/stateList.jsp</result>
+			<result name="detail">/jsp/switch/general/stateDetail.jsp</result>
+			<result type="redirectAction" name="redirect">state_list</result>
+		</action>
+
+		<action name="country_*" method="{1}" class="countryAction">
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="success">/jsp/switch/general/country.jsp</result>
+			<result name="input">/jsp/switch/general/country.jsp</result>
+			<result name="list">/jsp/switch/general/countryList.jsp</result>
+			<result name="detail">/jsp/switch/general/countryDetail.jsp</result>
+			<result type="redirectAction" name="redirect">country_list</result>
+		</action>
+
+		<action name="device_*" method="{1}" class="profileDeviceAction">
+			<result name="success">/jsp/profile/device.jsp</result>
+			<result name="input">/jsp/profile/device.jsp</result>
+			<result name="list">/jsp/profile/deviceList.jsp</result>
+			<result name="detail">/jsp/profile/deviceDetail.jsp</result>
+			<result type="redirectAction" name="redirect">device_list</result>
+			<result name="ajaxagents">/jsp/switch/general/ajaxAgents.jsp</result>
+				<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		
+		</action>
+
+		<action name="customer_*" method="{1}" class="customerAction">
+			<result name="success">/jsp/profile/customer.jsp</result>
+			<result name="input">/jsp/profile/customer.jsp</result>
+			<result name="list">/jsp/profile/customerList.jsp</result>
+			<result name="detail">/jsp/profile/customerDetail.jsp</result>
+			<result type="redirectAction" name="redirect">customer_list</result>
+		</action>
+
+		<action name="customerProject_*" method="{1}" class="customerProjectAction">
+			<result name="success">/jsp/profile/customerProject.jsp</result>
+			<result name="input">/jsp/profile/customerProject.jsp</result>
+			<result name="list">/jsp/profile/customerProjectList.jsp</result>
+			<result name="detail">/jsp/profile/customerProjectDetail.jsp</result>
+			<result name="customerDetail" type="redirect">
+				<param name="location">customer_detail.action?${customerDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">customerProject_list
+			</result>
+		</action>
+
+		<action name="samithi_*" method="{1}" class="samithiAction">
+			<result name="success">/jsp/switch/general/samithi.jsp</result>
+			<result name="input">/jsp/switch/general/samithi.jsp</result>
+			<result name="list">/jsp/switch/general/samithiList.jsp</result>
+			<result name="detail">/jsp/switch/general/samithiDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">samithi_list</result>
+		</action>
+		
+		<action name="samithiIcs_*" method="{1}" class="samithiIcsAction">
+		<result name="create">/jsp/switch/general/samithiIcs.jsp</result>
+		<!-- <result name="list">/jsp/switch/general/samithiIcs.jsp</result> -->
+		<result name="input">/jsp/switch/general/samithiIcs.jsp</result>
+		 <result name="redirect" type="redirect">samithi_list.action</result>
+		</action>
+
+		<action name="vendor_*" method="{1}" class="vendorAction">
+			<result name="success">/jsp/profile/vendor.jsp</result>
+			<result name="input">/jsp/profile/vendor.jsp</result>
+			<result name="list">/jsp/profile/vendorList.jsp</result>
+			<result name="detail">/jsp/profile/vendorDetail.jsp</result>
+			<result type="redirectAction" name="redirect">vendor_list</result>
+		</action>
+
+		<action name="cooperative_*" method="{1}" class="cooperativeAction">
+			<result name="success">/jsp/switch/general/cooperative.jsp</result>
+			<result name="input">/jsp/switch/general/cooperative.jsp</result>
+			<result name="list">/jsp/switch/general/cooperativeList.jsp</result>
+			<result name="detail">/jsp/switch/general/cooperativeDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">cooperative_list</result>
+		</action>
+
+		<action name="subCategoryService_*" method="{1}"
+			class="subCategoryServiceAction">
+			<result name="success">/jsp/service/subCategoryServiceList.jsp</result>
+			<result name="list">/jsp/service/subCategoryServiceList.jsp</result>
+			<result name="input">/jsp/service/subCategoryService.jsp</result>
+			<result name="detail">/jsp/service/subCategoryServiceDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">subCategoryService_list
+			</result>
+		</action>
+
+		<action name="productService_*" method="{1}" class="productServiceAction">
+			<result name="success">/jsp/service/productServiceList.jsp</result>
+			<result name="list">/jsp/service/productServiceList.jsp</result>
+			<result name="input">/jsp/service/productService.jsp</result>
+			<result name="detail">/jsp/service/productServiceDetail.jsp</result>
+			<result name="subCategoryServiceDetail" type="redirect">
+				<param name="location">subCategoryService_detail.action?${subCategoryDetailzParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">productService_list
+			</result>
+		</action>
+
+		<action name="procurementProduct_*" method="{1}"
+			class="procurementProductAction">
+			<result name="update">/jsp/service/procurementService.jsp</result>
+			<result name="list">/jsp/service/procurementServiceList.jsp</result>
+			<result name="input">/jsp/service/procurementProduct.jsp</result>
+			<result name="detail">/jsp/service/procurementServiceDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">procurementProduct_list
+			</result>
+			<!--<result name="redirect" type="redirect"> <param name="location">procurementAgentLogin_execute.action?type=procurement</param> 
+				<param name="parse">true</param> <param name="encode">false</param> </result> -->
+			<result name="html">/jsp/service/procurementProductPrint.jsp</result>
+		</action>
+
+		<action name="procurementProductEnroll_*" method="{1}"
+			class="procurementProductEnrollAction">
+			<result name="success">/jsp/switch/general/procurementProductEnroll.jsp
+			</result>
+			<result name="input">/jsp/switch/general/procurementProductEnroll.jsp
+			</result>
+			<result name="list">/jsp/switch/general/procurementProductList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/procurementProductDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">procurementProductEnroll_list
+			</result>
+		</action>
+
+		<action name="procurementVariety_*" method="{1}"
+			class="procurementVarietyAction">
+			<result name="success">/jsp/switch/general/procurementVariety.jsp
+			</result>
+			<result name="input">/jsp/switch/general/procurementVariety.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/procurementVarietyDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">procurementProductEnroll_list
+			</result>
+
+			<result name="procurementVarietyDetail" type="redirect">
+				<param name="location">procurementProductEnroll_detail.action?${procurementDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+
+		</action>
+
+		<action name="procurementGrade_*" method="{1}"
+			class="procurementGradeAction">
+			<result name="success">/jsp/switch/general/procurementGrade.jsp</result>
+			<result name="input">/jsp/switch/general/procurementGrade.jsp</result>
+			<result name="detail">/jsp/switch/general/procurementGradeDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">procurementProductEnroll_list
+			</result>
+
+			<result name="procurementGradeDetail" type="redirect">
+				<param name="location">procurementVariety_detail.action?${procurementDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result name="list" type="redirect">
+				<param name="location">procurementVariety_detail.action?${procurementDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+
+		</action>
+
+		<action name="locality_*" method="{1}" class="localityAction">
+			<result name="success">/jsp/switch/general/locality.jsp</result>
+			<result name="input">/jsp/switch/general/locality.jsp</result>
+			<result name="list">/jsp/switch/general/localityList.jsp</result>
+			<result name="detail">/jsp/switch/general/localityDetail.jsp</result>
+			<result type="redirectAction" name="redirect">locality_list</result>
+		</action>
+
+		<action name="municipality_*" method="{1}" class="municipalityAction">
+			<result name="success">/jsp/switch/general/municipality.jsp</result>
+			<result name="input">/jsp/switch/general/municipality.jsp</result>
+			<result name="list">/jsp/switch/general/municipalityList.jsp</result>
+			<result name="detail">/jsp/switch/general/municipalityDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">municipality_list</result>
+		</action>
+
+		<action name="gramPanchayat_*" method="{1}" class="gramPanchayatAction">
+			<result name="success">/jsp/switch/general/gramPanchayat.jsp</result>
+			<result name="input">/jsp/switch/general/gramPanchayat.jsp</result>
+			<result name="list">/jsp/switch/general/gramPanchayatList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/gramPanchayatDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">gramPanchayat_list</result>
+		</action>
+
+		<action name="village_*" method="{1}" class="villageAction">
+			<result name="success">/jsp/switch/general/village.jsp</result>
+			<result name="input">/jsp/switch/general/village.jsp</result>
+			<result name="list">/jsp/switch/general/villageList.jsp</result>
+			<result name="detail">/jsp/switch/general/villageDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">village_list</result>
+		</action>
+
+		<action name="fieldStaff_*" method="{1}" class="agentAction">
+			<result name="code" type="stream">
+				<param name="contentType">application/png</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${codeName}.png</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="success">/jsp/switch/general/agent.jsp</result>
+			<result name="input">/jsp/switch/general/agent.jsp</result>
+			<result name="list">/jsp/switch/general/fieldStaffList.jsp</result>
+			<result name="detail">/jsp/switch/general/agentDetail.jsp</result>
+			<result type="redirectAction" name="redirect">fieldStaff_list?type=fieldStaff
+			</result>
+			<result name="mapping">/jsp/switch/general/agentServiceLocMap.jsp
+			</result>
+			<result name="warehouseMapping">/jsp/switch/general/agentWarehouseMapping.jsp
+			</result>
+			<result name="ajaxagents">/jsp/switch/general/ajaxAgents.jsp</result>
+		</action>
+
+		<action name="distributionToFieldStaff_*" method="{1}"
+			class="distributionToFieldStaffAction">
+			<result name="success">/jsp/service/distributionToFieldStaff.jsp
+			</result>
+			<result name="list">/jsp/service/distributionToFieldStaffList.jsp
+			</result>
+			<result name="update">/jsp/service/distributionToFieldStaffEdit.jsp
+			</result>
+			<result name="input">/jsp/service/distributionToFieldStaff.jsp
+			</result>
+			<result name="detail">/jsp/service/distributionToFieldStaffDetail.jsp
+			</result>
+			<result name="initiate">/jsp/service/distributionToFieldStaff.jsp
+			</result>
+			<result name="redirect" type="redirectAction">distributionToFieldStaff_create
+			</result>
+			<!--<result name="redirect" type="redirect"> <param name="location">distributionToFieldStaff_create.action</param> 
+				<param name="parse">true</param> <param name="encode">false</param> </result> 
+				<result name="html">/jsp/service/distributionToFieldStaffPrint.jsp</result> -->
+		</action>
+
+		<action name="farmer_*" method="{1}" class="farmerAction">
+			<!-- <interceptor-ref name="eseImageUploadStack" /> -->
+			<result name="success">/jsp/profile/farmer.jsp</result>
+			<result name="input">/jsp/profile/farmer.jsp</result>
+			<result name="list">/jsp/profile/farmerList.jsp</result>
+			<result name="detail">/jsp/profile/farmerDetail.jsp</result>
+			<result name="plotting">/jsp/profile/farmerPlotting.jsp</result>
+			<result type="redirectAction" name="redirect">farmer_list</result>
+			<result type="redirectAction" name="redirectType">farmer_list?type=${type}
+			</result>
+		
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+					<result name="pdfCat" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.pdf</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="kml" type="stream">
+				<param name="contentType">application/kml</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${kmlFileName}.kml</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			
+			<result name="pdfFile" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.pdf</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			
+		</action>
+
+		<action name="farmerFarmField_*" method="{1}" class="farmerFieldAction">
+			<result name="input">/jsp/profile/farmerField.jsp</result>
+		</action>
+
+		<action name="farmerFamily_*" method="{1}" class="farmerFamilyAction">
+			<result name="success">/jsp/profile/farmerFamily.jsp</result>
+			<result name="input">/jsp/profile/farmerFamily.jsp</result>
+			<result name="list">/jsp/profile/farmerFamilyList.jsp </result>
+			<result name="detail">/jsp/profile/farmerFamilyDetail.jsp</result>
+			<result name="farmerDetail" type="redirect">
+				<param name="location">farmer_detail.action?${farmerDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">farmerFamily_list</result>
+		</action>
+
+		<action name="farm_*" method="{1}" class="farmAction">
+			<!-- <interceptor-ref name="eseImageUploadStack" /> -->
+			<result name="success">/jsp/profile/farm.jsp</result>
+			<result name="input">/jsp/profile/farm.jsp</result>
+			<result name="list">/jsp/profile/farmList.jsp</result>
+			<result name="detail">/jsp/profile/farmDetail.jsp</result>
+			<result name="farmCertifiedDetail">/jsp/profile/farmCertifiedDetail.jsp</result>
+			<result type="redirectAction" name="redirect">farm_list</result>
+			<result name="farmerDetail" type="redirect">
+				<param name="location">farmer_detail.action?${farmerDetailzParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result name="blriFarm">/jsp/profile/farmBlri.jsp</result>
+					<result name="pdfCat" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.pdf</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="farmInventory_*" method="{1}" class="farmInventoryAction">
+			<result name="list">/jsp/profile/farmInventoryList.jsp</result>
+			<result name="success">/jsp/profile/farmInventory.jsp</result>
+			<result name="input">/jsp/profile/farmInventory.jsp</result>
+			<result name="detail">/jsp/profile/farmInventoryDetail.jsp</result>
+			<result name="farmDetail" type="redirect">
+				<param name="location">farm_detail.action?${farmDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">farmInventory_list</result>
+		</action>
+		
+		 <action name="distributionBalance_*" method="{1}" class="distributionBalanceAction">
+		 
+			<result name="success">/jsp/profile/distributionBalanceTable.jsp</result>
+			<result name="input">/jsp/profile/distributionBalanceTable.jsp</result>
+			<result name="list">/jsp/profile/distributionBalanceTable.jsp</result>
+			<result type="redirectAction" name="redirect">distributionBalance_list</result>
+						
+		</action>
+
+		<action name="animalHusbandary_*" method="{1}"
+			class="animalHusbandaryAction">
+			<result name="list">/jsp/profile/animalHusbandaryList.jsp</result>
+			<result name="success">/jsp/profile/animalHusbandary.jsp</result>
+			<result name="input">/jsp/profile/animalHusbandary.jsp</result>
+			<result name="detail">/jsp/profile/animalHusbandaryDetail.jsp</result>
+			<result name="farmDetail" type="redirect">
+				<param name="location">farm_detail.action?${farmDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">animalHusbandary_list
+			</result>
+		</action>
+		
+		<action name="farmHistory_*" method="{1}" class="farmHistoryAction">
+			<result name="success">/jsp/profile/farmHistory.jsp</result>
+			<result name="input">/jsp/profile/farmHistory.jsp</result>
+			<result name="detail">/jsp/profile/farmHistoryDetail.jsp</result>
+		</action>
+		
+		<action name="inspectionCheck_*" method="{1}"
+			class="inspectionCheckAction">
+			<result name="list">/jsp/profile/inspectionCheckList.jsp</result>
+			<result name="success">/jsp/profile/inspectionCheck.jsp</result>
+			<result name="input">/jsp/profile/inspectionCheck.jsp</result>
+			<result name="detail">/jsp/service/inspectionCheckDetail.jsp
+			</result>
+			
+			<result type="redirectAction" name="redirect">inspectionCheck_list
+			</result>
+		</action>
+		
+		<action name="fieldHistory_*" method="{1}"
+			class="fieldHistoryAction">
+			<result name="list">/jsp/profile/fieldHistory.jsp</result>
+			<result name="success">/jsp/profile/fieldHistory.jsp</result>
+			<result name="input">/jsp/profile/fieldHistory.jsp</result>
+			<result name="detail">/jsp/service/fieldHistoryDetail.jsp
+			</result>
+			
+			<result type="redirectAction" name="redirect">fieldHistory_list
+			</result>
+		</action>
+
+		<action name="cropYield_*" method="{1}" class="cropYieldAction">
+			<result name="list">/jsp/profile/farmCropYieldList.jsp</result>
+		</action>
+
+		<action name="farmCropsMaster_*" method="{1}" class="farmCropsMasterAction">
+			<result name="success">/jsp/profile/farmCropsList.jsp</result>
+			<result name="list">/jsp/profile/farmCropsList.jsp</result>
+			<result name="input">/jsp/profile/farmCrops.jsp</result>
+			<result name="detail">/jsp/profile/farmCropsDetail.jsp</result>
+			<result type="redirectAction" name="redirect">farmCropsMaster_list
+			</result>
+		</action>
+
+		<action name="farmCrops_*" method="{1}" class="farmCropsAction">
+			<result name="success">/jsp/profile/farmerFarmCrops.jsp</result>
+			<result name="input">/jsp/profile/farmerFarmCrops.jsp</result>
+			<result name="list">/jsp/profile/farmerFarmCropsList.jsp</result>
+			<result name="detail">/jsp/profile/farmerFarmCropsDetail.jsp</result>
+			<result name="farmDetail" type="redirect">
+				<param name="location">farmer_detail.action?${farmerDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">farmCrops_list</result>
+		</action>
+
+		<action name="stockTransfer_*" method="{1}" class="stockTransferAction">
+			<result name="success">/jsp/service/stockTransfer.jsp</result>
+			<result name="list">/jsp/service/stockTransfer.jsp</result>
+			<result name="input">/jsp/service/stockTransfer.jsp</result>
+			<!--<result type="redirect" name="redirect">stockTransfer_create</result> -->
+			<result name="redirect" type="redirect">
+				<param name="location">stockTransferAgentLogin_execute.action?type=stockTransfer</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result name="html">/jsp/service/stockTransferPrint.jsp</result>
+		</action>
+
+		<action name="stockReturns_*" method="{1}" class="stockReturnsAction">
+			<result name="success">/jsp/service/stockReturnsList.jsp</result>
+			<result name="list">/jsp/service/stockReturnsList.jsp</result>
+			<result name="input">/jsp/service/stockReturnsList.jsp</result>
+			<!--<result name="redirect" type="redirect"> <param name="location">stockTransferAgentLogin_execute.action?type=stockTransfer</param> 
+				<param name="parse">true</param> <param name="encode">false</param> </result> -->
+			<result name="html">/jsp/service/stockReturnPrint.jsp</result>
+		</action>
+
+		<action name="prefernce_*" method="{1}" class="prefernceAction">
+			<result name="list">/jsp/switch/preferenceList.jsp</result>
+			<result name="success">/jsp/switch/preferenceList.jsp</result>
+			<result name="update">/jsp/switch/preferenceList.jsp</result>
+			<result name="input">/jsp/switch/preferenceList.jsp</result>
+			
+			<result name="text" type="stream">
+				<param name="contentType">application/text</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${fileName}.txt</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="roi_*" method="{1}" class="prefernceAction">
+			<result>/jsp/switch/roiHistory.jsp</result>
+			<result name="list">/jsp/switch/roiHistory.jsp</result>
+			<result name="input">/jsp/switch/roiHistory.jsp</result>
+		</action>
+
+		<action name="role_*" method="{1}" class="roleAction">
+			<result name="success">/jsp/profile/role.jsp</result>
+			<result type="redirectAction" name="redirect">role_list
+			</result>
+			<result name="input">/jsp/profile/role.jsp</result>
+			<result name="list">/jsp/profile/roleList.jsp</result>
+			<result name="detail">/jsp/profile/roleDetail.jsp</result>
+		</action>
+
+		<action name="roleMenu_*" method="{1}" class="credRoleMenuAction">
+			<result name="success">/jsp/credentials/roleMenuList.jsp</result>
+			<result type="redirectAction" name="redirect">roleMenu_list
+			</result>
+			<result name="list">/jsp/credentials/roleMenuList.jsp</result>
+			<result name="input">/jsp/credentials/roleMenu.jsp</result>
+		</action>
+
+		<action name="roleEntitlement_*" method="{1}" class="credRoleEntitleAction">
+			<result name="success">/jsp/credentials/roleEntitlementList.jsp</result>
+			<result name="list">/jsp/credentials/roleEntitlementList.jsp</result>
+			<result name="input">/jsp/credentials/roleEntitlement.jsp</result>
+		</action>
+
+		<action name="user_*" method="{1}" class="userAction">
+			<result name="success">/jsp/profile/userProfile.jsp</result>
+			<result name="input">/jsp/profile/userProfile.jsp</result>
+			<result type="redirectAction" name="redirect">user_list</result>
+			<result name="list">/jsp/profile/userProfileList.jsp</result>
+			<result name="detail">/jsp/profile/userProfileDetail.jsp</result>
+		</action>
+
+		<action name="catalogue_*" method="{1}" class="catalogueAction">
+			<result name="success">/jsp/profile/catalogue.jsp</result>
+			<result name="input">/jsp/profile/catalogue.jsp</result>
+			<result name="list">/jsp/profile/catalogueList.jsp</result>
+			<result name="detail">/jsp/profile/catalogueDetail.jsp</result>
+			<result type="redirectAction" name="redirect">catalogue_list</result>
+			<result type="redirectAction" name="redirectSurvey">catalogue_list.action?survey=1
+			</result>
+		</action>
+
+		<action name="harvestSeason_*" method="{1}" class="harvestSeasonAction">
+			<result name="success">/jsp/profile/harvestSeason.jsp</result>
+			<result name="input">/jsp/profile/harvestSeason.jsp</result>
+			<result name="list">/jsp/profile/harvestSeasonList.jsp</result>
+			<result name="detail">/jsp/profile/harvestSeasonDetail.jsp</result>
+			<result type="redirectAction" name="redirect">harvestSeason_list</result>
+		</action>
+
+		<action name="farmerReport_*" method="{1}" class="farmerListReportAction">
+			<result name="list">/jsp/reports/agro/farmerReportList.jsp
+			</result>
+			
+			<result name="farmerProfileExport">/jsp/reports/agro/farmerDetailExport.jsp</result>
+			
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="html">/jsp/reports/agro/farmerReportDetail.jsp
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="cropHarvestReport_*" method="{1}"
+			class="cropHarvestReportAction">
+			<result name="list">/jsp/reports/agro/cropHarvestReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="cBRReport_*" method="{1}" class="cBRReportAction">
+			<result name="list">/jsp/reports/agro/cBRReportList.jsp</result>
+
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result type="redirectAction" name="redirect">cBRReport_list</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="cropSaleReport_*" method="{1}" class="cropSaleReportAction">
+			<result name="list">/jsp/reports/agro/cropSaleReportList.jsp</result>
+			<result name="detail">/jsp/service/cropSaleDetail.jsp</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result type="redirectAction" name="redirect">cropSaleReport_list
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="cultivationReport_*" method="{1}"
+			class="cultivationReportAction">
+			<result name="list">/jsp/reports/agro/cultivationReportList.jsp
+			</result>
+			<result name="detail">/jsp/reports/agro/cultivationReportDetail.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result type="redirectAction" name="redirect">cultivationReport_list
+			</result>
+		</action>
+
+
+		<action name="farmerIncomeReport_*" method="{1}"
+			class="farmerIncomeReportAction">
+			<result name="list">/jsp/reports/agro/farmerIncomeReportList.jsp
+			</result>
+			<result name="update">/jsp/reports/agro/farmerIncomeReportList.jsp
+			</result>
+			<result name="input">/jsp/reports/agro/farmerIncomeReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result type="redirectAction" name="redirect">farmerIncomeReport_list
+			</result>
+		</action>
+
+
+		<action name="farmerCropReport_*" method="{1}"
+			class="farmerCropReportAction">
+			<result name="list">jsp/reports/agro/farmerCropReportList.jsp
+			</result>
+			<result name="update">jsp/reports/agro/farmerCropReportList.jsp
+			</result>
+			<result name="input">jsp/reports/agro/farmerCropReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+
+		<action name="cropHarvestServiceReport_*" method="{1}"
+			class="cropHarvestServiceReportAction">
+
+			<result name="success">/jsp/reports/agro/cropHarvestServiceReport.jsp
+			</result>
+			<result name="input">/jsp/reports/agro/cropHarvestServiceReport.jsp
+			</result>
+			<result name="create">/jsp/reports/agro/cropHarvestService.jsp</result>
+			<result name="list">/jsp/reports/agro/cropHarvestServiceReportList.jsp
+			</result>
+			<result name="detail">/jsp/reports/agro/cropHarvestServiceReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">cropHarvestServiceReport_list
+			</result>
+
+		</action>
+
+		<action name="farmerTrainingSelection_*" method="{1}"
+			class="farmerTrainingSelectionAction">
+
+			<result name="success">jsp/switch/general/farmerTrainingSelection.jsp
+			</result>
+			<result name="input">jsp/switch/general/farmerTrainingSelection.jsp
+			</result>
+			<result name="list">jsp/switch/general/farmerTrainingSelectionList.jsp
+			</result>
+			<result name="detail">jsp/switch/general/farmerTrainingSelectionDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerTrainingSelection_list
+			</result>
+		</action>
+
+		<action name="trainingPlanner_*" method="{1}" class="trainingPlannerAction">
+			<result name="success">/jsp/switch/general/trainingPlanner.jsp</result>
+			<result name="list">/jsp/switch/general/trainingPlanner.jsp</result>
+			<result type="redirectAction" name="redirect">trainingPlanner_list
+			</result>
+		</action>
+
+		<action name="trainingTopic_*" method="{1}" class="trainingTopicAction">
+			<result name="success">/jsp/switch/general/trainingTopic.jsp</result>
+			<result name="input">/jsp/switch/general/trainingTopic.jsp</result>
+			<result name="list">/jsp/switch/general/trainingTopicList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/trainingTopicDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">trainingTopic_list</result>
+		</action>
+
+		<action name="trainingCriteriaCategory_*" method="{1}"
+			class="trainingCriteriaCategoryAction">
+			<result name="success">/jsp/switch/general/trainingCriteriaCategory.jsp
+			</result>
+			<result name="input">/jsp/switch/general/trainingCriteriaCategory.jsp
+			</result>
+			<result name="list">/jsp/switch/general/trainingCriteriaCategoryList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/trainingCriteriaCategoryDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">trainingCriteriaCategory_list
+			</result>
+		</action>
+
+		<action name="targetGroup_*" method="{1}" class="targetGroupAction">
+			<result name="success">/jsp/switch/general/targetGroup.jsp</result>
+			<result name="input">/jsp/switch/general/targetGroup.jsp</result>
+			<result name="list">/jsp/switch/general/targetGroupList.jsp</result>
+			<result name="detail">/jsp/switch/general/targetGroupDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">targetGroup_list</result>
+		</action>
+
+		<action name="trainingMethod_*" method="{1}" class="trainingMethodAction">
+			<result name="success">/jsp/switch/general/trainingMethod.jsp</result>
+			<result name="input">/jsp/switch/general/trainingMethod.jsp</result>
+			<result name="list">/jsp/switch/general/trainingMethodList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/trainingMethodDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">trainingMethod_list
+			</result>
+		</action>
+
+		<action name="branchMaster_*" method="{1}" class="branchMasterAction">
+			<result name="list">jsp/switch/general/branchMasterList.jsp</result>
+			<result name="input">jsp/switch/general/branchMaster.jsp</result>
+			<result name="success">jsp/switch/general/branchMaster.jsp</result>
+			<result name="detail">jsp/switch/general/branchMasterDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">branchMaster_list </result>
+		</action>
+
+
+
+		<action name="trainingCompletionReport_*" method="{1}"
+			class="trainingCompletionReportAction">
+			<result name="list">/jsp/reports/agro/trainingCompletionReportList.jsp
+			</result>
+			<result name="imageData" type="imageResult"></result>
+			<result name="detail">/jsp/reports/agro/trainingCompletionReportDetail.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="offlineTrainingCompletionReport_*" method="{1}"
+			class="offlineTrainingCompletionReportAction">
+			<result name="list">/jsp/reports/agro/offlineTrainingCompletionReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+
+		<action name="farmerInspectionReport_*" method="{1}"
+			class="farmerInspectionReportAction">
+			<result name="list">jsp/reports/agro/farmerInspectionReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="farmerInspectionOrganicReport_*" method="{1}"
+			class="farmerInspectionOrganicReportAction">
+			<result name="list">jsp/reports/agro/farmerInspectionOrganicReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionOrganicReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionOrganicReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="farmerInspectionNpopReport_*" method="{1}"
+			class="farmerInspectionNpopReportAction">
+			<result name="list">jsp/reports/agro/farmerInspectionNpopReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionNpopReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionNpopReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="farmerInspectionIcsReport_*" method="{1}"
+			class="farmerInspectionIcsReportAction">
+			<result name="list">jsp/reports/agro/farmerInspectionIcsReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionIcsReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionIcsReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="topicCriteria_*" method="{1}" class="topicCriteriaAction">
+			<result name="success">/jsp/switch/general/topicCriteria.jsp</result>
+			<result name="input">/jsp/switch/general/topicCriteria.jsp</result>
+			<result name="list">/jsp/switch/general/topicCriteriaList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/topicCriteriaDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">topicCriteria_list</result>
+		</action>
+
+		<action name="masterData_*" method="{1}" class="masterDataAction">
+			<result name="list">jsp/switch/general/masterDataList.jsp</result>
+			<result name="input">jsp/switch/general/masterData.jsp</result>
+			<result name="success">jsp/switch/general/masterData.jsp</result>
+			<result name="detail">jsp/switch/general/masterDataDetail.jsp</result>
+			<result type="redirectAction" name="redirect">masterData_list</result>
+		</action>
+
+
+		<action name="farmTab_*" method="{1}" class="farmTabAction">
+			<result name="list">/jsp/profile/farmElement.jsp</result>
+		</action>
+
+		<action name="fieldStaffManagementReport_*" method="{1}"
+			class="fieldStaffManagementReportAction">
+			<result name="list">/jsp/reports/agro/fieldStaffManagementReportList.jsp
+			</result>
+			<result name="mapView">/jsp/reports/agro/fieldStaffManagementMapViewList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="agentBalance_*" method="{1}" class="agentBalanceAction">
+			<result name="success">/jsp/service/agentBalanceList.jsp</result>
+			<result name="list">/jsp/service/agentBalanceList.jsp</result>
+			<result type="redirectAction" name="redirect">agentBalance_list</result>
+			<!--<result name="redirect" type="redirect"> <param name="location">agentBalanceAgentLogin_execute.action?type=agentBalance</param> 
+				<param name="parse">true</param> <param name="encode">false</param> </result> -->
+		</action>
+
+		<action name="cropYieldVillageReport_*" method="{1}"
+			class="cropYieldVillageReportAction">
+			<result name="list">/jsp/reports/agro/cropYieldVillageReportList.jsp
+			</result>
+			<result type="redirectAction" name="redirect">cropYieldVillageReport_list
+			</result>
+		</action>
+
+		<action name="farmerBalanceReport_*" method="{1}"
+			class="farmerBalanceReportAction">
+			<result name="pdf" type="stream">
+				<param name="contentType">application/zip</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="list">/jsp/reports/agro/farmerBalanceReportList.jsp
+			</result>
+			<result name="subList">/jsp/reports/agro/farmerBalanceReportList.jsp
+			</result>
+			<!-- <result name="detail">/jsp/reports/agro/farmerIndividualBalanceReportDetail.jsp
+			</result> -->
+			 <result name="detail">/jsp/reports/agro/farmerBalanceReportDetailList.jsp
+			</result>
+		</action>
+
+
+		<action name="agentBalanceReport" method="{1}"
+			class="agentBalanceReportAction">
+			<result name="list">/jsp/reports/agro/agentBalanceReportList.jsp
+			</result>
+		</action>
+
+
+		<action name="cropYieldVillageReport_*" method="{1}"
+			class="cropYieldVillageReportAction">
+			<result name="list">/jsp/reports/agro/cropYieldVillageReportList.jsp
+			</result>
+			<result type="redirectAction" name="redirect">cropYieldVillageReport_list
+			</result>
+		</action>
+
+		<action name="cropYieldCropReport_*" method="{1}"
+			class="cropYieldCropReportAction">
+			<result name="list">/jsp/reports/agro/cropYieldCropReportList.jsp
+			</result>
+			<result type="redirectAction" name="redirect">cropYieldCropReport_list
+			</result>
+		</action>
+
+		<action name="location_*" method="{1}" class="locationAction">
+			<result name="list">/jsp/location/locationList.jsp</result>
+			<result name="input">/jsp/location/location.jsp</result>
+			<result name="detail">/jsp/location/locationDetail.jsp</result>
+			<result name="redirect" type="redirectAction">location_list?levelCode=${levelCode}
+			</result>
+		</action>
+
+		<action name="paymentAgentLogin_*" method="{1}" class="agentLoginAction">
+			<result name="success">/jsp/service/paymentAgentLogin.jsp</result>
+			<result name="payment" type="redirect">
+				<param name="location">payment_create.action?${agentId}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+		</action>
+
+
+		<action name="payment_*" method="{1}" class="paymentAction">
+			<result name="success">/jsp/service/payment.jsp</result>
+			<result name="list">/jsp/service/payment.jsp</result>
+			<result name="input">/jsp/service/payment.jsp</result>
+			<result type="redirectAction" name="redirect">payment_create</result>
+			<!--<result name="redirect" type="redirect"> <param name="location">paymentAgentLogin_execute.action?type=payment</param> 
+				<param name="parse">true</param> <param name="encode">false</param> -->
+			<result name="html">/jsp/service/paymentPrint.jsp</result>
+		</action>
+
+		<action name="farmerInspectionNopReport_*" method="{1}"
+			class="farmerInspectionNopReportAction">
+			<result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="list">jsp/reports/agro/farmerInspectionNopReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionNopReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionNopReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="farmerInspectionNopGroupReport_*" method="{1}"
+			class="farmerInspectionNopGroupReportAction">
+			<result name="list">jsp/reports/agro/farmerInspectionNopGroupReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionNopGroupReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionNopGroupReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="farmerProductTransfer_*" method="{1}"
+			class="farmerProductTransferAction">
+			<result name="success">/jsp/service/farmerProductTransfer.jsp</result>
+			<result name="list">/jsp/service/farmerProductTransfer.jsp</result>
+			<result name="input">/jsp/service/farmerProductTransfer.jsp</result>
+			<result type="redirect" name="redirect">farmerProductTransfer_create
+			</result>
+			<!-- <result name="redirect" type="redirect"> <param name="location">stockTransferAgentLogin_execute.action?type=stockTransfer</param> 
+				<param name="parse">true</param> <param name="encode">false</param> </result> -->
+			<result name="html">/jsp/service/farmerProductTransferPrint.jsp
+			</result>
+		</action>
+
+		<action name="periodicInspectionServiceReport_*" method="{1}"
+			class="periodicInspectionReportAction">
+			<result name="success">/jsp/reports/agro/farmInspection.jsp</result>
+			<result name="input">/jsp/reports/agro/farmInspection.jsp</result>
+			<result name="list">/jsp/reports/agro/farmInspectionList.jsp</result>
+			<result name="detail">/jsp/reports/agro/farmInspectionDetail.jsp
+			</result>
+			<result name="needDetail">/jsp/reports/agro/farmInspectionNeedDetail.jsp
+			</result>
+			<result name="inputNeed">/jsp/reports/agro/farmInspectionNeed.jsp</result>
+			<result type="redirectAction" name="redirect">periodicInspectionServiceReport_list?type=service
+			</result>
+		</action>
+
+
+		<action name="farmerInspectionUtzReport_*" method="{1}"
+			class="farmerInspectionUtzReportAction">
+			<result name="list">jsp/reports/agro/farmerInspectionUtzReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerInspectionUtzReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerInspectionUtzReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="researchStation_*" method="{1}" class="researchStationAction">
+			<result name="success">/jsp/profile/researchStation.jsp</result>
+			<result name="input">/jsp/profile/researchStation.jsp</result>
+			<result name="list">/jsp/profile/researchStationList.jsp</result>
+			<result name="detail">/jsp/profile/researchStationDetail.jsp</result>
+			<result type="redirectAction" name="redirect">researchStation_list
+			</result>
+
+		</action>
+
+
+		<action name="cow_*" method="{1}" class="cowAction">
+			<result name="create">/jsp/profile/cow.jsp</result>
+			<result name="detail">/jsp/profile/cowDetail.jsp</result>
+			<result name="redirect">/jsp/profile/cow.jsp</result>
+			<result name="input">/jsp/profile/cow.jsp</result>
+			<result name="farmDetail" type="redirect">
+				<param name="location">farm_detail.action?${farmerDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+
+			<result name="researchStatDetail" type="redirect">
+				<param name="location">researchStation_detail.action?${farmerDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+		</action>
+
+		<action name="housingInfo_*" method="{1}" class="housingInfoAction">
+			<result name="success" type="redirect">
+				<param name="location">farm_detail.action?${farmDetailParams}</param>
+				<param name="parse">true</param>
+				<param name="encode">false</param>
+			</result>
+			<result type="redirectAction" name="redirect">animalHusbandary_list
+			</result>
+		</action>
+
+		<action name="farmerIndividualBalanceReport_*" method="{1}"
+			class="farmerIndividualBalanceReportAction">
+			<result name="input">/jsp/reports/agro/farmerIndividualBalanceReportList.jsp
+			</result>
+			<result name="list">/jsp/reports/agro/farmerIndividualBalanceReportList.jsp
+			</result>
+			<result name="detail">/jsp/reports/agro/farmerIndividualBalanceReportDetail.jsp
+			</result>
+		</action>
+
+		<action name="productReturnFromFieldStaff_*" method="{1}"
+			class="productReturnFromFieldStaffAction">
+			<result name="success">/jsp/service/productReturnFromFieldStaff.jsp
+			</result>
+			<result name="list">/jsp/service/productReturnFromFieldStaff.jsp
+			</result>
+			<!-- <result name="update">/jsp/service/productReturnFromFieldStaffEdit.jsp 
+				</result> -->
+			<result name="input">/jsp/service/productReturnFromFieldStaff.jsp
+			</result>
+			<!-- <result name="detail">/jsp/service/productReturnFromFieldStaffDetail.jsp 
+				</result> -->
+			<result name="initiate">/jsp/service/productReturnFromFieldStaff.jsp
+			</result>
+			<result name="redirect" type="redirectAction">productReturnFromFieldStaff_create
+			</result>
+			<result name="html">/jsp/service/productReturnFarmerPrint.jsp
+			</result>
+		</action>
+		<action name="globalReport_*" method="{1}" class="globalReportAction">
+			<result name="input">/jsp/reports/agro/globalReportList.jsp
+			</result>
+			<result name="list">/jsp/reports/agro/globalReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="trainingMaterial_*" method="{1}"
+			class="trainingMaterialAction">
+			<result name="success">/jsp/switch/general/trainingMaterial.jsp</result>
+			<result name="input">/jsp/switch/general/trainingMaterial.jsp</result>
+			<result name="list">/jsp/switch/general/trainingMaterialList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/trainingMaterialDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">trainingMaterial_list
+			</result>
+		</action>
+
+		<action name="observations_*" method="{1}" class="observationAction">
+			<result name="success">/jsp/switch/general/trainingObservationsCreate.jsp
+			</result>
+			<result name="input">/jsp/switch/general/trainingObservationsCreate.jsp
+			</result>
+			<result name="list">/jsp/switch/general/trainingObservationsList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/trainingObservationsDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">observations_list </result>
+		</action>
+
+		<action name="cultivation_*" method="{1}" class="cultivationReportAction">
+			<result name="success">/jsp/reports/agro/cocSevice.jsp</result>
+			<result name="list">/jsp/reports/agro/cocServiceList.jsp</result>
+			<result name="detail">/jsp/reports/agro/cocServiceDetail.jsp</result>
+
+			<result type="redirectAction" name="redirect">cultivation_list?type=service
+			</result>
+		</action>
+
+
+
+		<action name="qrCodeGen_*" method="{1}" class="qrCodeGenAction">
+			<result name="success">/jsp/service/qrCodeGenerator.jsp</result>
+			<result name="list">/jsp/service/qrCodeGenerator.jsp</result>
+			<result type="redirectAction" name="redirect">qrCodeGen_list</result>
+			<result name="code" type="stream">
+				<param name="contentType">application/png</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${fileName}.png</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="creationFarmer_*" method="{1}" class="creationToolAction">
+			<result name="success">/jsp/switch/general/creationFarmer.jsp</result>
+			<result name="redirect">/jsp/switch/general/creationFarmer.jsp</result>
+			<result name="create">/jsp/switch/general/creationFarmer.jsp</result>
+			<result name="input">/jsp/switch/general/creationFarmer.jsp</result>
+			<result name="list">/jsp/switch/general/creationFarmerList.jsp
+			</result>
+			<result name="createList">/jsp/switch/general/creationList.jsp</result>
+		</action>
+
+		<action name="creationTool_*" method="{1}" class="creationToolAction">
+			<result name="list">/jsp/switch/general/creationToolList.jsp</result>
+			<result name="gridPage">/jsp/switch/general/creationToolGrid.jsp</result>
+			<result name="edit">/jsp/switch/general/editCreationTool.jsp</result>
+			<result name="sectionEdit">/jsp/switch/general/editSection.jsp</result>
+			<result  name="editListOrder">/jsp/switch/general/editListOrder.jsp</result>
+			<result name="addListFields">/jsp/switch/general/addListFields.jsp</result>
+			<result type="redirectAction" name="redirectToAddListFields">creationTool_addListFields</result>
+			<result type="redirectAction" name="redirectToEditListOrder">creationTool_editListOrder</result>
+			<result type="redirectAction" name="redirectToList">creationTool_list</result>
+			<result type="redirectAction" name="redirect">creationTool_grid</result>
+		
+			
+
+
+		</action>
+
+		<action name="farmerFeedBackReport_*" method="{1}"
+			class="farmerFeedBackReportAction">
+			<result name="list">jsp/reports/agro/farmerFeedBackReportList.jsp
+			</result>
+			<result name="detail">jsp/reports/agro/farmerFeedBackReportDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">farmerFeedBackReport_list
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+
+		<action name="farmerFeedBackService_*" method="{1}"
+			class="farmerFeedBackServiceAction">
+			<result name="success">/jsp/service/feedbackService.jsp</result>
+			<result name="list">/jsp/service/feedbackService.jsp</result>
+			<result name="input">/jsp/service/feedbackService.jsp</result>
+			<result type="redirectAction" name="redirect">farmerFeedBackService_create
+			</result>
+
+		</action>
+
+		<action name="surveyMaster_*" method="{1}" class="surveyMasterAction">
+			<result name="list">/jsp/profile/surveyMasterList.jsp</result>
+			<result name="detail">/jsp/profile/surveyMasterDetail.jsp</result>
+			<result name="input">/jsp/profile/surveyMaster.jsp</result>
+			<result name="success">/jsp/profile/surveyMaster.jsp</result>
+			<result type="redirectAction" name="redirect">surveyMaster_list</result>
+		</action>
+
+		<action name="survey_*" method="{1}" class="surveyAction">
+			<result name="list">/jsp/profile/survey.jsp</result>
+			<result name="input">/jsp/profile/survey.jsp</result>
+			<result type="redirectAction" name="redirectEditList">surveyEdit_list</result>
+			<result type="redirectAction" name="redirectSurveyFailedList">surveyReport_list?surveyFailure=true
+			</result>
+			<result type="redirectAction" name="surveyEdit">surveyReport_list?surveyEdit=1
+			</result>
+		</action>
+
+		<action name="question_*" method="{1}" class="questionAction">
+			<result name="success">/jsp/profile/question.jsp</result>
+			<result name="input">/jsp/profile/question.jsp</result>
+			<result name="list">/jsp/profile/questionList.jsp</result>
+			<result name="detail">/jsp/profile/questionDetail.jsp</result>
+			<result type="redirectAction" name="redirect">question_list</result>
+		</action>
+
+
+		<action name="farmerIncome_*" method="{1}" class="farmerIncomeReportAction">
+			<result name="success">/jsp/reports/agro/farmerIncome.jsp</result>
+			<result name="list">/jsp/reports/agro/farmerIncomeList.jsp</result>
+			<result name="detail">/jsp/reports/agro/farmerIncomeDetail.jsp</result>
+			<result type="redirectAction" name="redirect">farmerIncome_list?type=service
+			</result>
+			<result name="update">/jsp/reports/agro/farmerIncome.jsp</result>
+			
+		</action>
+
+		<action name="farmerActivityReport_*" method="{1}"
+			class="farmerActivityReportAction">
+			<result name="list">/jsp/reports/agro/farmerActivityReportList.jsp
+			</result>
+			<result name="detail">/jsp/reports/agro/farmerActivityReportDetail.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="supplierProcurement_*" method="{1}"
+			class="supplierProcurementAction">
+			<result name="success">/jsp/service/supplierProcurement.jsp</result>
+			<!-- <result name="update">/jsp/service/procurementService.jsp</result> -->
+			<result name="list">/jsp/service/supplierProcurement.jsp</result>
+			<result name="input">/jsp/service/supplierProcurement.jsp</result>
+			<!-- <result name="detail">/jsp/service/procurementServiceDetail.jsp</result> -->
+			<result type="redirectAction" name="redirect">supplierProcurement_create
+			</result>
+			<!--<result name="redirect" type="redirect"> <param name="location">procurementAgentLogin_execute.action?type=procurement</param> 
+				<param name="parse">true</param> <param name="encode">false</param> </result> -->
+			<!-- <result name="html">/jsp/service/procurementProductPrint.jsp</result> -->
+		</action>
+
+		<action name="procurementTraceability_*" method="{1}"
+			class="procurementTraceabilityAction">
+			<result name="list">/jsp/service/procurementTraceabilityList.jsp
+			</result>
+			<result name="input">/jsp/service/procurementTraceability.jsp</result>
+			<result type="redirectAction" name="redirect">procurementTraceability_list
+			</result>
+		</action>
+
+		<action name="procurementTraceabilityReport_*" method="{1}"
+			class="procurementTraceabilityReportAction">
+			<result name="list">/jsp/reports/agro/procurementTraceabilityReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+
+		<!-- <action name="receptionTraceability_*" method="{1}" class="receptionTraceabilityAction"> 
+			<result name="list">/jsp/service/receptionTraceability.jsp</result> <result 
+			name="input">/jsp/service/receptionTraceability.jsp</result> <result type="redirectAction" 
+			name="redirect">receptionTraceability_create </result> </action> -->
+
+		<action name="traceabilityProcurementTransfer_*" method="{1}"
+			class="traceabilityProcurementTransferAction">
+			<result name="input">/jsp/service/traceabilityProcurementTransfer.jsp
+			</result>
+			<result type="redirectAction" name="redirect">traceabilityProcurementTransfer_list
+			</result>
+		</action>
+
+		<action name="icsFarmerDairyReport_*" method="{1}"
+			class="icsFarmerDairyReportAction">
+			<result name="list">/jsp/reports/agro/icsFarmerDairyReportList.jsp
+			</result>
+			<result name="detail">/jsp/reports/agro/icsFarmerDairyReportDetail.jsp
+			</result>
+		</action>
+
+		<action name="gmo_*" method="{1}" class="gmoAction">
+			<result name="list">/jsp/profile/gmoList.jsp
+			</result>
+		</action>
+
+		<action name="ginnerQuantitySold_*" method="{1}"
+			class="ginnerQuantitySoldAction">
+			<result name="list">/jsp/profile/ginnerQuantitySoldList.jsp
+			</result>
+		</action>
+
+		<action name="dynmaicCertificationReport_*" method="{1}"
+			class="dynamicCertificationAction">
+			<result name="list">/jsp/service/dynamicCertificationList.jsp
+			</result>
+			<result name="detail">/jsp/service/dynamicCertificationDetail.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+
+		<action name="cottonPrice_*" method="{1}" class="cottonPriceAction">
+			<result name="list">/jsp/profile/cottonPriceList.jsp
+			</result>
+		</action>
+		<action name="dynamicCertification_*" method="{1}"
+			class="dynamicCertificationAction">
+			<result name="success">/jsp/service/dynamicCertificationEdit.jsp
+			</result>
+			<result name="list">/jsp/service/dynamicCertificationConfigList.jsp
+			</result>
+			<result name="input">/jsp/service/dynamicCertification.jsp</result>
+			<result name="update">/jsp/service/dynamicCertification.jsp</result>
+			<result name="detail">/jsp/service/dynamicCertificationDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">dynamicCertification_list?txnType=${txnType}
+			</result>
+				<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>	
+				<result name="pdfCat" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.pdf</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="menuCreationToolGrid_*" method="{1}"
+			class="dynamicMenuConfigAction">
+			<result name="success">/jsp/switch/general/dynamicMenuConfig.jsp
+			</result>
+			<!-- <result name="redirect">/jsp/switch/general/dynamicMenuConfig.jsp</result> -->
+			<result name="input">/jsp/switch/general/dynamicMenuConfig.jsp
+			</result>
+			<result name="update">/jsp/switch/general/dynamicMenuConfig.jsp
+			</result>
+			<result name="list">/jsp/switch/general/dynamicMenuConfigList.jsp
+			</result>
+			<result name="detail">/jsp/switch/general/dynamicMenuConfigDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">menuCreationToolGrid_list
+			</result>
+		</action>
+
+		<action name="forecast_*" method="{1}" class="weatherForecastAction">
+			<result name="list">/jsp/switch/general/forecastList.jsp
+			</result>
+		</action>
+      <action name="forecastAdvisor_*" method="{1}" class="forecastAdvisorAction">
+			<result name="list">/jsp/switch/general/forecastAdvisorList.jsp
+			</result>
+			<result name="input">jsp/switch/general/forecastAdvisor.jsp</result>
+			<result name="success">jsp/switch/general/forecastAdvisor.jsp</result>
+			<result name="create">/jsp/reports/agro/forecastAdvisor.jsp</result>
+			<result name="detail">/jsp/switch/general/forecastAdvisorDetail.jsp</result>
+			<!-- <result name="detail">jsp/switch/general/masterDataDetail.jsp</result> -->
+			<result type="redirectAction" name="redirect">forecastAdvisor_list</result>
+		</action>
+
+		
+		
+
+		
+		<action name="dynamicReport_*" method="{1}" class="dynamicReportAction">
+			<result name="list">/jsp/switch/dynamicReportNew.jsp</result>
+		</action>
+
+		<action name="dynamicDataImport_*" method="{1}" class="dynamicDataImportAction">
+			<result name="list">/jsp/switch/general/dynamicDataImport.jsp</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="geoPlotting_*" method="{1}" class="geoPlottingAction">
+			<result name="success">/jsp/profile/geoPlotting.jsp</result>
+			<result name="list">/jsp/profile/geoPlotting.jsp</result>
+			<result name="plotting">/jsp/profile/geoPlotting.jsp</result>
+		</action>
+		<action name="newDynamicReport_*" method="{1}" class="newDynamicReportAction">
+			<result name="list">/jsp/switch/general/newDynamicReport.jsp</result>
+		</action>
+		<action name="coldStorageEntry_*" method="{1}"
+			class="coldStorageEntryAction">
+			<result name="update">/jsp/service/coldStorageEntryService.jsp</result>
+			<result name="list">/jsp/service/coldStorageEntryServiceList.jsp</result>
+			<result name="input">/jsp/service/coldStorageEntry.jsp</result>
+			<result name="detail">/jsp/service/coldStorageEntryServiceDetail.jsp
+			</result>
+			<result type="redirectAction" name="redirect">coldStorageEntry_list
+			</result>	
+			
+		</action>
+	<action name="cropCalendar_*" method="{1}" class="cropCalendarAction">
+
+			<result name="success">/jsp/reports/agro/cropCalendar.jsp </result>
+			<result name="input">/jsp/reports/agro/cropCalendar.jsp	</result>
+			<result name="create">/jsp/reports/agro/cropCalendar.jsp</result>
+			<result name="list">/jsp/reports/agro/cropCalendarList.jsp	</result>
+			<result name="detail">/jsp/reports/agro/cropCalendarDetail.jsp	</result>
+			<result type="redirectAction" name="redirect">cropCalendar_list	</result>
+
+		</action>
+		
+		<action name="sowingLocation_*" method="{1}" class="sowingLocationAction">
+			<result name="success">/jsp/switch/sowingLocation.jsp</result>
+			<result name="list">/jsp/switch/sowingLocation.jsp</result>
+	
+		</action>
+		
+		<action name="dynamicUI_*" method="{1}" class="dynamicUiAction">
+			<result name="list">/jsp/switch/general/DynamicUi.jsp</result>
+		</action>
+		
+		 <action name="baleGeneration_*" method="{1}" class="baleGenerationAction">
+			<result name="success">/jsp/service/baleGeneration.jsp</result>
+			<result name="list">/jsp/service/baleGeneration.jsp</result>
+			<result name="input">/jsp/service/baleGeneration.jsp</result>
+			<result name="redirect" type="redirect">baleGeneration_list.action</result>
+			<result name="html">/jsp/service/receptionTraceabilityPrint.jsp</result>
+		</action>
+		
+		<action name="moleculeProcess_*" method="{1}" class="moleculeProcessAction">
+			<result name="success">/jsp/service/moleculeProcessList.jsp</result>
+			<result name="list">/jsp/service/moleculeProcessList.jsp</result>
+			<result name="input">/jsp/service/moleculeProcess.jsp</result>
+			<result name="detail">/jsp/service/moleculeProcessDetail.jsp</result>
+			<result name="redirect" type="redirect">moleculeProcess_list.action</result>
+			
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		
+		
+		
+		<action name="loanDistribution_*" method="{1}" class="loanDistributionAction">
+			<result name="success">/jsp/service/loanDistribution.jsp</result>		
+			<result name="list">/jsp/service/loanDistributionList.jsp</result>
+			<result name="detail">/jsp/service/loanDistributionDetail.jsp</result>
+			<result name="input">/jsp/service/loanDistribution.jsp</result>
+			<result name="update">/jsp/service/loanDistributionEdit.jsp</result>			
+			<result type="redirectAction" name="redirect">loanDistribution_list
+			</result>
+			
+		</action>
+		<action name="loanDistributionReport_*" method="{1}"
+			class="loanDistributionReportAction">
+			<result name="list">/jsp/reports/agro/loanDistributionReportList.jsp
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result> 
+		</action>
+		
+		<action name="certificationDetails_*" method="{1}"
+			class="certificationDetailsAction">
+			<result name="list">/jsp/profile/certificationDetails.jsp</result>
+			<result name="success">/jsp/profile/certificationDetails.jsp</result>
+			<result name="input">/jsp/profile/certificationDetails.jsp</result>
+			<result name="detail">/jsp/profile/certificationDetails.jsp
+			</result>
+			
+			<result type="redirectAction" name="redirect">certificationDetails_list
+			</result>
+		</action>
+		<action name="samithiFarmerDetails_*" method="{1}"
+			class="samithiFarmerDetailsAction">
+			<result name="list">/jsp/switch/general/samithiFarmerDetails.jsp</result>
+			<result name="success">/jsp/switch/general/samithiFarmerDetails.jsp</result>
+			<result name="input">/jsp/switch/general/samithiFarmerDetails.jsp</result>
+			<result name="detail">/jsp/switch/general/samithiFarmerDetails.jsp
+			</result>
+			
+			<result type="redirectAction" name="redirect">samithiFarmerDetails_list
+			</result>
+		</action>
+		
+		<action name="agrodashboard_*" method="{1}" class="agrodashboardAction">
+			<result name="success">/jsp/switch/agrodashboard.jsp</result>
+			<result name="list">/jsp/switch/agrodashboard.jsp</result>						
+		</action>
+		
+			<action name="farmerLoanStatementReport_*" method="{1}"
+			class="farmerLoanStatementReportAction">
+			<result name="pdf" type="stream">
+				<param name="contentType">application/zip</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="list">/jsp/reports/agro/farmerLoanStatementReportList.jsp
+			</result>
+			<result name="subList">/jsp/reports/agro/farmerLoanStatementReportList.jsp
+			</result>
+			<!-- <result name="detail">/jsp/reports/agro/farmerIndividualBalanceReportDetail.jsp
+			</result> -->
+		</action>
+		<action name="farmerStatementReport_*" method="{1}"
+			class="farmerStatementReportAction">
+			<result name="pdf" type="stream">
+				<param name="contentType">application/zip</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${pdfFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="xls" type="stream">
+				<param name="contentType">application/xls</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename=${xlsFileName}.zip</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="list">/jsp/reports/agro/farmerStatementReportList.jsp
+			</result>
+			<result name="subList">/jsp/reports/agro/farmerStatementReportList.jsp
+			</result>
+			<!-- <result name="detail">/jsp/reports/agro/farmerIndividualBalanceReportDetail.jsp
+			</result> -->
+		</action>
+		
+		<action name="surveyTL_*" method="{1}" class="farmerAction">
+			<!-- <interceptor-ref name="eseImageUploadStack" /> -->
+			<result name="list">/jsp/reports/agro/surveyTL.jsp</result>
+			<result type="redirectAction" name="redirect">surveyTL_list</result>
+			
+		</action>
+		
+	</package>
+</struts>

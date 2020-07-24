@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.eses.sourcetrace.com/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="TxnProcessServiceImpl" targetNamespace="http://service.eses.sourcetrace.com/">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://service.eses.sourcetrace.com/" elementFormDefault="unqualified"
+			targetNamespace="http://service.eses.sourcetrace.com/" version="1.0">
+			<xs:element name="Request">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="head" type="tns:Head" />
+						<xs:element minOccurs="0" name="body" type="tns:body" />
+						<xs:element name="txnLogId" type="xs:long" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Response">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="status" type="tns:Status" />
+						<xs:element name="body" type="tns:body" />
+						<xs:element name="sessionId" type="xs:string" />
+						<xs:element name="binaryType" type="tns:binaryType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="processRequest" type="tns:processRequest" />
+			<xs:element name="processRequestResponse" type="tns:processRequestResponse" />
+			<xs:complexType name="processRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="head" type="tns:Head" />
+								<xs:element minOccurs="0" name="body" type="tns:body" />
+								<xs:element name="txnLogId" type="xs:long" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Head">
+				<xs:sequence>
+					<xs:element name="serialNo" type="xs:string" />
+					<xs:element name="agentId" type="xs:string" />
+					<xs:element name="agentToken" type="xs:string" />
+					<xs:element minOccurs="0" name="servPointId" type="xs:string" />
+					<xs:element name="txnTime" type="xs:string" />
+					<xs:element name="txnType" type="xs:string" />
+					<xs:element minOccurs="0" name="operType" type="xs:string" />
+					<xs:element minOccurs="0" name="mode" type="xs:string" />
+					<xs:element minOccurs="0" name="resentCount" type="xs:string" />
+					<xs:element minOccurs="0" name="msgNo" type="xs:string" />
+					<xs:element minOccurs="0" name="batchNum" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="body">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="data"
+						nillable="true" type="tns:data" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="data">
+				<xs:sequence>
+					<xs:element name="key" type="xs:string" />
+					<xs:element minOccurs="0" name="value" type="xs:string" />
+					<xs:element minOccurs="0" name="intValue" type="xs:int" />
+					<xs:element minOccurs="0" name="longValue" type="xs:long" />
+					<xs:element minOccurs="0" name="doubleValue" type="xs:double" />
+					<xs:element minOccurs="0" name="booleanValue" type="xs:boolean" />
+					<xs:element minOccurs="0" name="dateValue" type="xs:date" />
+					<xs:element minOccurs="0" name="timeValue" type="xs:time" />
+					<xs:element minOccurs="0" name="dateTimeValue" type="xs:anySimpleType" />
+					<xs:element minOccurs="0" name="objectValue" type="tns:Object" />
+					<xs:element minOccurs="0" name="collectionValue" type="tns:Collection" />
+					<xs:element xmlns:ns1="http://www.w3.org/2005/05/xmlmime"
+						minOccurs="0" name="binaryValue" ns1:expectedContentTypes="application/octet-stream"
+						type="xs:base64Binary" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Object">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" name="data" type="tns:data" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Collection">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" name="object" type="tns:Object" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="processRequestResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="status" type="tns:Status" />
+								<xs:element name="body" type="tns:body" />
+								<xs:element name="sessionId" type="xs:string" />
+								<xs:element name="binaryType" type="tns:binaryType" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Status">
+				<xs:sequence>
+					<xs:element name="code" type="xs:string" />
+					<xs:element name="message" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="binaryType">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" name="binaryData"
+						type="tns:binaryData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="binaryData">
+				<xs:sequence>
+					<xs:element name="key" type="xs:string" />
+					<xs:element xmlns:ns2="http://www.w3.org/2005/05/xmlmime"
+						name="value" ns2:expectedContentTypes="application/octet-stream"
+						type="xs:base64Binary" />
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="processRequestResponse">
+		<wsdl:part element="tns:processRequestResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="processRequest">
+		<wsdl:part element="tns:processRequest" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ITxnProcessService">
+		<wsdl:operation name="processRequest">
+			<wsdl:input message="tns:processRequest" name="processRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:processRequestResponse" name="processRequestResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TxnProcessServiceImplSoapBinding"
+		type="tns:ITxnProcessService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="processRequest">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="processRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="processRequestResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TxnProcessServiceImpl">
+		<wsdl:port binding="tns:TxnProcessServiceImplSoapBinding"
+			name="tservport">
+			<soap:address location="http://localhost:8080/tserv/ws" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

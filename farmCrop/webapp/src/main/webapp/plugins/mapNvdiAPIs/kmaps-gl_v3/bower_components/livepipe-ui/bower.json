@@ -1,0 +1,15 @@
+{
+  "name": "livepipe-ui",
+  "version": "1.0.0.0",
+  "homepage": "http://livepipe.net/core",
+  "authors": [
+    "Ryan Johnson <http://syntacticx.com/>"
+  ],
+  "description": "Widgets and controls for Prototype javascript library",
+  "keywords": [
+  ],
+  "license": "MIT",
+  "main": "src/livepipe.js",
+  "ignore": [
+  ]
+}

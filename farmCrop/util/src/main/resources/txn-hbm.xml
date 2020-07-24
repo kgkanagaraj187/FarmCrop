@@ -1,0 +1,3739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<filter-def name="branchFilter">
+		<filter-param name="branchIdParam" type="string" />
+	</filter-def>
+	<class name="com.sourcetrace.esesw.entity.txn.ESETxnType" table="ESE_TXN_TYPE">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="code" column="CODE" />
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.txn.ESETxnHeader"
+		table="ESE_TXN_HEADER">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="deviceName" column="DEVICE_NAME" />
+		<property name="deviceType" column="DEVICE_TYPE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="servPointId" column="SERVICE_POINT_ID" />
+		<property name="servPointName" column="SERVICE_POINT_NAME" />
+		<property name="msgNo" column="MSG_NO" />
+		<property name="batchNo" column="BATCH_NO" />
+		<property name="mode" column="MODE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="tenantId" column="TENANT_ID" />
+		<many-to-one name="eseTxnType" column="ESE_TXN_TYPE_ID"
+			  />
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.txn.ESETxn" table="ESE_TXN">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="txnId" column="TXN_ID" />
+		<property name="operType" column="OPER_TYPE" />
+		<property name="resentCount" column="RESENT_COUNT" />
+		<property name="status" column="STATUS">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.sourcetrace.esesw.entity.txn.ESETxnStatus</param>
+			</type>
+		</property>
+		<property name="code" column="CODE" />
+		<property name="message" column="MESG" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="updateTime" column="UPDATE_TIME" />
+		<many-to-one name="header" column="ESE_TXN_HEADER_ID"
+			unique="true" not-null="true"   cascade="all" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CustomerRegistration"
+		table="CUSTOMER_REGISTRATION">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="customerId" column="CUSTOMER_ID" />
+		<property name="firstName" column="FIRST_NAME" />
+		<property name="lastName" column="LAST_NAME" />
+		<property name="storeName" column="STORE_NAME" />
+		<property name="address" column="ADDRESS" />
+		<property name="location" column="LOCATION" />
+		<property name="pinCode" column="PIN_CODE" />
+		<property name="contactNumber" column="CONTACT_NO" />
+		<property name="enrolledDate" column="ENROLLED_DATE" />
+		<property name="enrolledAgentId" column="ENROLLED_AGENT_ID" />
+		<property name="enrolledAgentName" column="ENROLLED_AGENT_NAME" />
+		<property name="enrolledDeviceId" column="ENROLLED_DEVICE_ID" />
+		<property name="enrolledDeviceName" column="ENROLLED_DEVICE_NAME" />
+		<property name="enrolledBranchId" column="ENROLLED_BRANCH_ID" />
+		<property name="enrolledBranchName" column="ENROLLED_BRANCH_NAME" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OrderTaking"
+		table="ORDER_TAKING">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="orderDate" column="ORDER_DATE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="deviceName" column="DEVICE_NAME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="branchName" column="BRANCH_NAME" />
+		<property name="customerId" column="CUSTOMER_ID" />
+		<property name="firstName" column="CUS_FIRST_NAME" />
+		<property name="lastName" column="CUS_LAST_NAME" />
+		<property name="storeName" column="STORE_NAME" />
+		<property name="address" column="ADDRESS" />
+		<property name="location" column="LOCATION" />
+		<property name="totalOrder" column="TOTAL_ORDER" />
+		<property name="totalOrderPrice" column="TOTAL_ORDER_PRICE" />
+		<property name="orderStatus" column="ORDER_STATUS" />
+		<set name="orderDetails" cascade="all">
+			<key column="ORDER_TAKING_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.OrderTaking" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OrderDetail"
+		table="ORDER_DETAIL">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="categoryName" column="CATEGORY_NAME" />
+		<property name="productName" column="PRODUCT_NAME" />
+		<property name="quantity" column="QUANTITY" />
+		<property name="price" column="PRICE" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<many-to-one name="orderTaking" column="ORDER_TAKING_ID"
+			not-null="true"   />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.Inventory"
+		table="INVENTORY">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="shopDealerId" column="SHOP_DEALER_ID" />
+		<property name="shopDealerName" column="SHOP_DEALER_NAME" />
+		<property name="type" column="TYPES" />
+		<property name="creditLimit" column="CREDIT_LIMIT" />
+		<property name="outstandingBalance" column="OUTSTANDING_BALANCE" />
+		<property name="orderDate" column="ORDER_DATE" />
+		<property name="orderNo" column="ORDER_NO" />
+		<property name="deliveryDate" column="DELIVERY_DATE" />
+		<property name="deliveryNo" column="DELIVERY_NO" />
+		<property name="totalQuantity" column="TOTAL_QTY" />
+		<property name="grandTotal" column="GRAND_TOTAL" />
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="paymentReference" column="PAYMENT_REFERENCE" />
+		<property name="paymentAmount" column="PAYMENT_AMOUNT" />
+		<property name="deliveryMode" column="DELIVERY_MODE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="deviceName" column="DEVICE_NAME" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="approvalCode" column="APPROVAL_CODE" />
+		<property name="operationType" column="OPER_TYPE" />
+		<set name="inventoryDetails" cascade="all">
+			<key column="INVENTORY_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.InventoryDetail" />
+		</set>
+		<property name="cancelDate" column="CANCEL_DATE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.InventoryDetail"
+		table="INVENTORY_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="product" column="PRODUCT_ID"   />
+		<property name="quantity" column="QUANTITY" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<many-to-one name="inventory" column="INVENTORY_ID"   />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.Distribution"
+		table="DISTRIBUTION">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="referenceNo" column="REFERENCE_NO" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="totalAmount" column="TOTAL_AMOUNT" />
+		<property name="tax" column="TAX" />
+		<property name="finalAmount" column="FINAL_AMOUNT" />
+		<property name="paymentMode" column="PAYNMENT_MODE" />
+		<property name="paymentAmount" column="PAYMENT_AMT" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="receiptNumber" column="RECEIPT_NO" />
+		<property name="intBalance" column="INT_BAL" />
+		<property name="txnAmount" column="TXN_AMT" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="freeDistribution" column="IS_FREE_DISTRIBUTION" />
+		<property name="samithiName" column="SAMITHI_NAME" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="villageName" column="VILLAGE_NAME" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="balAmount" column="BAL_AMT" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="latitude" column="LATITUDE"/>
+		<property name="longitude" column="LONGITUDE"/>
+     	<property name="fatherName"
+			formula="(SELECT FARMER.LAST_NAME FROM FARMER WHERE FARMER.FARMER_ID=FARMER_ID LIMIT 1)" />
+
+		<many-to-one name="village" column="VILLAGE_ID"  />
+		<many-to-one name="agroTransaction" column="TRXN_AGRO_ID"
+			  cascade="all" />
+		<many-to-one name="season" column="SEASON_ID"  />
+		<set name="distributionDetails" cascade="all"  >
+			<key column="DISTRIBUTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.DistributionDetail" />
+		</set>
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="status" column="STATUS" />
+		<property name="updatedUserName" column="UPDATED_USER_NAME" />
+		<property name="updateTime" column="UPDATED_TIME" />
+		<property name="warehouseCode" column="WAREHOUSE_CODE" />
+		<property name="warehouseName" column="WAREHOUSE_NAME" />
+		<set name="pmtImageDetail" cascade="all" lazy ="false"  >
+			<key column="PMT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PMTImageDetails" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+		
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.DistributionDetail"
+		table="DISTRIBUTION_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="product" column="PRODUCT_ID"   />
+		<property name="quantity" column="QUANTITY" />
+		<property name="unit" column="UNIT" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="sellingPrice" column="SELLING_PRICE" />
+		<property name="existingQuantity" column="EXISTING_QUANTITY" />
+		<property name="currentQuantity" column="CURRENT_QUANTITY" />
+		<property name="costPrice" column="COST_PRICE" />
+		<property name="batchNo" column="BATCH_NO" />
+		<property name="sagiCode" column="SAGI_CODE" />
+		   <property name="initFBalance" column="INIT_FBAL" />
+		<property name="initTBalance" column="INIT_TBAL" />
+		<property name="finalFBalance" column="FINAL_FARMER_BALANCE" />
+	
+		<many-to-one name="distribution" column="DISTRIBUTION_ID"
+			  cascade="all"  />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.Procurement"
+		table="PROCUREMENT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="type" column="TYPEE" />
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<property name="poNumber" column="PO_NUMBER" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="paymentAmount" column="PAYMENT_AMT" />
+		<property name="procMasterType" column="MASTER_TYPE" />
+		<property name="procMasterTypeId" column="MASTER_TYPE_ID" />
+		<many-to-one name="agroTransaction" column="TRXN_AGRO_ID"
+			  cascade="all" />
+		<many-to-one name="season" column="SEASON_ID"   />
+		<set name="procurementDetails" cascade="all"  >
+			<key column="PROCUREMENT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.ProcurementDetail" />
+		</set>
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="totalProVal" column="TOTAL_AMOUNT" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<many-to-one name="farmer" column="FARMER_ID"   />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="roadMapCode" column="ROAD_MAP_CODE" />
+		<property name="vehicleNum" column="VEHICLE_NO" />
+		<property name="farmerAttnce" column="FARMER_ATTENDANCE" />
+		<property name="substituteName" column="SUBSTITUTE_NAME" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="farmId" column="FARM_ID" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="totalLabourCost" column="TOTAL_LABOUR_COST" />
+		<property name="transportCost" column="TRANSPORT_COST" />
+		<property name="invoiceValue" column="INVOICE_COST" />
+		<property name="warehouseId" column="WAREHOUSE_ID" />
+		<property name="cropType" column="CROP_TYPE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="invoiceNo" column="INVOICE_NO" />
+		<property name="vehicleType" column="VEHICLE_TYPE" />
+		<property name="status" column="STATUS" />
+		<property name="actualAmount" column="ACTUAL_AMT" />
+		<property name="loanInterest" column="LOAN_PERCENTAGE" />
+		<property name="loanAmount" column="LOAN_AMT" />
+		<property name="finalPayAmt" column="FINAL_PAY_AMOUNT" />
+		
+		<many-to-one name="buyer" column="BUYER" not-null="true"/>
+		<property name="farm"
+			formula="(SELECT FARM.FARM_NAME FROM FARM WHERE FARM.FARM_CODE =FARM_ID)" />
+		<property name="ffc" column="FFC" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.ProcurementDetail"
+		table="PROCUREMENT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="procurementGrade" column="PROCUREMENT_GRADE_ID"
+			  />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="tareWeight" column="TARE_WEIGHT" />
+		<property name="NetWeight" column="NET_WEIGHT" />
+		<property name="ratePerUnit" column="RATE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="dryLoss" column="DRY_LOSS" />
+		<property name="gradingLoss" column="GRADING_LOSS" />
+		<property name="unit" column="UNIT" />
+		<many-to-one name="procurement" column="PROCUREMENT_ID"
+			  />
+		<property name="batchNo" column="BATCH_NO" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.MTNT" table="MTNT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="warehouseCode" column="WAREHOUSE_CODE" />
+		<property name="warehouseName" column="WAREHOUSE_NAME" />
+		<property name="mtntDate" column="MTNT_DATE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="deviceName" column="DEVICE_NAME" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="totalNumberOfBags" column="TOTAL_NO_OF_BAGS" />
+		<property name="totalGrossWeight" column="TOTAL_GROSS_WEIGHT" />
+		<property name="totalTareWeight" column="TOTAL_TARE_WEIGHT" />
+		<property name="totalNetWeight" column="TOTAL_NET_WEIGHT" />
+		<property name="type" column="TYPEE" />
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverId" column="DRIVER_ID" />
+		<property name="operationType" column="OPER_TYPE" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<set name="mtntDetails" cascade="all">
+			<key column="MTNT_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.MTNTDetail" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.MTNTDetail"
+		table="MTNT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="mtnt" column="MTNT_ID"   />
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<property name="numberOfBags" column="NO_OF_BAGS" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="tareWeight" column="TARE_WEIGHT" />
+		<property name="NetWeight" column="NET_WEIGHT" />
+		<property name="mode" column="MODE" />
+		<many-to-one name="gradeMaster" column="GRADE_MASTER_ID"
+			  />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.VillageWarehouse"
+		table="VILLAGE_WAREHOUSE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="isDelete" column="IS_DELETE" />
+		<property name="quality" column="QUALITY" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineDistribution"
+		table="OFFLINE_DISTRIBUTION">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="distributionDate" column="DISTRIBUTION_DATE" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="warehouseCode" column="WAREHOUSE_CODE" />
+		<property name="villageCode" column="VILLAGE_CODE" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="paymentAmt" column="PAYMENT_AMT" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="tax" column="TAX" />
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="freeDistribution" column="IS_FREE_DISTRIBUTION" />
+		<property name="totalAmount" column="TOTAL_AMOUNT" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="currentSeasonCode" column="CURRENT_SEASON_CODE" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		
+		<set name="offlineDistributionDetails" cascade="all" lazy ="false"  >
+			<key column="OFFLINE_DISTRIBUTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineDistributionDetail" />
+		</set>
+		<set name="pmtImageDetail" cascade="all" lazy ="false"  >
+			<key column="OFFLINE_PMT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PMTImageDetails" />
+		</set>
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.OfflineDistributionDetail"
+		table="OFFLINE_DISTRIBUTION_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="quantity" column="QUANTITY" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="sellingPrice" column="SELLING_PRICE" />
+		<many-to-one name="offlineDistribution" column="OFFLINE_DISTRIBUTION_ID"
+			  />
+		<property name="batchNo" column="BATCH_NO" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineProcurement"
+		table="OFFLINE_PROCUREMENT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="procurementDate" column="PROCUREMENT_DATE" />
+		<property name="totalAmount" column="TOTAL_AMOUNT" />
+		<property name="paymentAmt" column="PAYMENT_AMOUNT" />
+		<property name="type" column="TYPEE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="samithiCode" column="SAMITHI_CODE" />
+		<property name="villageCode" column="VILLAGE_CODE" />
+		<property name="cityCode" column="CITY_CODE" />
+		<property name="chartNo" column="CHART_NO" />
+		<property name="driverName" column="DRIVER_NAME" />
+		<property name="vehicleNo" column="VEHICLE_NO" />
+		<property name="poNumber" column="PO_NUMBER" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="procMasterType" column="MASTER_TYPE" />
+		<property name="procMasterTypeId" column="MASTER_TYPE_ID" />
+		<property name="vehicleType" column="VEHICLE_TYPE" />
+		
+		<set name="offlineProcurementDetails" cascade="all" lazy ="false" >
+			<key column="OFFLINE_PROCUREMENT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineProcurementDetail" />
+		</set>
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="roadMapCode" column="ROAD_MAP_CODE" />
+		<property name="farmerAttnce" column="FARMER_ATTENDANCE" />
+		<property name="substituteName" column="SUBSTITUTE_NAME" />
+		<property name="farmId" column="FARM_ID" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="totalLabourCost" column="TOTAL_LABOUR_COST" />
+		<property name="transportCost" column="TRANSPORT_COST" />
+		<property name="invoiceValue" column="INVOICE_COST" />
+		<property name="warehouseId" column="WAREHOUSE_ID" />
+		<property name="cropType" column="CROP_TYPE" />
+		<property name="invoiceNo" column="INVOICE_NO" />
+		<property name="isReg" column="IS_REG_FARMER" />
+		<many-to-one name="buyer" column="BUYER" not-null="true"/>
+		<property name="loanInterest" column="LOAN_INTEREST_PERCENT" />
+		<property name="loanRepaymentAmt" column="LOAN_REPAYMENT_AMT" />
+		<property name="finalPayAmt" column="FINAL_PAY_AMT" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineProcurementDetail"
+		table="OFFLINE_PROCUREMENT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="quality" column="QUALITY" />
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="tareWeight" column="TARE_WEIGHT" />
+		<property name="netWeight" column="NET_WEIGHT" />
+		<property name="ratePerUnit" column="RATE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="batchNo" column="BATCH_NO" />
+		<property name="unit" column="UNIT" />
+		<many-to-one name="offlineProcurement" column="OFFLINE_PROCUREMENT_ID"
+			  />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineMTNT"
+		table="OFFLINE_MTNT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="warehouseCode" column="WAREHOUSE_CODE" />
+		<property name="mtntDate" column="MTNT_DATE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="totalNumberOfBags" column="TOTAL_NO_OF_BAGS" />
+		<property name="totalGrossWeight" column="TOTAL_GROSS_WEIGHT" />
+		<property name="totalTareWeight" column="TOTAL_TARE_WEIGHT" />
+		<property name="totalNetWeight" column="TOTAL_NET_WEIGHT" />
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverId" column="DRIVER_ID" />
+		<property name="type" column="TYPEE" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMessage" column="STATUS_MSG" />
+		<property name="transporter" column="TRANSPORTER" />
+		<set name="offlineMTNTDetails" cascade="all" lazy ="false">
+			<key column="OFFLINE_MTNT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineMTNTDetail" />
+		</set>
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="totalLabourCost" column="TOTAL_LABOUR_COST" />
+		<property name="transportCost" column="TRANSPORT_COST" />
+		<property name="client" column="CLIENT" />
+		<property name="totalAmt" column="TOTAL_AMOUNT" />
+		<property name="invoiceNo" column="INVOICE_NO" />
+		<property name="messageNo" column="MSG_NO" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineMTNTDetail"
+		table="OFFLINE_MTNT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="offlineMTNT" column="OFFLINE_MTNT_ID"
+			  />
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="villageCode" column="VILLAGE_CODE" />
+		<property name="numberOfBags" column="NO_OF_BAGS" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="tareWeight" column="TARE_WEIGHT" />
+		<property name="netWeight" column="NET_WEIGHT" />
+		<property name="mode" column="MODE" />
+		<property name="quality" column="QUALITY" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="uom" column="UOM" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineInventory"
+		table="OFFLINE_INVENTORY">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="shopDealerId" column="SHOP_DEALER_ID" />
+		<property name="shopDealerName" column="SHOP_DEALER_NAME" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="creditLimit" column="CREDIT_LIMIT" />
+		<property name="outstandingBalance" column="OUTSTANDING_BALANCE" />
+		<property name="inventoryDate" column="INVENTORY_DATE" />
+		<property name="inventoryOrderNo" column="INVENTORY_ORDER_NO" />
+		<property name="inventoryDeliveryNo" column="INVENTORY_DELIVERY_NO" />
+		<property name="totalQuantity" column="TOTAL_QTY" />
+		<property name="grandTotal" column="GRAND_TOTAL" />
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="paymentReference" column="PAYMENT_REFERENCE" />
+		<property name="paymentAmount" column="PAYMENT_AMOUNT" />
+		<property name="deliveryMode" column="DELIVERY_MODE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<set name="offlineInventoryDetails" cascade="all" lazy ="false"  >
+			<key column="OFFLINE_INVENTORY_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineInventoryDetail" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineInventoryDetail"
+		table="OFFLINE_INVENTORY_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="quantity" column="QUANTITY" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<many-to-one name="offlineInventory" column="OFFLINE_INVENTORY_ID"
+			  />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.AgroTransaction"
+		table="TRXN_AGRO">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="deviceName" column="DEVICE_NAME" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="vendorId" column="VENDOR_ID" />
+		<property name="vendorName" column="VENDOR_NAME" />
+		<property name="customerId" column="CUSTOMR_ID" />
+		<property name="customerName" column="CUSTOMER_NAME" />
+		<property name="profType" column="PROF_TYPE" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="modeOfPayment" column="MODE_OF_PAYMENT" />
+		<property name="intBalance" column="INT_BAL" />
+		<property name="txnAmount" column="TXN_AMT" />
+		<property name="balAmount" column="BAL_AMT" />
+		<property name="operType" column="OPER_TYPE" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="txnDesc" column="TXN_DESC" />
+		<property name="qty" column="QTY" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="debitAmt" column="DEBIT_AMOUNT" />
+		<property name="creditAmt" column="CREDIT_AMOUNT" />
+		<property name="intialBalance" column="INITIAL_BALANCE" />
+		<many-to-one name="distribution" column="DISTRIBUTION_ID"
+			  cascade="all"/>
+		
+		<many-to-one name="procurement" column="PROCUREMENT_ID"
+			  cascade="all" />
+		<many-to-one name="distributionStock" column="DISTRIBUTION_STOCK_ID"
+			  cascade="all"/>
+		<property name="branchId"
+			formula="(SELECT FARMER.BRANCH_ID FROM FARMER WHERE FARMER.FARMER_ID = FARMER_ID LIMIT 1)" />
+		<many-to-one name="account" column="ESE_ACCOUNT_ID"/>
+		<many-to-one name="samithi" column="SAMITHI_ID" />
+		<many-to-one name="refAgroTransaction" cascade="all"
+			column="REF_TRXN_AGRO_ID" />
+
+		<property name="audioFile" column="AUDIO_FILE" />
+		<property name="branch_id" column="BRANCH_ID" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<many-to-one name="productReturn" column="PRODUCT_RETURN_ID"
+			  cascade="all" />
+		<many-to-one name="procurementTraceability" column="PROCUREMENT_TRACEABILITY_ID"
+			  cascade="all" />
+		<!-- <many-to-one name="imageInfo" column="PAYMENT_IMG_INFO_ID"   
+			/> -->
+			<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.profile.PaymentImage"
+		table="PAYMENT_IMG">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="photo" column="PHOTO" />
+		<property name="photoCaptureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<many-to-one name="txn" column="TXN_ID" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.AgentMovement"
+		table="AGENT_MOVEMENT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farm" column="FARM_ID"   />
+		<many-to-one name="agroTransaction" column="TRXN_AGRO_ID"
+			  />
+		<property name="purpose" column="PURPOSE" />
+		<property name="remarks" column="REMARKS" />
+		<set name="agentMovementLocations" cascade="all"  >
+			<key column="AGENT_MVMT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.AgentMovementLocation" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.AgentMovementLocation"
+		table="AGENT_MOVEMENT_LOC">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="agentMovement" column="AGENT_MVMT_ID"
+			  />
+		<property name="updateTime" column="UPD_TIME" />
+		<property name="photo" column="PHOTO" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.AgentBalanceReport">
+		<subselect>
+			SELECT
+			trxn_agro.ID,
+			trxn_agro.RECEIPT_NO,
+			trxn_agro.AGENT_ID,
+			trxn_agro.AGENT_NAME,
+			trxn_agro.FARMER_ID,
+			trxn_agro.FARMER_NAME,
+			trxn_agro.SERVICE_POINT_NAME,
+			trxn_agro.TXN_TYPE,
+			trxn_agro.INT_BAL,
+			trxn_agro.TXN_AMT,
+			trxn_agro.BAL_AMT,
+			trxn_agro.TXN_TIME,
+			trxn_agro.TXN_DESC,
+			trxn_agro.PROF_TYPE,
+			ese_account.ACC_NO,
+			ese_account.ACC_TYPE
+
+			FROM
+			trxn_agro
+			INNER JOIN
+			ese_account ON ese_account.PROFILE_ID =
+			trxn_agro.AGENT_ID
+			WHERE
+			ese_account.TYPEE = '1' AND
+			trxn_agro.PROF_TYPE != '02' AND
+			(
+			trxn_agro.TXN_TYPE IS NULL OR
+			(trxn_agro.TXN_TYPE !='329' AND
+			trxn_agro.TXN_TYPE !='514' AND
+			trxn_agro.TXN_TYPE !='345' )) AND
+			trxn_agro.OPER_TYPE = 1 ORDER BY
+			trxn_agro.TXN_TIME DESC
+
+		</subselect>
+
+		<synchronize table="ESE_ACCOUNT" />
+		<synchronize table="TRXN_AGRO" />
+
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="initialBalance" column="INT_BAL" />
+		<property name="txnAmount" column="TXN_AMT" />
+		<property name="balanceAmount" column="BAL_AMT" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="txnDesc" column="TXN_DESC" />
+		<property name="profType" column="PROF_TYPE" />
+		<property name="accountNumber" column="ACC_NO" />
+		<property name="accountType" column="ACC_TYPE" />
+
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.FarmerBalanceReport">
+		<subselect>
+			SELECT
+			trxn_agro.ID,
+			trxn_agro.RECEIPT_NO,
+			trxn_agro.AGENT_ID,
+			trxn_agro.AGENT_NAME,
+			trxn_agro.FARMER_ID,
+			trxn_agro.FARMER_NAME,
+			trxn_agro.SERVICE_POINT_NAME,
+			trxn_agro.TXN_TYPE,
+			trxn_agro.INT_BAL,
+			trxn_agro.TXN_AMT,
+			trxn_agro.BAL_AMT,
+			trxn_agro.TXN_TIME,
+			trxn_agro.TXN_DESC,
+			trxn_agro.ESE_ACCOUNT_ID,
+			ese_account.ACC_NO,
+			ese_account.ACC_TYPE
+
+			FROM
+			trxn_agro
+			INNER JOIN
+			ese_account ON ese_account.PROFILE_ID =
+			trxn_agro.FARMER_ID
+			WHERE
+			ese_account.TYPEE = '3' AND
+			trxn_agro.PROF_TYPE = '02' AND
+			trxn_agro.OPER_TYPE = 1 ORDER BY
+			trxn_agro.TXN_TIME DESC
+
+		</subselect>
+
+		<synchronize table="ESE_ACCOUNT" />
+		<synchronize table="TRXN_AGRO" />
+
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="initialBalance" column="INT_BAL" />
+		<property name="txnAmount" column="TXN_AMT" />
+		<property name="balanceAmount" column="BAL_AMT" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="txnDesc" column="TXN_DESC" />
+		<property name="accountNumber" column="ACC_NO" />
+		<property name="accountType" column="ACC_TYPE" />
+		<many-to-one name="account" column="ESE_ACCOUNT_ID"   />
+
+	</class>
+
+	<class name="com.sourcetrace.eses.entity.LocationHistory" table="LOC_HISTORY">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="serialNumber" column="SERIAL_NO" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="createdTime" column="CREATED_TIME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="startTime" column="START_TIME" />
+		<property name="endTime" column="END_TIME" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="endlongitude" column="END_LONGITUDE" />
+		<property name="endlatitude" column="END_LATITUDE" />
+		<property name="startAddress" column="ADDRESS" />
+		<property name="endAddress" column="END_ADDRESS" />
+			<set name="locationHistoryDetails" cascade="all" lazy="true">
+			<key column="LOC_HISTORY_ID" />
+			<one-to-many class="com.sourcetrace.eses.entity.LocationHistoryDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.entity.LocationHistoryDetail" table="LOC_HISTORY_DETAIL">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="serialNumber" column="SERIAL_NO" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="createdTime" column="CREATED_TIME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="distance" column="DISTANCE" />
+		<property name="address" column="ADDRESS" />
+		<property name="accuracy" column="ACCURACY" />
+		<property name="netStatus" column="NET_STATUS" />
+		<property name="gpsStatus" column="GPS_STATUS" />
+		<many-to-one name="locHistory" column="LOC_HISTORY_ID"/>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	<class name="com.sourcetrace.eses.order.entity.txn.TruckStock"
+		table="TRUCK_STOCK">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="createTime" column="CREATE_TIME" />
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="sendStock" column="SEND_STOCK" />
+		<property name="receivedStock" column="RECEIVED_STOCK" />
+		<property name="reason" column="REASON" />
+		<set name="truckStockDetails" cascade="all"  >
+			<key column="TRUCK_STOCK_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.TruckStockDetail" />
+		</set>
+	</class>
+	<class name="com.sourcetrace.eses.order.entity.txn.TruckStockDetail"
+		table="TRUCK_STOCK_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="createTime" column="CREATE_TIME" />
+		<property name="driverId" column="DRIVER_ID" />
+		<property name="uniqueSeqId" column="UNIQUE_SEQ_ID" />
+		<property name="type" column="TYPEE" />
+		<property name="stock" column="STOCK" />
+		<many-to-one name="truckStock" column="TRUCK_STOCK_ID"
+			  />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OrderPending">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="shopDealerId" column="SHOP_DEALER_ID" />
+		<property name="shopDealerName" column="SHOP_DEALER_NAME" />
+		<property name="orderDate" column="ORDER_DATE" />
+		<property name="orderNo" column="ORDER_NO" />
+		<property name="orderQty" column="ORDER_QTY" />
+		<property name="deliveryQty" column="DELIVERY_QTY" />
+		<property name="balanceQty" column="BALANCE_QTY" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OrderPendingDetail">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="orderNo" column="ORDER_NO" />
+		<property name="productName" column="PRODUCT_NAME" />
+		<property name="productUnit" column="PRODUCT_UNIT" />
+		<property name="orderQty" column="ORDER_QTY" />
+		<property name="deliveryQty" column="DELIVERY_QTY" />
+		<property name="balanceQty" column="BALANCE_QTY" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.ProductPending">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="productName" column="PRODUCT_NAME" />
+		<property name="productUnit" column="PRODUCT_UNIT" />
+		<property name="orderQty" column="ORDER_QUANTITY" />
+		<property name="deliveryQty" column="DELIVERY_QUANTITY" />
+		<property name="pendingQty" column="PENDING_QUANTITY" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.ProductPendingDetail">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="shopDealerId" column="SHOP_DEALER_ID" />
+		<property name="shopDealerName" column="SHOP_DEALER_NAME" />
+		<property name="orderNo" column="ORDER_NO" />
+		<property name="orderDate" column="ORDER_DATE" />
+		<property name="orderQty" column="ORDER_QUANTITY" />
+		<property name="deliveryQty" column="DELIVERY_QUANTITY" />
+		<property name="pendingQty" column="PENDING_QUANTITY" />
+		<property name="productId" column="PRODUCT_ID" />
+	</class>
+	<class name="com.sourcetrace.eses.order.entity.txn.PaymentMode"
+		table="PAYMENT_MODE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+
+	</class>
+	<class name="com.sourcetrace.eses.order.entity.txn.TripSheet"
+		table="TRIP_SHEET">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="city" column="CITY_ID"   />
+		<property name="chartNo" column="CHART_NO" />
+		<property name="date" column="TRIP_SHEET_DATE" />
+		<property name="driverName" column="DRIVER_NAME" />
+		<property name="vehicleNo" column="VEHICLE_NO" />
+		<property name="buyerName" column="BUYER_NAME" />
+		<property name="transitStatus" column="TRANSIT_STATUS" />
+		<set name="procurements" cascade="all">
+			<key column="TRIP_SHEET_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.Procurement" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CityWarehouse"
+		table="CITY_WAREHOUSE">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="city" column="CITY_ID"   />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="isDelete" column="IS_DELETE" />
+		<property name="quality" column="QUALITY" />
+		<property name="branchId" column="BRANCH_ID" />
+		<many-to-one name="farmer" column="FARMER_ID"   />
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<many-to-one name="coOperative" column="CO_OPERATIVE_ID"
+			  />
+		<property name="revisionNo" column="REVISION_NO" />
+		<set name="cityWarehouseDetails" cascade="all"  >
+			<key column="CITY_WAREHOUSE_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.CityWarehouseDetail" />
+		</set>
+		<property name="coldStorageName" column="COLD_STORAGE_NAME" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PMT" table="pmt">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="mtntDate" column="MTNT_DATE" />
+		<property name="mtnrDate" column="MTNR_DATE" />
+		<property name="mtntReceiptNumber" column="MTNT_RECEIPT_NUMBER" />
+		<property name="mtnrReceiptNumber" column="MTNR_RECEIPT_NUMBER" />
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverName" column="DRIVER_NAME" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMessage" column="STATUS_MSG" />
+		<property name="branchId" column="BRANCH_ID" />
+		<many-to-one name="mtntTransferInfo" column="MTNT_TRANSFER_INFO_ID"
+			  cascade="all" />
+		<many-to-one name="mtnrTransferInfo" column="MTNR_TRANSFER_INFO_ID"
+			  cascade="all" />
+		<many-to-one name="coOperative" column="CO_OPERATIVE_ID"
+			  />
+		<set name="pmtDetails" cascade="all" order-by="id asc"  >
+			<key column="PMT_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.PMTDetail" />
+		</set>
+
+		<set name="pmtFarmerDetais" cascade="all" order-by="id asc" lazy="false" >
+			<key column="PMT_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.PMTFarmerDetail" />
+		</set>
+
+
+		<set name="pmtImageDetails" cascade="all"   where="type=1">
+			<key column="PMT_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.PMTImageDetails" />
+		</set>
+
+		<property name="trnType" column="TRN_TYPE" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="totalLabourCost" column="TOTAL_LABOUR_COST" />
+		<property name="transportCost" column="TRANSPORT_COST" />
+		<property name="client" column="CLIENT" />
+		<property name="totalAmt" column="TOTAL_AMOUNT" />
+		<property name="invoiceNo" column="INVOICE_NO" />
+		<property name="transporter" column="TRANSPORTER" />
+		<many-to-one name="transferInfo" column="TRANSFER_INFO"
+			  />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />	  
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PMTDetail"
+		table="pmt_detail">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="gradeMaster" column="GRADE_MASTER_ID"
+			  />
+		<many-to-one name="procurementGrade" column="PROCUREMENT_GRADE_ID"
+			  />
+		<property name="ics" column="ICS" />
+		<property name="mtntNumberOfBags" column="MTNT_NO_OF_BAGS" />
+		<property name="mtnrNumberOfBags" column="MTNR_NO_OF_BAGS" />
+		<property name="mtntGrossWeight" column="MTNT_GROSS_WEIGHT" />
+		<property name="mtntQuintalWeight" column="MTN_QUINTAL_WEIGHT" />
+		<property name="mtnrGrossWeight" column="MTNR_GROSS_WEIGHT" />
+		<property name="branchId" column="BRANCH_ID" />
+		<many-to-one name="pmt" column="PMT_ID"  
+			cascade="all" />
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<many-to-one name="coOperative" column="COOPRATIVE_ID"
+			  />
+		<many-to-one name="farmer" column="FARMER_ID"   />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="uom" column="UOM" />
+		
+		<!-- To get status if 1 reception details and if 0 transfer details -->
+		<property name="status" column="STATUS" />
+		<property name="heap" column="HEAP" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PMTFarmerDetail"
+		table="pmt_farmer_detail">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="gradeMaster" column="GRADE_MASTER_ID"
+			  />
+		<many-to-one name="procurementGrade" column="PROCUREMENT_GRADE_ID"
+			  />
+		<property name="mtntNumberOfBags" column="MTNT_NO_OF_BAGS" />
+		<property name="mtnrNumberOfBags" column="MTNR_NO_OF_BAGS" />
+		<property name="mtntGrossWeight" column="MTNT_GROSS_WEIGHT" />
+		<property name="mtnrGrossWeight" column="MTNR_GROSS_WEIGHT" />
+		<property name="branchId" column="BRANCH_ID" />
+		<many-to-one name="pmt" column="PMT_ID"   />
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<many-to-one name="coOperative" column="COOPRATIVE_ID"
+			  />
+		<!-- <many-to-one name="farmer" column="FARMER_ID"   /> -->
+		<property name="farmer" column="FARMER_ID" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="uom" column="UOM" />
+		<property name="ics" column="ICS" />
+		<property name="season" column="SEASON" />
+		<!-- To get status if 1 reception details and if 0 transfer details -->
+		<property name="status" column="STATUS" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.TransferInfo"
+		table="transfer_info">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="deviceName" column="DEVICE_NAME" />
+		<property name="operationType" column="OPER_TYPE" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="agentType" column="AGENT_TYPE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.DMT" table="DMT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="mtntDate" column="MTNT_DATE" />
+		<property name="mtnrDate" column="MTNR_DATE" />
+		<property name="mtntReceiptNo" column="MTNT_RECEIPT_NO" />
+		<property name="mtnrReceiptNo" column="MTNR_RECEIPT_NO" />
+		<many-to-one name="senderWarehouse" column="SENDER_WAREHOUSE_ID"
+			  />
+		<many-to-one name="receiverWarehouse" column="RECEIVER_WAREHOUSE_ID"
+			  />
+		<many-to-one name="senderTransferInfo" column="SENDER_TRANSFER_INFO_ID"
+			  />
+		<many-to-one name="receiverTransferInfo" column="RECEIVER_TRANSFER_INFO_ID"
+			  />
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverName" column="DRIVER_NAME" />
+		<property name="status" column="STATUS" />
+		<set name="dmtDetails" cascade="all">
+			<key column="DMT_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.DMTDetail" />
+		</set>
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.DMTDetail"
+		table="DMT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="product" column="PRODUCT_ID"   />
+		<property name="transferedUnit" column="TRANSFERED_UNIT" />
+		<property name="transferedQty" column="TRANSFERED_QTY" />
+		<property name="receivedUnit" column="RECEIVED_UNIT" />
+		<property name="receivedQty" column="RECEIVED_QTY" />
+		<many-to-one name="dmt" column="DMT_ID"   />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CityWarehouseDetail"
+		table="CITY_WAREHOUSE_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="date" column="TXN_DATE" />
+		<property name="type" column="TYPEE" />
+		<property name="referenceId" column="TXN_REFERENCE_ID" />
+		<property name="previousNumberOfBags" column="PREVIOUS_NO_OF_BAGS" />
+		<property name="previousGrossWeight" column="PREVIOUS_GROSS_WEIGHT" />
+		<property name="txnNumberOfBags" column="TXN_NO_OF_BAGS" />
+		<property name="txnGrossWeight" column="TXN_GROSS_WEIGHT" />
+		<property name="totalNumberOfBags" column="TOTAL_NO_OF_BAGS" />
+		<property name="totalGrossWeight" column="TOTAL_GROSS_WEIGHT" />
+		<property name="description" column="DESCRIPTION" />
+		<many-to-one name="cityWarehouse" column="CITY_WAREHOUSE_ID"
+			  />
+		<property name="batchNo" column="BATCH_NO" />
+		<property name="blockName" column="BLOCK_NAME" />
+		<property name="floorName" column="FLOOR_NAME" />
+		<property name="bayNumber" column="BAY_NUMBER" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflinePayment"
+		table="OFFLINE_PAYMENT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="paymentDate" column="PAYMENT_DATE" />
+		<property name="paymentAmt" column="PAYMENT_AMT" />
+		<property name="paymentType" column="PAYMENT_TYPE" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="pageNo" column="PAGE_NO" />
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="remarks" column="REMARKS" />
+		<property name="image" column="PHOTO" />
+		<property name="pcTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="branchId" column="BRANCH_ID" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.Contract"
+		table="contract">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="contractNo" column="CONTRACT_NUMBER" />
+		<many-to-one name="farmer" column="FARMER_ID"   />
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="season" column="SEASON_MASTER_ID"   />
+		<many-to-one name="account" column="ESE_ACCOUNT_ID"   />
+		<property name="acre" column="ACRE" />
+		<property name="price" column="PRICE" />
+		<property name="status" column="STATUS" />
+		<set name="pricePatterns" table="CONTRACT_PRICEPATTERN_MAP"  >
+			<key column="CONTRACT_ID" />
+			<many-to-many column="PRICE_PATTERN_ID"
+				class="com.sourcetrace.eses.order.entity.txn.PricePattern" unique="true" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PricePattern"
+		table="PRICE_PATTERN">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<many-to-one name="season" column="SEASON_MASTER_ID"   />
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="revisionNo" column="REVISION_NO" />
+		<set name="pricePatternDetails" cascade="all"  >
+			<key column="PRICE_PATTERN_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PricePatternDetail" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PricePatternDetail"
+		table="PRICE_PATTERN_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="gradeMaster" column="GRADE_MASTER_ID"
+			  />
+		<many-to-one name="pricePattern" column="PRICE_PATTERN_ID"
+			  />
+		<property name="price" column="PRICE" />
+	</class>
+
+	<!-- Certification HBM Configuration Starts !!! -->
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.CertificateCategory"
+		table="CERTIFICATE_CATEGORY">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<set name="standards"   cascade="all">
+			<key column="CERTIFICATE_CATEGORY_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.CertificateStandard" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.CertificateStandard"
+		table="CERTIFICATE_STANDARD">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<many-to-one name="category" column="CERTIFICATE_CATEGORY_ID"
+			not-null="true"   />
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.Section"
+		table="SECTION">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="name" column="NAME" />
+		<property name="sectionType" column="SECTION_TYPE" />
+
+		<many-to-one name="certificateCategory" column="CERTIFICATE_CATEGORY_ID"
+			  />
+		<property name="revisionNumber" column="REVISION_NUMBER" />
+		<set name="questions"   cascade="all">
+			<key column="SECTION_ID" />
+			<one-to-many class="com.sourcetrace.eses.inspect.agrocert.Question" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.Question"
+		table="QUESTION">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="name" column="NAME" />
+		<property name="questionType" column="QUESTION_TYPE" />
+		<property name="revisionNumber" column="REVISION_NUMBER" />
+		<many-to-one name="section" column="SECTION_ID"   />
+		<many-to-one name="parentQuestion" column="PARENT_QUESTION_ID"
+			  />
+		<set name="subQuestions"   cascade="all">
+			<key column="PARENT_QUESTION_ID" />
+			<one-to-many class="com.sourcetrace.eses.inspect.agrocert.Question" />
+		</set>
+	</class>
+	<class name="com.sourcetrace.eses.txn.agrocert.FarmerCropProdAnswers"
+		table="FARMER_CROP_PROD_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="answeredDate" column="ANSWERED_DATE" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmId" column="FARM_ID" />
+		<property name="categoryCode" column="CATEGORY_CODE" />
+		<property name="categoryName" column="CATEGORY_NAME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="farmersSectionAnswers" lazy="true" cascade="all" sort="natural">
+			<key column="FARMER_CROP_PROD_ANSWERS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.FarmersSectionAnswers" />
+		</set>
+		<set name="inspectionStandards" lazy="true" cascade="all">
+			<key column="FARMER_CROP_PROD_ANSWERS_ID" />
+			<one-to-many class="com.sourcetrace.eses.txn.agrocert.InspectionStandard" />
+		</set>
+		<many-to-one name="season" column="SEASON_ID"   />
+		<property name="acresOwned" column="ACRES_OWNED" />
+		<property name="acresFarmed" column="ACRES_FARMED" />
+		<property name="acresOrganic" column="ACRES_ORGANIC" />
+		<property name="acresTransition" column="ACRES_TRANSITION" />
+		<property name="acresEligibleNext" column="ELIGIBLE_ACRES_NEXT_CERTIFICATION" />
+		<property name="acresReqIns" column="ACRES_REQ_ORGANIC_INSPECTION" />
+		<property name="certificationStatus" column="CERTIFICATION_STATUS" />
+		<property name="farmerName"
+			formula="(select GROUP_CONCAT(Farmer.first_name) from Farmer where Farmer.farmer_id = farmer_id AND Farmer.STATUS_CODE = 0  LIMIT 1)" />
+		<property name="farmerCode"
+			formula="(SELECT FARMER.FARMER_CODE FROM FARMER WHERE FARMER.FARMER_ID=FARMER_ID  AND FARMER.STATUS_CODE = 0 LIMIT 1)" />
+		<property name="farmName"
+			formula="(SELECT DISTINCT FARM.FARM_NAME FROM FARM WHERE  FARM.ID=FARM_ID LIMIT 1)" />
+		<property name="farmCode"
+			formula="(SELECT DISTINCT FARM.FARM_CODE FROM FARM WHERE  FARM.ID=FARM_ID LIMIT 1)" />
+		<property name="farmerTraceId"
+			formula="(SELECT FARMER.TRACE_ID FROM FARMER WHERE FARMER.FARMER_ID=FARMER_ID  AND FARMER.STATUS_CODE = 0 LIMIT 1)" />
+		<property name="farmerTraceNet"
+			formula="(SELECT FARMER.FRAMER_CODE_BY_TRCAENET FROM FARMER WHERE FARMER.FARMER_ID=FARMER_ID  AND FARMER.STATUS_CODE = 0 LIMIT 1)" />
+
+<property name="latitude" column="LATITUDE"/>
+<property name="longitude" column="LONGITUDE"/>
+
+
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.InspectionStandard"
+		table="INSPECTION_STANDARD">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="standardCode" column="STANDARD_CODE" />
+		<property name="standardName" column="STANDARD_NAME" />
+		<many-to-one name="farmerCropProdAnswers" column="FARMER_CROP_PROD_ANSWERS_ID"
+			  />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.FarmersSectionAnswers"
+		table="FARMER_SECTION_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmerCropProdAnswers" column="FARMER_CROP_PROD_ANSWERS_ID"
+			  />
+		<property name="sectionCode" column="SECTION_CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="sectionName" column="SECTION_NAME" />
+		<property name="sectionType" column="SECTION_TYPE" />
+		<set name="farmersQuestionAnswers" lazy="true" cascade="all" sort="natural">
+			<key column="FARMER_SECTION_ANSWERS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.FarmersQuestionAnswers" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.FarmersQuestionAnswers"
+		table="FARMER_QUESTION_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmersSectionAnswers" column="FARMER_SECTION_ANSWERS_ID"
+			  />
+		<property name="questionCode" column="QUESTION_CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="questionName" column="QUESTION_NAME" />
+		<property name="registeredQuestion" column="REGISTERED_QUESTION" />
+		<property name="questionType" column="QUESTION_TYPE" />
+		<property name="image" type="binary" column="IMG" />
+		<property name="latitude" column="GPS_LATITUDE" />
+		<property name="longtitude" column="GPS_LONGTITUDE" />
+		<property name="GPSCaptureDateTime" column="GPS_CAPTURE_DATE_TIME" />
+		<property name="followUp" column="FOLLOW_UP" />
+		<many-to-one name="parentQuestionAnswers" column="PARENT_FARMER_QUESTION_ANSWERS_ID"
+			  />
+		<set name="answers"   cascade="all" sort="natural">
+			<key column="FARMER_QUESTION_ANSWERS_ID" />
+			<one-to-many class="com.sourcetrace.eses.txn.agrocert.Answers" />
+		</set>
+		<set name="subQuestions"   cascade="all" sort="natural">
+			<key column="PARENT_FARMER_QUESTION_ANSWERS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.FarmersQuestionAnswers" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.Answers" table="ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmersQuestionAnswers" column="FARMER_QUESTION_ANSWERS_ID"
+			  />
+		<property name="answerType" column="ANSWER_TYPE" />
+		<property name="answer" column="ANSWER" />
+		<property name="answer1" column="ANSWER_1" />
+		<property name="answer2" column="ANSWER_2" />
+		<property name="answer3" column="ANSWER_3" />
+		<property name="answer4" column="ANSWER_4" />
+		<property name="answer5" column="ANSWER_5" />
+		<property name="followUp" column="FOLLOW_UP" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.FailedQuestions"
+		table="FAILED_QUESTIONS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="questionName" column="QUESTION_NAME" />
+		<property name="failedCount" column="FAILED_COUNT" />
+		<property name="userName" column="USER_NAME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.FarmerFailedQuestions"
+		table="FARMER_FAILED_QUESTIONS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="questionName" column="QUESTION_NAME" />
+		<property name="failedCount" column="FAILED_COUNT" />
+		<property name="userName" column="USER_NAME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.CropYield" table="CROP_YIELD">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farm" column="FARM_ID"   />
+		<many-to-one name="season" column="SEASION_ID"   />
+		<property name="landHolding" column="LAND_HOLDING" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="cropYieldDate" column="CROP_YIELD_DATE" />
+		<set name="cropYieldDetails"   cascade="all">
+			<key column="CROP_YIELD_ID" />
+			<one-to-many class="com.sourcetrace.eses.txn.agrocert.CropYieldDetail" />
+		</set>
+		
+		<property name="moleculeName" column="MOLECULE_NAME" />
+		<property name="image" type="binary" column="IMG" />
+		<property name="status" column="STATUS" />
+		<property name="type" column="TYPE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.CropYieldDetail"
+		table="CROP_YIELD_DETAIL">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<!-- <many-to-one name="farmCropsMaster" column="FARM_CROP_MASTER_ID"   
+			/> -->
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODDUCT_ID"
+			  />
+		<property name="yield" column="YIELD" />
+		<many-to-one name="cropYield" column="CROP_YIELD_ID"   />
+		<property name="status" column="STATUS" />
+		<property name="type" column="TYPE" />
+	</class>
+	<!-- Certification HBM Configuration Ends !!! -->
+
+	<class name="com.ese.entity.txn.mfi.InterestRateHistory" table="INTEREST_RATE_HISTORY">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="rateOfInterest" column="RATE_OF_INTEREST" />
+		<property name="roiEffFrom" column="ROI_EFF_FROM" />
+		<property name="affectExistingFarmerBal" column="AFFECT_EXISTING_FARMER_BAL" />
+		<property name="isActive" column="IS_ACTIVE" />
+		<property name="createDt" column="CREATE_DT" />
+		<property name="createUserName" column="CREATE_USER_NAME" />
+		<property name="lastUpdateDt" column="LAST_UPDATE_DT" />
+		<property name="updateUserName" column="UPDATE_USER_NAME" />
+		<property name="revisionNo" column="REVISION_NO" />
+	</class>
+
+	<class name="com.ese.entity.txn.mfi.InterestCalcHistory" table="INTEREST_CALC_HISTORY">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="farmerProfileId" column="FARMER_PROFILE_ID" />
+		<property name="farmerAccountRef" column="FARMER_ACCOUNT_REF" />
+		<property name="principalAmount" column="PRINCIPAL_AMOUNT" />
+		<property name="rateOfInterest" column="RATE_OF_INTEREST" />
+		<property name="interestAmount" column="INTEREST_AMOUNT" />
+		<property name="calcDate" column="CALC_DATE" />
+		<property name="calcStatus" column="CALC_STATUS" />
+		<property name="calcRemarks" column="CALC_REMARKS" />
+		<property name="trxnRefId" column="TRXN_REF_ID" />
+		<property name="accumulatedIntAmount" column="ACCUMULATED_INT_AMOUNT" />
+		<property name="createDt" column="CREATE_DT" />
+		<property name="createUserName" column="CREATE_USER_NAME" />
+		<property name="lastUpdateDt" column="LAST_UPDATE_DT" />
+		<property name="updateUserName" column="UPDATE_USER_NAME" />
+		<property name="revisionNo" column="REVISION_NO" />
+	</class>
+
+	<class name="com.ese.entity.txn.mfi.InterestCalcConsolidated"
+		table="INTEREST_CALC_CONSOLIDATED">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="farmerProfileId" column="FARMER_PROFILE_ID" />
+		<property name="farmerAccountRef" column="FARMER_ACCOUNT_REF" />
+		<property name="accumulatedPrincipalAmount" column="ACCUMULATED_PRINCIPAL_AMOUNT" />
+		<property name="currentRateOfInterest" column="CURRENT_RATE_OF_INTEREST" />
+		<property name="accumulatedIntAmount" column="ACCUMULATED_INT_AMOUNT" />
+		<property name="accumulatedPrincipalAmount2" column="ACCUMULATED_PRINCIPAL_AMOUNT2" />
+		<property name="currentRateOfInterest2" column="CURRENT_RATE_OF_INTEREST2" />
+		<property name="accumulatedIntAmount2" column="ACCUMULATED_INT_AMOUNT2" />
+		<property name="lastCalcDate" column="LAST_CALC_DATE" />
+		<property name="createDt" column="CREATE_DT" />
+		<property name="createUserName" column="CREATE_USER_NAME" />
+		<property name="lastUpdateDt" column="LAST_UPDATE_DT" />
+		<property name="updateUserName" column="UPDATE_USER_NAME" />
+		<property name="revisionNo" column="REVISION_NO" />
+	</class>
+
+
+
+	<class name="com.ese.entity.sms.SmsTemplate" table="SMS_TEMPLATE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="template" column="TEMPLATE" />
+		<property name="isActive" column="IS_ACTIVE" />
+		<property name="createdDate" column="CREATE_DT" />
+		<property name="createdUser" column="CREATE_USER_NAME" />
+		<property name="updatedDate" column="LAST_UPDATE_DT" />
+		<property name="updatedUser" column="UPDATE_USER_NAME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.ese.entity.sms.SmsGroupHeader" table="SMS_GROUP">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="isActive" column="IS_ACTIVE" />
+		<property name="createdDate" column="CREATE_DT" />
+		<property name="createdUser" column="CREATE_USER_NAME" />
+		<property name="updatedDate" column="LAST_UPDATE_DT" />
+		<property name="updatedUser" column="UPDATE_USER_NAME" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="smsGroupDetails"   cascade="all">
+			<key column="GROUP_ID" />
+			<one-to-many class="com.ese.entity.sms.SmsGroupDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.ese.entity.sms.SmsGroupDetail" table="SMS_GROUP_DETAIL">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="smsGroup" column="GROUP_ID" not-null="true"
+			  fetch="select" />
+		<property name="profileType" column="PROFILE_TYPE" />
+		<property name="profileId" column="PROFILE_ID" />
+		<property name="isActive" column="IS_ACTIVE" />
+		<property name="createdDate" column="CREATE_DT" />
+		<property name="createdUser" column="CREATE_USER_NAME" />
+		<property name="updatedDate" column="LAST_UPDATE_DT" />
+		<property name="updatedUser" column="UPDATE_USER_NAME" />
+	</class>
+
+	<class name="com.ese.entity.sms.SMSHistory" table="SMS_HISTORY">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="smsType" column="SMS_TYPE" />
+		<property name="smsRoute" column="SMS_ROUTE" />
+		<property name="senderMobNo" column="SENDER_MOB_NO" />
+		<property name="message" column="MESSAGE" />
+		<property name="statusz" column="STATUS" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="uuid" column="UUID" />
+		<property name="createdUser" column="CREATE_USER" />
+		<property name="createdDate" column="CREATE_DT" />
+		<property name="updatedDate" column="UPDATE_DT" />
+		<property name="updatedUser" column="LAST_UPDATE_USER" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="smsHistoryDetails" cascade="all"  >
+			<key column="SMS_HISTORY_ID" />
+			<one-to-many class="com.ese.entity.sms.SMSHistoryDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.ese.entity.sms.SMSHistoryDetail" table="SMS_HISTORY_DETAIL">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one name="smsHistory" column="SMS_HISTORY_ID"
+			  />
+		<property name="receiverNo" column="RECEIVER_NO" />
+		<property name="sendAt" column="SENT_AT" />
+		<property name="receiverId" column="RECEIVER_ID" />
+		<property name="receiverType" column="RECEIVER_TYPE" />
+		<property name="groupId" column="GROUP_ID" />
+		<property name="statusz" column="STATUS" />
+		<property name="createdDate" column="CREATE_DT" />
+		<property name="createUser" column="CREATE_USER_NAME" />
+		<property name="updatedDate" column="LAST_UPDATE_DT" />
+		<property name="lastUpdateUser" column="UPDATE_USER_NAME" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.profile.Symptoms"
+		table="SYMPTOMS_MASTER">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="code" column="SYMPTOM_CODE" />
+		<property name="name" column="SYMPTOM_NAME" />
+		<property name="typez" column="TYPEZ" />
+
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.profile.InspectionImageInfo"
+		table="INSPECTION_IMG_INFO">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="txnType" column="TXN_TYPE" />
+		<set name="inspectionImages" cascade="all"  >
+			<key column="INSPECTION_IMG_INFO_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.profile.InspectionImage" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.profile.InspectionImage"
+		table="INSPECTION_IMG">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="photo" type="binary" column="PHOTO" />
+		<property name="photoCaptureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<many-to-one name="inspectionImageInfo" column="INSPECTION_IMG_INFO_ID" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PeriodicInspectionData"
+		table="periodic_inspection_data_list">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="catalogueValue" column="CATALOUGE_VALUE" />
+		<property name="type" column="I_TYPE" />
+		<property name="otherCatalogueValueName" column="OTHER_CATALOGUE_VALUE_NAME" />
+		<property name="quantityValue" column="QUANTITY" />
+		<property name="cocDone" column="COC_DONE" />
+		<many-to-one name="periodicInspection" column="PERIODIC_INSPECTION_ID"
+			  />
+		<property name="uom" column="UOM" />
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.PeriodicInspectionSymptom"
+		table="periodic_inspection_symptoms_data_list">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="symCode" column="SYMPTOM_CODE" />
+		<property name="type" column="I_TYPE" />
+		<many-to-one name="periodicInspection" column="PERIODIC_INSPECTION_ID"
+			  />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PeriodicInspection"
+		table="PERIODIC_INSPECTION">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="farmId" column="FARM_ID" />
+		<property name="inspectionType" column="INSPECTION_TYPE" />
+		<property name="inspectionDate" column="INSPECTION_DATE" />
+		<property name="purpose" column="PURPOSE" />
+		<property name="remarks" column="REMARKS" />
+		<property name="farmerVoice" column="VOICE_RECORDING" />
+		<property name="survivalPercentage" column="SURVIVAL_PERCENTATGE" />
+		<property name="averageHeight" column="AVG_HEIGHT" />
+		<property name="averageGirth" column="AVG_GIRTH" />
+		<property name="currentStatusOfGrowth" column="CURRENT_STATUS_OF_GROWTH" />
+		<property name="activitiesAfterPreVisit" column="ACTIVITIES_AFTER_PREV_VISIT" />
+		<property name="interPloughingWith" column="INTERPLOUGHING_WITH" />
+		<property name="typeOfManureApplied" column="TYPE_OF_MANURE_APPLIED" />
+		<property name="otherTypeOfManureApplied" column="OTHER_TYPE_OF_MANURE_APPLIE" />
+		<property name="manureQuantityApplied" column="MANURE_QTY_APPLIED" />
+		<property name="typeOfFertilizerApplied" column="TYPE_OF_FERTILIZER_APPLIED" />
+		<property name="otherTypeOfFertilizerApplied" column="OTHER_TYPE_OF_FERTILIER" />
+		<property name="fertilizerQuantityApplied" column="FERTILIZER_QTY_APPLIED" />
+		<property name="pestProblemNoticed" column="PEST_PROBLEM_NOTICED" />
+		<property name="nameOfPest" column="NAME_OF_THE_PEST" />
+		<property name="otherPestName" column="OTHER_PEST_NAME" />
+		<many-to-one name="pestSymptom" column="PEST_SYMPTOM_CODE"
+			  property-ref="code" />
+		<property name="pestSymptomOtherValue" column="PEST_SYMPTOM_OTHER_VALUE" />
+		<property name="pestInfestationETL" column="PEST_INFESTATION_ABOVE_ETL" />
+		<property name="recommendedPesticideName" column="RECOMMENDED_PESTICIDE_NAME" />
+		<property name="pesticideQuantityApplied" column="PESTICIDE_QTY_APPLIED" />
+		<property name="pesticidateApplicationDate" column="DATE_OF_PESTICIDE_APPLICATION" />
+		<property name="pestProblemSolved" column="PEST_PROBLEM_SOLVED" />
+		<property name="diseaseProblemNoticed" column="DISEASE_PROBLEM_NOTICED" />
+		<property name="nameOfDisease" column="NAME_OF_THE_DISEASE" />
+		<property name="otherNameOfDisease" column="OTHER_DISEASE_NAME" />
+		<many-to-one name="diseaseSymptom" column="DISEASE_SYMPTOM_CODE"
+			  property-ref="code" />
+		<property name="diseaseSymptomOtherValue" column="DISEASE_SYMPTOM_OTHER_VALUE" />
+		<property name="diseaseInfestationETL" column="DISEASE_INFESTATION_ABOVE_ETL" />
+		<property name="recommendedFungicideName" column="RECOMMENDED_FUNGICIDE_NAME" />
+		<property name="fungicideQuantityApplied" column="FUNGICIDE_QTY_APPLIED" />
+		<property name="dateOfFungicideApplication" column="DATE_OF_FUNGICIDE_APPLICATION" />
+		<property name="diseaseProblemSolved" column="DISEASE_PROBLEM_SOLVED" />
+		<property name="farmerOpinion" column="FARMER_OPINION_ABOUT_SERVICE" />
+		<property name="interCrop" column="IS_INTERCROP" />
+		<property name="nameOfInterCrop" column="NAME_OF_INTERCROP" />
+		<property name="yieldObtained" column="YIELD_OBTAINED_IN_MT" />
+		<property name="expenditureIncurred" column="EXPENDITURE_INCURRED" />
+		<property name="incomeGenerated" column="INCOME_GENERATED" />
+		<property name="netProfitOrLoss" column="NET_PROFIT_LOSS" />
+		<property name="createdDT" column="CREATE_DT" />
+		<property name="createdUserName" column="CREATE_USER_NAME" />
+		<property name="lastUpdatedDT" column="LAST_UPDATE_DT" />
+		<property name="lastUpdatedUserName" column="UPDATE_USER_NAME" />
+		<many-to-one name="inspectionImageInfo" column="INSPECTION_IMG_INFO_ID"
+			cascade="all"   />
+		<property name="chemicalName" column="CHEMICAL_NAME" />
+		<property name="monthOfFertilizerApplied" column="MONTH_OF_FERTILIZER_APPLIED" />
+		<property name="monthOfPesticideApplication" column="MONTH_OF_PESTICIDE_APPLICATION" />
+		<property name="monthOfFungicideApplication" column="MONTH_OF_FUNGICIDE_APPLICATION" />
+		<property name="isFertilizerApplied" column="FERTILIZER_APPLIED" />
+		<property name="isFieldSafetyProposal" column="IS_FIELD_SAFETY_PROPOSAL" />
+		<property name="txnId" column="TXN_ID" />
+		<property name="noOfPlantsReplanned" column="NO_PLANTS_REPLANT" />
+		<property name="gapPlantingDate" column="GAP_PLANT_DATE" />
+		<many-to-one name="farm" column="FARM_ID" property-ref="farmCode"
+			insert="false" update="false" />
+		<many-to-one name="eSETxn" column="TXN_ID" property-ref="txnId"
+			insert="false" update="false" />
+		<property name="pestSymptomsName" column="PEST_SYMPTOMS_NAME" />
+		<property name="diseaseSymptomsName" column="DISEASE_SYMPTOMS_NAME" />
+		<property name="cropRotation" column="CROP_ROTATION" />
+
+		<property name="temperature" column="TEMP" />
+		<property name="humidity" column="HUMIDITY" />
+		<property name="rain" column="RAIN" />
+		<property name="windSpeed" column="WIND_SPEED" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="isDeleted" column="IS_DELETED" />
+
+		<property name="landpreparationCompleted" column="LAND_PREP_COMPLETED" />
+		<property name="chemicalSpray" column="CHEMICAL_SPRAY" />
+		<property name="monoOrImida" column="MONO_IMIDA" />
+		<property name="singleSprayOrCocktail" column="SINGLE_SPRAY_COCKTAIL" />
+		<property name="repetitionOfPest" column="REPETITION_PEST" />
+		<property name="nitrogenousFert" column="NITROGENOUS_FERT" />
+		<property name="cropSpacingLastYear" column="CROP_SPACE_LAST_YEAR" />
+		<property name="cropSpacingCurrentYear" column="CROP_SPACE_CURRENT_YEAR" />
+		<property name="weeding" column="WEEDING" />
+		<property name="picking" column="PICKING" />
+		<property name="soilPhoto" column="SOIL_PHOTO" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="txnType" column="TXN_TYPE" />
+
+		<set name="periodicInspectionData" cascade="all"  
+			order-by="ID">
+			<key column="PERIODIC_INSPECTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PeriodicInspectionData" />
+		</set>
+
+		<set name="periodicInspectionSymptoms" cascade="all"  
+			order-by="ID">
+			<key column="PERIODIC_INSPECTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PeriodicInspectionSymptom" />
+		</set>
+
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="cropCode" column="CROP_CODE" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+
+
+
+	</class>
+
+	<class name="com.sourcetrace.eses.entity.TransactionType" table="TXN_TYPE">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="code" column="CODE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.entity.TransactionHeader"
+		table="TXN_HEADER">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="versionNo" column="VERSION_NO" />
+		<property name="servPointId" column="SERVICE_POINT_ID" />
+	</class>
+
+	<class name="com.sourcetrace.eses.entity.Transaction" table="TXN">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="txnCode" column="TXN_CODE" />
+		<property name="operType" column="OPER_TYPE" />
+		<property name="mode" column="MODE" />
+		<property name="resentCount" column="RESENT_COUNT" />
+		<property name="msgNo" column="MSG_NO" />
+		<property name="batchNo" column="BATCH_NO" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMessage" column="STATUS_MSG" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="tenantId" column="TENANT_ID" />
+		<many-to-one name="header" column="TXN_HEADER_ID"  
+			cascade="all" />
+	</class>
+
+	<class name="com.sourcetrace.eses.util.log.TransactionLog" table="TXN_LOG">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="msgNo" column="MSG_NO" />
+		<property name="resentCount" column="RESETN_CNT" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="operationType" column="OPER_TYPE" />
+		<property name="mode" column="MODE" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="version" column="VERSION" />
+		<property name="requestLog" column="REQUEST_LOG" />
+		<property name="createdDT" column="CREATE_DT" />
+		<property name="status" column="STATUS" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="branchId" column="BRANCH_ID" />
+	</class>
+
+	<class name="com.ese.entity.profile.CropSupply" table="CROP_SUPPLY">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="dateOfSale" column="DATE_SALE" />
+		<many-to-one name="buyerInfo" column="BUYER_INFO"
+			not-null="true"   />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="farmCode" column="FARM_CODE" />
+		<property name="farmName" column="FARM_NAME" />
+		<property name="transportDetail" column="TRANSPORT_DETAIL" />
+		<property name="receiptInfor" column="RECEIPT" />
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="paymentInfo" column="PAYMENT_INFO" />
+		<property name="totalSaleValu" column="TOTAL_SALE" />
+		<property name="vehicleNo" column="VEHICLE_NUMBER" />
+		<property name="invoiceDetail" column="INVOICE_DETAIL" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="cooperative" column="COOPERATIVE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="fatherName"
+			formula="(SELECT FARMER.LAST_NAME FROM FARMER WHERE FARMER.FARMER_ID = FARMER_ID LIMIT 1)" />
+		<set name="cropSupplyDetails" cascade="all"   inverse="true">
+			<key column="CROP_SUPPLY_ID" />
+			<one-to-many class="com.ese.entity.profile.CropSupplyDetails" />
+		</set>
+		<set name="cropSupplyImages" cascade="all"   inverse="true">
+			<key column="CROP_SUPPLY_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.CropSupplyImages" />
+		</set>
+		
+		<property name="currentSeasonCode" column="CURRENT_SEASON_CODE" />
+		<property name="poNumber" column="PO_NUMBER" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.CropSupplyImages"
+		table="CROP_SUPPLY_IMAGE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="cropSupply" column="CROP_SUPPLY_ID"  
+			cascade="all" />
+		<property name="photo" column="PHOTO" />
+		<property name="captureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+
+	</class>
+
+	<class name="com.ese.entity.profile.CropHarvest" table="CROP_HARVEST">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="harvestDate" column="HARVEST_DATE" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="farmCode" column="FARM_CODE" />
+		<property name="farmName" column="FARM_NAME" />
+		<property name="totalQty" column="TOTAL_QTY" />
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="storageIn" column="STORAGE_IN" />
+		<property name="packedIn" column="PACKED_IN" />
+		<property name="otherStorageInType" column="OTHER_STORAGEIN_TYPE" />
+		<property name="otherPackedInType" column="OTHER_PACKEDIN_TYPE" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="fatherName"
+			formula="(SELECT FARMER.LAST_NAME FROM FARMER WHERE FARMER.FARMER_ID = FARMER_ID LIMIT 1)" />
+		<set name="cropHarvestDetails" cascade="all"   inverse="true">
+			<key column="CROP_HARVEST_ID" />
+			<one-to-many class="com.ese.entity.profile.CropHarvestDetails" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.ese.entity.profile.CropHarvestDetails" table="CROP_HARVEST_DETAILS">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one name="crop" column="CROP" not-null="true"
+			  />
+		<property name="cropType" column="CROP_TYPE" />
+		<property name="qty" column="QTY" />
+		<property name="price" column="PRICE" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<many-to-one name="cropHarvest" column="CROP_HARVEST_ID"
+			  />
+		<many-to-one name="grade" column="GRADE" not-null="true"
+			  />
+		<many-to-one name="variety" column="VARIETY" not-null="true"
+			  />
+	</class>
+
+	<class name="com.ese.entity.profile.CropSupplyDetails" table="CROP_SUPPLY_DETAILS">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one name="crop" column="CROP"   />
+		<property name="cropType" column="CROP_TYPE" />
+		<property name="qty" column="QTY" />
+		<property name="price" column="PRICE" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="batchLotNo" column="BATCH_LOT_NO" />
+		<many-to-one name="cropSupply" column="CROP_SUPPLY_ID"
+			  />
+		<many-to-one name="grade" column="GRADE"   />
+		<many-to-one name="variety" column="VARIETY"   />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.Cultivation"
+		table="CULTIVATION">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="expenseDate" column="EXPENSE_DATE" />
+		<property name="farmId" column="FARM_ID" />
+		<property name="farmName" column="FARM_NAME" />
+		<property name="landTotal" column="LAND_TOTAL" />
+		<property name="totalSowing" column="TOTAL_SOWING" />
+		<property name="totalGap" column="TOTAL_GAP" />
+		<property name="totalWeed" column="TOTAL_WEED" />
+		<property name="totalCulture" column="TOTAL_CULTURE" />
+		<property name="totalIrrigation" column="TOTAL_IRRIGATION" />
+		<property name="totalFertilizer" column="TOTAL_FERTILIZER" />
+		<property name="totalPesticide" column="TOTAL_PESTICIDE" />
+		<property name="totalHarvest" column="TOTAL_HARVEST" />
+		<property name="totalExpense" column="TOTAL_EXPENSES" />
+		<property name="totalCoc" column="TOTAL_COC" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="fertilizerCost" column="FERTILIZER_COST" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="agriIncome" column="AGRI_INCOME" />
+		<property name="interCropIncome" column="INTERCROP_INCOME" />
+		<property name="otherSourcesIncome" column="OTHERSOURCES_INCOME" />
+		<property name="pesticideCost" column="PESTICIDE_COST" />
+		<property name="villageId" column="VILLAGE_ID" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="fatherName"
+			formula="(SELECT FARMER.LAST_NAME FROM FARMER WHERE FARMER.FARMER_ID = FARMER_ID LIMIT 1)" />
+		<property name="villageName"
+			formula="(SELECT v.name FROM village v where v.id=VILLAGE_ID)" />
+		<property name="currentSeasonCode" column="CURRENT_SEASON_CODE" />
+		<property name="totalManure" column="TOTAL_MANURE" />
+		<property name="manureCost" column="MANURE_COST" />
+		<property name="cropCode" column="CROP_CODE" />
+		<property name="labourCost" column="LABOUR_COST" />
+		<property name="cottonQty" column="COTTON_QTY" />
+		<property name="unitSalePrice" column="SALE_PRICE" />
+		<property name="saleCottonIncome" column="SALE_CT_INCOME" />
+		<property name="soilPreparation" column="SOIL_PREPARATION" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name ="landLabourCost" column="LAND_LABOUR_COST"/>
+		<property name ="sowingLabourCost" column="SOWING_LABOUR_COST"/>
+		<property name ="gapLabourCost" column="GAP_LABOUR_COST"/>
+		<property name ="weedLabourCost" column="WEED_LABOUR_COST"/>
+		<property name ="cultureLabourCost" column="CULTURE_LABOUR_COST"/>
+		<property name ="irriLabourCost" column="IRRI_LABOUR_COST"/>
+		<property name ="fertLabourcost" column="FERTI_LABOUR_COST"/>
+		<property name ="pestLabourCost" column="PEST_LABOUR_COST"/>
+		<property name ="manureLabourCost" column="MANURE_LABOUR_COST"/>
+		<property name ="harvestLabourCost" column="HARVEST_LABOUR_COST"/>
+		<property name ="transportCost" column="TRANSPORST_COST"/>
+		<property name ="fuelCost" column="FUEL_COST"/>
+		<property name ="otherCost" column="OTHER_COST"/>
+		<property name="latitude" column="LATITUDE"/>
+		<property name="longitude" column="LONGITUDE"/>
+		
+		<set name="cultivationDetails" cascade="all"  >
+			<key column="CULTIVATION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.CultivationDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+		
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CultivationDetail"
+		table="CULTIVATION_DETAIL">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="type" column="TYPE" />
+		<property name="fertilizerType" column="FERTILIZER_TYPE" />
+		<property name="qty" column="QUANTITY" />
+		<property name="cost" column="COST" />
+		<property name="completed" column="COMPLETED" />
+		<property name="usageLevel" column="USAGE_LEVEL" />
+		<property name="usageLevelName"
+			formula="(SELECT CATALOGUE_VALUE.NAME FROM CATALOGUE_VALUE WHERE CATALOGUE_VALUE.CODE = USAGE_LEVEL)" />
+		<property name="uom" column="UOM" />
+		<!-- <property name="fertilizerName" formula="(SELECT CATALOGUE_VALUE.NAME 
+			FROM CATALOGUE_VALUE WHERE CATALOGUE_VALUE.CODE = FERTILIZER_TYPE)" /> -->
+		<many-to-one name="cultivation" column="CULTIVATION_ID"
+			  />
+	</class>
+
+	<class name="com.ese.entity.profile.ViewCultivation" table="vw_cost_cultivation_report">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="farmer" column="FARMER" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="landPreparation" column="LAND_PREPARATION" />
+		<property name="sowing" column="SOWING" />
+		<property name="gapFilling" column="GAP_FILLING" />
+		<property name="weeding" column="WEEDING" />
+		<property name="interCultural" column="INTER_CULTURAL" />
+		<property name="irrigation" column="IRRIGATION" />
+		<property name="fertilizer" column="FERTILIZER" />
+		<property name="pesticide" column="PESTICIDE" />
+		<property name="harvesting" column="HARVESTING" />
+		<property name="otherExpeness" column="OTHER_EXPENSES" />
+		<property name="farmId" column="FARM_ID" />
+		<property name="villageId" column="VILLAGE_ID" />
+		<property name="expenseDate" column="EXPENSE_DATE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PaymentLedger"
+		table="PAYMENT_LEDGER">
+		<id name="id" column="ID" type="long">
+			<generator class="native" />
+		</id>
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="type" column="TXN_TYPE" />
+		<property name="refId" column="REF_ID" />
+		<property name="prevValue" column="PREV_VALUE" />
+		<property name="txnValue" column="TXN_VALUE" />
+		<property name="newValue" column="NEW_VALUE" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.AgentAccessLog"
+		table="AGENT_ACCESS_LOG">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="profileId" column="PROFILE_ID" />
+		<property name="login" column="LOGIN" />
+		<property name="lastTxnTime" column="LAST_TXN_TIME" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="mobileVersion" column="MOBILE_VERSION" />
+		<property name="branchId" column="BRANCH_ID" />
+		<set name="agentAccessLogDetails" cascade="all">
+			<key column="ACCESS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.AgentAccessLogDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.AgentAccessLogDetail"
+		table="AGENT_ACCESS_LOG_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="txnMode" column="TXN_MODE" />
+		<property name="messageNumber" column="MESSAGE_NUMBER" />
+		<property name="txnCount" column="TXN_COUNT" />
+		<property name="servicePoint" column="SERVICE_POINT" />
+		<property name="txnDate" column="LAST_UPDATED_DATE" />
+		<many-to-one name="agentAccessLog" column="ACCESS_ID"
+			not-null="true"   />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CowInspection"
+		table="COW_INSPECTION">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="elitType" column="ELIT_TYPE" />
+		<many-to-one name="researchStation" column="RESEARCH_STATION_ID"
+			  />
+		<many-to-one name="farm" column="FARM_ID"   />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="cowId" column="COW_ID" />
+		<property name="inspectionNo" column="INSPECTION_NO" />
+		<property name="lastInspDate" column="LAST_INSP_DATE" />
+		<property name="currentInspDate" column="CURRENT_INSP_DATE" />
+		<property name="intervalDays" column="INTERVAL_DAYS" />
+		<property name="milkMorngPerday" column="MILK_MORNG_PER_DAY" />
+		<property name="milkEvngPerday" column="MILK_EVNG_PER_DAY" />
+		<property name="totalMilkPerDay" column="TOTAL_MILK_PER_DAY" />
+		<property name="totalMilkPerPeriod" column="TOTAL_MILK_PER_PERIOD" />
+		<property name="audio" column="AUDIO" />
+		<property name="infestationPara" column="INFESTATION_PARASITES" />
+		<property name="deworwingPlace" column="DEWORMING_PLACE" />
+		<property name="medicineName" column="MEDICINE_NAME" />
+		<property name="diseaseNoticed" column="DISEASE_NOTICED" />
+		<property name="diseaseName" column="DISEASE_NAME" />
+		<property name="diseaseServices" column="DISEASE_SERVICES" />
+		<property name="diseaseMedicines" column="DISEASE_MEDICIZES" />
+		<property name="healthProblem" column="HEALTH_PROBLEM" />
+		<property name="healthServices" column="HEALTH_SERVICES" />
+		<property name="healthMedicines" column="HEALTH_MEDICIZES" />
+		<property name="correctivMeasure" column="CORRECTIVE_MEASURE" />
+		<property name="vaccinationPlace" column="VACCINATION_PLACE" />
+		<property name="comments" column="COMMENTS" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="createdUserName" column="CREATE_USER_NAME" />
+		<property name="lastUpdatedUserName" column="UPDATE_USER_NAME" />
+		<property name="isMilkingCow" column="IS_MILKING_COW" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<set name="inspectionImages" cascade="all"  >
+			<key column="COW_INSPECTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.CowInspectionImages" />
+		</set>
+
+		<set name="cowFeedTypes" cascade="all"  >
+			<key column="COW_INSPECTION_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.CowFeedType" />
+		</set>
+
+		<set name="cowVaccinations" cascade="all"  >
+			<key column="COW_INSPECTION_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.CowVaccination" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CowInspectionImages"
+		table="COW_INSPECTION_IMAGE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="cowInspectionId" column="COW_INSPECTION_ID" />
+		<property name="photo" column="PHOTO" />
+		<property name="captureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CowFeedType"
+		table="COW_FEED_TYPE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="feedType" column="FEED_TYPE" />
+		<property name="amount" column="AMOUNT" />
+		<property name="cowInspectionId" column="COW_INSPECTION_ID" />
+	</class>
+
+
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CostFarming"
+		table="COST_FARMING">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+
+		<property name="elitType" column="ELIT_TYPE" />
+		<property name="researchStationId" column="RESEARCH_STATION_ID" />
+		<property name="farmCode" column="FARM_CODE" />
+		<property name="farmerId" column="FARMER_ID" />
+		<many-to-one name="cow" column="COW_ID"   />
+		<property name="collectionDate" column="COLLECTION_DATE" />
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="housingCost" column="HOUSING_COST" />
+		<property name="feedCost" column="FEED_COST" />
+		<property name="treatementCost" column="TREATMENT_COST" />
+		<property name="otherCost" column="OTHER_COST" />
+		<property name="totalExpence" column="TOTAL_EXPENCE" />
+		<property name="incomeMilk" column="INCOME_MILK" />
+		<property name="incomeOther" column="INCOME_OTHER" />
+		<property name="totalIncome" column="TOTAL_INCOME" />
+		<property name="createDate" column="CREATE_DATE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.CowVaccination"
+		table="COW_VACCINATION">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="date" column="DATE" />
+		<property name="cowInspectionId" column="COW_INSPECTION_ID" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.Sensitizing"
+		table="SENSITIZING">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="groupId" column="GROUP_ID" />
+		<property name="farmerCount" column="FARMER_COUNT" />
+		<property name="remarks" column="REMARKS" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="status" column="STATUS" />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="createdDt" column="CREATED_DT" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="village" column="VILLAGE" />
+		<property name="groupName"
+			formula="(SELECT w.NAME FROM WAREHOUSE w WHERE w.CODE=GROUP_ID)" />
+
+		<set name="sentizingImages" cascade="all"  >
+			<key column="SENSITIZING_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.SensitizingImg" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.SensitizingImg"
+		table="SENSITIZING_IMAGE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="sentizing" column="SENSITIZING_ID"
+			  cascade="all" />
+		<property name="photo" column="PHOTO" />
+		<property name="captureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.ProductReturn"
+		table="PRODUCT_RETURN">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="referenceNo" column="REFERENCE_NO" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="totalAmount" column="TOTAL_AMOUNT" />
+		<property name="tax" column="TAX" />
+		<property name="finalAmount" column="FINAL_AMOUNT" />
+		<property name="paymentMode" column="PAYNMENT_MODE" />
+		<property name="paymentAmount" column="PAYMENT_AMT" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="receiptNumber" column="RECEIPT_NO" />
+		<property name="intBalance" column="INT_BAL" />
+		<property name="txnAmount" column="TXN_AMT" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="agentName" column="AGENT_NAME" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="freeDistribution" column="IS_FREE_DISTRIBUTION" />
+		<property name="samithiName" column="SAMITHI_NAME" />
+		<property name="servicePointName" column="SERVICE_POINT_NAME" />
+		<property name="villageName" column="VILLAGE_NAME" />
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="balAmount" column="BAL_AMT" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="stockType" column="STOCK_TYPE" />
+
+		<property name="fatherName"
+			formula="(SELECT FARMER.LAST_NAME FROM FARMER WHERE FARMER.FARMER_ID=FARMER_ID LIMIT 1)" />
+
+		<many-to-one name="village" column="VILLAGE_ID"   />
+		<many-to-one name="agroTransaction" column="TRXN_AGRO_ID"
+			  cascade="all" />
+		<many-to-one name="season" column="SEASON_ID"   />
+		<set name="productReturnDetail" cascade="all"  >
+			<key column="PRODUCT_RETURN_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.ProductReturnDetail" />
+		</set>
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="status" column="STATUS" />
+		<property name="updatedUserName" column="UPDATED_USER_NAME" />
+		<property name="updateTime" column="UPDATED_TIME" />
+		
+		<set name="pmtImageDetail" cascade="all" lazy ="false" where="type=4" >
+			<key column="PMT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PMTImageDetails" />
+		</set>
+		
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.ProductReturnDetail"
+		table="PRODUCT_RETURN_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="product" column="PRODUCT_ID"   />
+		<property name="quantity" column="QUANTITY" />
+		<property name="unit" column="UNIT" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="sellingPrice" column="SELLING_PRICE" />
+		<property name="existingQuantity" column="EXISTING_QUANTITY" />
+		<property name="currentQuantity" column="CURRENT_QUANTITY" />
+		<property name="costPrice" column="COST_PRICE" />
+		<property name="batchNo" column="BATCH_NO" />
+		<many-to-one name="productReturn" column="PRODUCT_RETURN_ID"
+			  cascade="all" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.GlobalReport"
+		table="vw_global_report">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="txnTime" column="TXN_TIME" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="distributionAmount" column="DIS_AMOUNT" />
+		<property name="procurmentAmount" column="PRO_AMOUNT" />
+		<property name="seasonCode" column="SEASON_CODE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineProductReturn"
+		table="OFFLINE_PRODUCT_RETURN">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="productReturnDate" column="PRODUCT_RETURN_DATE" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="warehouseCode" column="WAREHOUSE_CODE" />
+		<property name="villageCode" column="VILLAGE_CODE" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="paymentAmt" column="PAYMENT_AMT" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="txnType" column="TXN_TYPE" />
+		<property name="tax" column="TAX" />
+		<property name="paymentMode" column="PAYMENT_MODE" />
+		<property name="freeDistribution" column="IS_FREE_DISTRIBUTION" />
+		<property name="totalAmount" column="TOTAL_AMOUNT" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="currentSeasonCode" column="CURRENT_SEASON_CODE" />
+		<property name="stockType" column="STOCK_TYPE" />
+		<set name="offlineProductReturnDetail" cascade="all" lazy ="false"  >
+			<key column="OFFLINE_PRODUCT_RETURN_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineProductReturnDetail" />
+		</set>
+		<set name="pmtImageDetail" cascade="all" lazy ="false"  >
+			<key column="OFFLINE_PMT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.PMTImageDetails" />
+		</set>		
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.OfflineProductReturnDetail"
+		table="OFFLINE_PRODUCT_RETURN_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="quantity" column="QUANTITY" />
+		<property name="pricePerUnit" column="PRICE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="sellingPrice" column="SELLING_PRICE" />
+		<many-to-one name="offlineProductReturn" column="OFFLINE_PRODUCT_RETURN_ID"
+			  />
+		<property name="batchNo" column="BATCH_NO" />
+	</class>
+
+
+
+	<class name="com.sourcetrace.eses.txn.agrocert.SurveyFarmerCropProdAnswers"
+		table="SURVEY_FARMER_CROP_PROD_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="surveyTxnId" column="SURVEY_TXN_ID" />
+		<property name="answeredDate" column="ANSWERED_DATE" />
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmId" column="FARM_ID" />
+		<property name="cooperativeCode" column="COOPEARTIVE_CODE" />
+		<property name="categoryCode" column="CATEGORY_CODE" />
+		<property name="categoryName" column="CATEGORY_NAME" />
+		<set name="farmersSectionAnswers" lazy="true" cascade="all" sort="natural">
+			<key column="FARMER_CROP_PROD_ANSWERS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.SurveyFarmersSectionAnswers" />
+		</set>
+
+		<property name="dataCollectorId" column="DATA_COLLECTOR_ID" />
+		<property name="dataCollectorName" column="DATA_COLLECTOR_NAME" />
+		<property name="surveyCode" column="SURVEY_CODE" />
+		<property name="surveyName" column="SURVEY_NAME" />
+		<property name="mode" column="MODE" />
+		<property name="farmerName"
+			formula="(select GROUP_CONCAT(Farmer.first_name) from farmer where FIND_IN_SET(Farmer.farmer_id,farmer_id)  AND FARMER.STATUS_CODE = 0  LIMIT 1)" />
+		<property name="farmerCode"
+			formula="(SELECT FARMER.FARMER_CODE FROM FARMER WHERE FARMER.FARMER_ID=FARMER_ID  AND FARMER.STATUS_CODE = 0 LIMIT 1)" />
+		<property name="farmerOrgName"
+			formula="(select GROUP_CONCAT(WAREHOUSE.NAME) from WAREHOUSE where FIND_IN_SET(WAREHOUSE.CODE,COOPEARTIVE_CODE LIMIT 1)  )" />
+		<property name="farmName"
+			formula="(SELECT DISTINCT FARM.FARM_NAME FROM FARM WHERE  FARM.FARM_CODE=FARM_ID LIMIT 1)" />
+
+		<property name="comment" column="COMMENT" />
+		<property name="saveStatus" column="SAVE_STATUS" />
+		<property name="farmerCropProdAnsRefId" column="FARMER_CROP_PROD_ANS_REF_ID" />
+		<property name="updateUserName" column="UPDATE_USER_NAME" />
+		<property name="updateDT" column="UPDATE_DT" />
+		<property name="deletedReason" column="DELETED_REASON" />
+		<property name="surveyTypeId" column="SURVEY_TYPE_ID" />
+		<set name="surveyAnswerDetails"   cascade="none"
+			inverse="true">
+			<key column="SURVEY_ANSWER_ID" />
+			<one-to-many class="com.sourcetrace.eses.txn.agrocert.SurveyAnswersDetails" />
+		</set>
+		<set name="surveySubFormAnswersDetails"   cascade="none"
+			inverse="true">
+			<key column="SURVEY_ANSWER_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.SurveySubFormAnswersDetails" />
+		</set>
+		<property name="failureMessage" column="FAILURE_MESSAGE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="farmerOrgCode"
+			formula="(SELECT DISTINCT WAREHOUSE.CODE FROM WAREHOUSE WHERE WAREHOUSE.ID=COOPEARTIVE_CODE)" />
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.SurveyFarmersSectionAnswers"
+		table="SURVEY_FARMER_SECTION_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmerCropProdAnswers" column="FARMER_CROP_PROD_ANSWERS_ID"
+			  />
+		<property name="sectionCode" column="SECTION_CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="sectionName" column="SECTION_NAME" />
+		<property name="sectionType" column="SECTION_TYPE" />
+		<set name="farmersQuestionAnswers" lazy="true" cascade="all"
+			order-by="QUESTION_ORDER">
+			<key column="FARMER_SECTION_ANSWERS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.SurveyFarmersQuestionAnswers" />
+		</set>
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.SurveyFarmersQuestionAnswers"
+		table="SURVEY_FARMER_QUESTION_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmersSectionAnswers" column="FARMER_SECTION_ANSWERS_ID"
+			  />
+		<property name="questionCode" column="QUESTION_CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="questionName" column="QUESTION_NAME" />
+		<property name="registeredQuestion" column="REGISTERED_QUESTION" />
+		<property name="questionType" column="QUESTION_TYPE" />
+		<property name="image" type="binary" column="IMG" />
+		<property name="latitude" column="GPS_LATITUDE" />
+		<property name="longtitude" column="GPS_LONGTITUDE" />
+		<property name="GPSCaptureDateTime" column="GPS_CAPTURE_DATE_TIME" />
+		<property name="followUp" column="FOLLOW_UP" />
+		<property name="componentType" column="COMPONENT_TYPE" />
+		<many-to-one name="parentQuestionAnswers" column="PARENT_FARMER_QUESTION_ANSWERS_ID"
+			  />
+		<set name="answers" lazy="true" cascade="all" sort="natural"
+			where="ANSWER_TYPE!=1">
+			<key column="FARMER_QUESTION_ANSWERS_ID" />
+			<one-to-many class="com.sourcetrace.eses.txn.agrocert.SurveyAnswers" />
+		</set>
+		<set name="subQuestions"   cascade="all" sort="natural">
+			<key column="PARENT_FARMER_QUESTION_ANSWERS_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.txn.agrocert.SurveyFarmersQuestionAnswers" />
+		</set>
+		<set name="subFormAnswers"   cascade="all" sort="natural">
+			<key column="CHILD_FARMERS_QUESTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.SubFormAnswerMapping" />
+		</set>
+
+		<many-to-one name="question" property-ref="code" column="QUESTION_CODE"
+			update="false" insert="false" />
+		<property name="questionOrder" column="QUESTION_ORDER" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.SurveyAnswers"
+		table="SURVEY_ANSWERS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmersQuestionAnswers" column="FARMER_QUESTION_ANSWERS_ID"
+			  />
+		<property name="answerType" column="ANSWER_TYPE" />
+		<property name="answer" column="ANSWER" />
+		<property name="answer1" column="ANSWER_1" />
+		<property name="answer2" column="ANSWER_2" />
+		<property name="answer3" column="ANSWER_3" />
+		<property name="answer4" column="ANSWER_4" />
+		<property name="answer5" column="ANSWER_5" />
+		<property name="answer6" column="ANSWER_6" />
+		<property name="followUp" column="FOLLOW_UP" />
+		<property name="nonConfirm" column="NON_CONFIRM" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SurveyType"
+		table="SURVEY_TYPE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="name" column="SURVEY_TYPE" />
+		<property name="createdDate" column="CREATED_TIME" />
+		<property name="updatedDate" column="UPDATED_TIME" />
+		<property name="createdUserName" column="CREATE_USER_NAME" />
+		<property name="updatedUserName" column="UPDATED_USER_NAME" />
+		<property name="revisionNumber" column="REVISION_NO" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SurveyQuestionMapping"
+		table="SURVEY_QUESTION_MAP">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="surveyMaster" column="SURVEY_ID"   />
+		<many-to-one name="question" column="QUESTION_ID"   />
+		<property name="questionOrder" column="QUESTION_ORDER" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.txn.agrocert.SurveyAnswersDetails"
+		table="VW_SURVEY_ANSWERS_DETAILS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="surveyAnswers" column="SURVEY_ANSWER_ID" />
+		<property name="questionCode" column="QUESTION_CODE" />
+		<property name="answerType" column="ANSWER_TYPE" />
+		<property name="answer" column="ANSWER" />
+		<property name="answer1" column="ANSWER_1" />
+		<property name="answer2" column="ANSWER_2" />
+		<property name="answer3" column="ANSWER_3" />
+		<!-- <property name="answer4" column="ANSWER_4" /> -->
+		<property name="answer5" column="ANSWER_5" />
+		<property name="answer6" column="ANSWER_6" />
+		<property name="componentType" column="COMPONENT_TYPE" />
+		<property name="fqaId" column="FQA_ID" />
+	</class>
+
+
+
+	<class name="com.sourcetrace.eses.txn.agrocert.DownloadTask"
+		table="DOWNLOAD_TASK">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="userName" column="USER_NAME" />
+		<property name="startTime" column="START_TIME" />
+		<property name="progressStatus" column="PROGRESS_STATUS" />
+		<property name="fileName" column="FILE_NAME" />
+		<property name="fileType" column="FILE_TYPE" />
+		<property name="description" column="DESCRIPTION" />
+		<property name="fileData" column="FILE_DATA" />
+		<property name="status" column="STATUS" />
+		<property name="endTime" column="END_TIME" />
+	</class>
+
+
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SubFormQuestionMapping"
+		table="SUB_FORM_QUESTION_MAP">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="parentQuestion" column="PARENT_QUESTION_ID"
+			  />
+		<many-to-one name="childQuestion" column="CHILD_QUESTION_ID"
+			  />
+		<property name="questionOrder" column="QUESTION_ORDER" />
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SubFormAnswerMapping"
+		table="SUB_FORM_ANSWER_MAP">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="subFormParentQuestion" cascade="all"
+			column="PARENT_FARMERS_QUESTION_ID"   />
+		<many-to-one name="subFormChildQuestion" cascade="all"
+			column="CHILD_FARMERS_QUESTION_ID"   />
+		<many-to-one name="answer" cascade="all" column="ANSWER_ID"
+			  />
+		<property name="answerOrder" column="ANSWER_ORDER" />
+	</class>
+
+	<class name="com.sourcetrace.eses.txn.agrocert.SurveySubFormAnswersDetails"
+		table="VW_SURVEY_SUBFORM_ANSWERS_DETAILS">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="surveyAnswers" column="SURVEY_ANSWER_ID"
+			  />
+		<property name="parentQuestionCode" column="PARENT_QUESTION_CODE" />
+		<property name="childQuestionCode" column="CHILD_QUESTION_CODE" />
+		<property name="parentfqa" column="PARENT_FQA_ID" />
+		<property name="childfqa" column="CHILD_FQA_ID" />
+		<property name="answerOrder" column="ANSWER_ORDER" />
+		<property name="answerType" column="ANSWER_TYPE" />
+		<property name="answer" column="ANSWER" />
+		<property name="answer1" column="ANSWER_1" />
+		<property name="answer2" column="ANSWER_2" />
+		<property name="answer3" column="ANSWER_3" />
+		<!-- <property name="answer4" column="ANSWER_4" /> -->
+		<property name="answer5" column="ANSWER_5" />
+		<property name="answer6" column="ANSWER_6" />
+		<property name="questionOrder" column="QUESTION_ORDER" />
+		<property name="componentType" column="COMPONENT_TYPE" />
+		<!-- <property name="followUp" column="FOLLOW_UP" /> -->
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SurveySection"
+		table="SURVEY_SECTION">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="name" column="NAME" />
+		<property name="revisionNumber" column="REVISION_NUMBER" />
+		<set name="questions"   order-by="id" cascade="all">
+			<key column="SECTION_ID" />
+			<one-to-many class="com.sourcetrace.eses.inspect.agrocert.SurveyQuestion" />
+		</set>
+		<set name="languagePreferences" table="LANGUAGE_PREF" where="LTYPE=1"
+			  cascade="all">
+			<key column="code" property-ref="code" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.LanguagePreferences" />
+		</set>
+		<!-- <many-to-one name="country" column="COUNTRY_ID"   /> -->
+	</class>
+
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SurveyQuestion"
+		table="SURVEY_QUESTION">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="serialNo" column="SERIAL_NO" />
+		<property name="name" column="NAME" />
+		<property name="questionType" column="QUESTION_TYPE" />
+		<property name="revisionNumber" column="REVISION_NUMBER" />
+		<property name="info" column="INFO_TEXT" />
+		<property name="formulaEquation" column="FORMULA_EQN" />
+		<property name="dataCollection" column="DATA_COLLECTION_TYPE" />
+		<property name="componentType" column="COMPONENT_TYPE" />
+		<!-- <property name="historical" column="HISTORICAL" /> -->
+		<property name="collectionType" column="COLLECTION_TYPE" />
+		<property name="dataFormat" column="DATA_FORMAT" />
+		<property name="validationType" column="VALIDATION_TYPE" />
+		<property name="maxLength" column="MAX_LENGTH" />
+		<property name="listMethodName" column="LIST_METHOD_NAME" />
+		<property name="otherCatalogValue" column="OTHER_CATALOG_VALUE" />
+		<property name="answerCatType" column="ANSWER_CAT_TYPE" />
+		<many-to-one name="section" column="SECTION_ID"   />
+		<many-to-one name="parentQuestion" column="PARENT_QUESTION_ID"
+			  />
+		<set name="subQuestions"   order-by="id" cascade="all">
+			<key column="PARENT_QUESTION_ID" />
+			<one-to-many class="com.sourcetrace.eses.inspect.agrocert.SurveyQuestion" />
+		</set>
+		<set name="units"   cascade="all" table="QUES_CAT_MAP">
+			<key column="QUESTION_ID" />
+			<many-to-many column="CATALOGUE_ID"
+				class="com.sourcetrace.eses.entity.FarmCatalogue" where="typez=95"
+				order-by="id" />
+		</set>
+		<set name="defaultValues"   cascade="all" table="QUES_CAT_MAP">
+			<key column="QUESTION_ID" />
+			<many-to-many column="CATALOGUE_ID"
+				class="com.sourcetrace.eses.entity.FarmCatalogue" where="typez=96"
+				order-by="id" />
+		</set>
+		<property name="status" column="STATUS" />
+		<property name="defaultUnit" column="DEFAULT_UNIT" />
+		<property name="unitOtherCatalogValue" column="UNIT_OTHER_CATALOG_VALUE" />
+		<property name="entityProperty" column="ENTITY_PROPERTY" />
+		<property name="dependencyKey" column="DEPENDENCY_KEY" />
+		<property name="subFormKey" column="SUB_FORM_KEY" />
+		<property name="mandatory" column="IS_MANDATORY" />
+		<set name="subFormQuestions" sort="natural" cascade="all"  >
+			<key column="PARENT_QUESTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.SubFormQuestionMapping" />
+		</set>
+		<property name="parentDepen" column="PARENT_DEPENDANCY_KEY" />
+		<property name="minRange" column="MIN_RANGE" />
+		<property name="maxRange" column="MAX_RANGE" />
+		<!-- <many-to-one name="country" column="COUNTRY_ID"   /> -->
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.profile.DataLevel"
+		table="DATA_LEVEL">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<property name="entityName" column="ENTITY_NAME" />
+		<property name="entityAbsoluteName" column="ENTITY_ABSOLUTE_NAME" />
+		<property name="idendifier" column="IDENDIFIER" />
+		<set name="languagePreferences" table="LANGUAGE_PREF" where="LTYPE=0">
+			<key column="code" property-ref="code" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.LanguagePreferences" />
+		</set>
+	</class>
+
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.LanguagePreferences"
+		table="LANGUAGE_PREF">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<property name="shortName" column="SHORT_NAME" />
+		<property name="info" column="INFO" />
+		<property name="lang" column="LANG" />
+		<property name="type" column="LTYPE" />
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SurveyPreferences"
+		table="SURVEY_PREF">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="type" column="PREF_TYPE" />
+		<many-to-one name="country" column="COUNTRY_ID"   />
+		<property name="code" column="CODE" />
+		<property name="name" column="NAME" />
+		<property name="convertionCode" column="CONV_CODE" />
+		<property name="convertionName" column="CONV_NAME" />
+		<property name="value" column="PREF_VALUE" />
+		<property name="createdDate" column="CREATED_TIME" />
+		<property name="updatedDate" column="UPDATED_TIME" />
+		<property name="createdUserName" column="CREATE_USER_NAME" />
+		<property name="updatedUserName" column="UPDATED_USER_NAME" />
+		<property name="revisionNumber" column="REVISION_NO" />
+		<property name="status" column="STATUS" />
+	</class>
+
+	<class name="com.sourcetrace.eses.inspect.agrocert.SurveyMaster"
+		table="SURVEY_MASTER">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="code" column="SURVEY_CODE" />
+		<property name="name" column="SURVEY_TITLE" />
+		<property name="description" column="SURVEY_DESCRIPTION" />
+		<many-to-one name="dataLevel" column="DATA_LEVEL_ID"   />
+		<many-to-one name="surveyType" column="SURVEY_TYPE_ID"
+			  />
+		<property name="createdDate" column="CREATED_TIME" />
+		<property name="updatedDate" column="UPDATED_TIME" />
+		<property name="createdUserName" column="CREATE_USER_NAME" />
+		<property name="updatedUserName" column="UPDATED_USER_NAME" />
+		<property name="revisionNumber" column="REVISION_NO" />
+		<property name="status" column="STATUS" />
+		<set name="surveyQuestionMapping" sort="natural" cascade="all"
+			 >
+			<key column="SURVEY_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.SurveyQuestionMapping" />
+		</set>
+		<set name="sections" table="SURVEY_SECTION_MAP" order-by="SECTION_ID"
+			 >
+			<key column="SURVEY_ID" />
+			<many-to-many column="SECTION_ID"
+				class="com.sourcetrace.eses.inspect.agrocert.SurveySection" />
+		</set>
+		<set name="languagePreferences" table="LANGUAGE_PREF" where="LTYPE=4"
+			 >
+			<key column="code" property-ref="code" />
+			<one-to-many
+				class="com.sourcetrace.eses.inspect.agrocert.LanguagePreferences" />
+		</set>
+
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.OfflineSupplierProcurement"
+		table="OFFLINE_SUPPLIER_PROCUREMENT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="invoiceNo" column="INVOICE_NO" />
+		<property name="isRegSupplier" column="IS_REG_SUPPLIER" />
+		<property name="procurementDate" column="PROCUREMENT_DATE" />
+		<property name="totalAmount" column="TOTAL_AMOUNT" />
+		<property name="paymentAmt" column="PAYMENT_AMOUNT" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="servicePointId" column="SERVICE_POINT_ID" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="procMasterType" column="MASTER_TYPE" />
+		<property name="procMasterTypeId" column="MASTER_TYPE_ID" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<property name="warehouseId" column="WAREHOUSE_ID" />
+		<set name="offlineSupplierProcurementDetails" cascade="all" lazy ="false" >
+			<key column="OFFLINE_SUPPLIER_PROCUREMENT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineSupplierProcurementDetail" />
+		</set>
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="totalLabourCost" column="TOTAL_LABOUR_COST" />
+		<property name="transportCost" column="TRANSPORT_COST" />
+		<property name="invoiceValue" column="INVOICE_VALUE" />
+		<property name="taxAmt" column="TAX_AMT" />
+		<property name="otherCost" column="OTHER_COST" />
+		
+
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.OfflineSupplierProcurementDetail"
+		table="OFFLINE_SUPPLIER_PROCUREMENT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="isRegFarmer" column="IS_REG_FARMER" />
+		<property name="villageCode" column="VILLAGE_CODE" />
+		<property name="farmerMobileNumber" column="MOBILE_NO" />
+		<property name="quality" column="QUALITY" />
+		<property name="productCode" column="PRODUCT_CODE" />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+		<property name="unit" column="UNIT" />
+		<property name="cropType" column="CROP_TYPE" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="netWeight" column="NET_WEIGHT" />
+		<property name="ratePerUnit" column="RATE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<property name="batchNo" column="BATCH_NO" />
+		<many-to-one name="offlineSupplierProcurement" column="OFFLINE_SUPPLIER_PROCUREMENT_ID"
+			  />
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.SupplierProcurement"
+		table="SUPPLIER_PROCUREMENT">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="type" column="TYPEE" />
+		<property name="invoiceNo" column="INVOICE_NO" />
+		<many-to-one name="agroTransaction" column="TRXN_AGRO_ID"
+			  cascade="all" />
+		<many-to-one name="season" column="SEASON_ID"   />
+		
+		<property name="paymentAmount" column="PAYMENT_AMT" />
+		<property name="totalProVal" column="TOTAL_AMOUNT" />
+		<property name="mobileNumber" column="MOBILE_NO" />
+		<property name="isRegSupplier" column="IS_REG_SUPPLIER" />
+		<property name="procMasterType" column="MASTER_TYPE" />
+		<property name="procMasterTypeId" column="MASTER_TYPE_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="totalLabourCost" column="TOTAL_LABOUR_COST" />
+		<property name="transportCost" column="TRANSPORT_COST" />
+		<property name="invoiceValue" column="INVOICE_VALUE" />
+		<set name="supplierProcurementDetails" cascade="all"  >
+			<key column="SUPPLIER_PROCUREMENT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.SupplierProcurementDetail" />
+		</set>
+		<property name="warehouseId" column="WAREHOUSE_ID" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="trader" column="TRADER" />
+		<property name="taxAmt" column="TAX_AMT"/>
+		<property name="otherCost" column="OTHER_COST"/>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+
+	</class>
+
+	
+	
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.SupplierProcurementDetail"
+		table="SUPPLIER_PROCUREMENT_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="farmer" column="FARMER_ID"   />
+		<property name="farmerName" column="FARMER_NAME" />
+		<property name="villageCode" column="VILLAGE_CODE" />
+		<property name="isReg" column="IS_REG_FARMER" />
+		<property name="farmerMobileNumber" column="MOBILE_NO" />
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"
+			  />
+		<many-to-one name="procurementGrade" column="PROCUREMENT_GRADE_ID"
+			  />
+		<property name="quality" column="QUALITY" />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+		<property name="cropType" column="CROP_TYPE" />
+		<property name="unit" column="UNIT" />
+		<property name="batchNo" column="BATCH_NO" />
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="NetWeight" column="NET_WEIGHT" />
+		<property name="ratePerUnit" column="RATE_PER_UNIT" />
+		<property name="subTotal" column="SUB_TOTAL" />
+		<many-to-one name="supplierProcurement" column="SUPPLIER_PROCUREMENT_ID"
+			  />
+
+	</class>
+
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.OfflineProcurementTraceability"
+		table="OFFLINE_PROCUREMENT_TRACEABILITY">
+		<id name="id">
+			<generator class="native" />
+		</id>
+
+		<property name="farmerId" column="FARMER_ID" />
+		<property name="warehouseId" column="WAREHOUSE_ID" />
+		<property name="season" column="SEASON_ID" />
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="stripPositive" column="STRIP_POSITIVE" />
+		<property name="stripImage" column="PHOTO" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="trash" column="TRASH" />
+		<property name="moisture" column="MOISTURE" />
+		<property name="stapleLen" column="STAPLE_LEN" />
+		<property name="kowdi_kapas" column="KOWDI_KAPAS" />
+		<property name="yellow_cotton" column="YELLOW_COTTON" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="procurementDate" column="PROCUREMENT_DATE" />
+		<property name="totalProVal" column="TOTAL_AMOUNT" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="paymentAmount" column="PAYMENT_AMOUNT" />
+		<property name="statusMsg" column="STATUS_MSG" />
+		<set name="offlineprocurTraceabtyDetails" cascade="all" lazy ="false"  >
+			<key column="OFFLINE_PROCUREMENT_TRACEABILITY_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineProcurementTraceabilityDetails" />
+		</set>
+	<property name="messageNo" column="MSG_NO" />	
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class
+		name="com.sourcetrace.eses.order.entity.txn.OfflineProcurementTraceabilityDetails"
+		table="OFFLINE_PROCUREMENT_TRACEABILITY_DETAILS">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<many-to-one name="offlineProcurementTraceability" column="OFFLINE_PROCUREMENT_TRACEABILITY_ID"
+			  />
+		<property name="gradeCode" column="GRADE_ID" />
+		<property name="productCode" column="PRO_PRODUCT_ID" />
+		<property name="unit" column="UNIT" />
+		<property name="price" column="PRICE" />
+		<property name="premiumPrice" column="PREMIUM_PRICE" />
+		<property name="totalPrice" column="TOTAL_PRICE" />
+		<property name="totalPricepremium" column="TOTAL_PRICE_PREMIUM" />
+		<property name="NetWeight" column="NET_WEIGHT" />
+		<property name="numberOfBags" column="NUMBER_OF_BAGS" />
+	</class>
+
+
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflinePMTNR"
+		table="offline_pmtnr">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="coOperativeCode" column="CO_OPERATIVE_CODE" />
+		<property name="mtnrDate" column="MTNR_DATE" />
+		<property name="mtntReceiptNo" column="MTNT_RECEIPT_NO" />
+		<property name="receiptNo" column="RECEIPT_NO" />
+		<property name="agentId" column="AGENT_ID" />
+
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverName" column="DRIVER_NAME" />
+		<property name="transporter" column="TRANSPORTER" />
+		<property name="seasonCode" column="SEASON_CODE" />
+
+		<property name="deviceId" column="DEVICE_ID" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedUser" column="UPDATED_USER" />
+
+		<property name="createdDated" column="CREATED_DATE" />
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />
+
+		<set name="offlinePmtImages" cascade="all" lazy ="false"   where="type=1">
+			<key column="PMT_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflinePMTImageDetails" />
+		</set>
+
+		<set name="offlinePMTRDetail" cascade="all" order-by="id asc" lazy ="false" 
+			 >
+			<key column="PMTNR_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflinePMTNRDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflinePMTNRDetail"
+		table="offline_pmtnr_details">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<many-to-one name="offlinePMTNR" column="PMTNR_ID"  
+			cascade="all" />
+		<property name="productCode" column="PROCUREMENT_PRODUCT_ID" />
+		<!-- <property name="gradeCode" column="PROCUREMENT_GRADE_ID" /> -->
+		<property name="grossWeight" column="GROSS_WEIGHT" />
+		<property name="noOfBags" column="NO_OF_BAGS" />
+		<property name="coOperativeCode" column="CO_OPERATIVE_CODE" />
+		<property name="ics" column="ICS" />
+		<property name="transferBags"  column="TRANSFER_BAGS"/>
+		<property name="transferWeight"  column="TRANSFER_WEIGHT"/>
+		<property name="heap" column="HEAP"/>
+		
+	</class>
+
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflinePMTImageDetails"
+		table="offline_pmt_image_details">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="pmt" column="PMT_ID" />
+		<property name="photo" column="PHOTO" />
+		<property name="captureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="type" column="TYPE" />
+	</class>
+
+
+	<class name="com.sourcetrace.eses.order.entity.txn.PMTImageDetails"
+		table="pmt_image_details">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="offlinePMT" column="OFFLINE_PMT_ID" />
+		<property name="pmt" column="PMT_ID" />
+		<property name="photo" column="PHOTO" />
+		<property name="captureTime" column="PHOTO_CAPTURE_TIME" />
+		<property name="latitude" column="LATITUDE" />
+		<property name="longitude" column="LONGITUDE" />
+		<property name="fileName" column="FILE_NAME" />
+		<property name="fileType" column="FILE_TYPE" />
+		<property name="type" column="TYPE" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineGinningProcess" table="OFFLINE_GINNING_PROCESS">
+	<id name="id" column="ID">
+		<generator class="native"/>
+	</id>
+	<property name="processDate" column="PROCESS_DATE"/>
+	<property name="agentId" column="AGENT_ID"/>
+	<property name="createdUser" column="CREATED_USER"/>
+	<property name="updatedUser" column="UPDATED_USER"/>
+	<property name="statusCode" column="STATUS_CODE"/>
+	<property name="statusMsg" column="STATUS_MAG"/>
+	<property name="branchId" column="BRANCH_ID"/>
+	<property name="deviceId" column="DEVICE_ID"/>
+	<property name="createdDate" column="CREATED_DATE"/>
+	<property name="heapCode" column="HEAP_CODE"/>
+	<property name="productCode" column="PRODUCT_CODE"/>
+	<property name="ics" column="ICS"/>
+	<property name="processQty" column="PROCESS_QTY"/>
+	<property name="lintQty" column="LINT_QTY"/>
+	<property name="seedQty" column="SEED_QTY"/>
+	<property name="scrapQty" column="SCRAP_QTY"/>
+	<property name="remark" column="REMARK"/>
+	<property name="season" column="SEASON"/>
+	<many-to-one name="ginning" column="GINNING_ID"  />
+	<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineBaleGeneration" table="OFFLINE_BALE_GENERATION">
+	<id name="id" column="ID">
+		<generator class="native"/>
+	</id>
+	<property name="createdDate" column="CREATED_DATE"/>
+	<property name="agentId" column="AGENT_ID"/>
+	<property name="createdUser" column="CREATED_USER"/>
+	<property name="updatedUser" column="UPDATED_USER"/>
+	<property name="statusCode" column="STATUS_CODE"/>
+	<property name="statusMsg" column="STATUS_MSG"/>
+	<property name="deviceId" column="DEVICE_ID"/>
+	<property name="genDate" column="GEN_DATE"/>
+	<property name="baleDate" column="BALE_DATE"/>
+	<property name="heap" column="HEAP_CODE"/>
+	<property name="lotNo" column="LOT_NO"/>
+	<property name="prNo" column="PR_NO"/>
+	<property name="baleWeight" column="BALE_WEIGHT"/>
+	<property name="branchId" column="BRANCH_ID"/>
+	<property name="season" column="SEASON" />
+	<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineSpinningTransfer" table="OFFLINE_SPINNING_TRANSFER">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+	<property name="agentId" column="AGENT_ID" />
+	<property name="createdUser" column="CREATED_USER" />
+	<property name="updatedUser" column="UPDATED_USER" />
+	<property name="statusCode" column="STATUS_CODE" />
+	<property name="statusMsg" column="STATUS_MSG" />
+	<property name="branchId" column="BRANCH_ID" />
+	<property name="deviceId" column="DEVICE_ID" />
+	<property name="createdDate" column="CREATED_DATE" />
+	<property name="transDate" column="TRANS_DATE" />
+	<property name="invoiceNo" column="INVOICE_NO" />
+	<property name="truckNo" column="TRUCK_NO" />
+	<property name="spinnerCode" column="SPINNER_CODE" />
+	<property name="lotNo" column="LOT_NO" />
+	<property name="prNo" column="PR_NO" />
+	<property name="noBals" column="NO_OF_BALES" />
+	<property name="netWeight" column="NET_WEIGHT" />
+	<property name="rate" column="RATE" />
+	<property name="netAmt" column="NET_AMT" />
+	<property name="type" column="TYPE" />
+	<property name="season" column="SEASON" />
+	<set name="offlinePmtImages" cascade="all" lazy ="false"   where="type=2">
+		<key column="PMT_ID" />
+		<one-to-many class="com.sourcetrace.eses.order.entity.txn.OfflinePMTImageDetails" />
+	</set>
+	<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.DistributionStock" table="DISTRIBUTION_STOCK">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+		<property name="txnTime" column="TXN_TIME"/>
+		<property name="receiptNo" column="RECEIPT_NO"/>
+		<property name="branchId" column="BRANCH_ID"/>
+		<many-to-one name="senderWarehouse" column="SENDER_WAREHOUSE"/>
+		<many-to-one name="receiverWarehouse" column="RECEIVER_WAREHOUSE"/>
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverName" column="DRIVER_NAME" />
+		<property name="loggedUser" column="LOGGER_USER"/>
+		<property name="txnType" column="TXN_TYPE"/>
+		<property name="status" column="STATUS" />
+		<property name="season" column="SEASON" />
+		<set name="distributionStockDetails" cascade="all" >
+			<key column="DISTRIBUTION_STOCK_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.DistributionStockDetail" />
+		</set>
+		
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.DistributionStockDetail" table="DISTRIBUTION_STOCK_DETAIL">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+		<many-to-one name="product" column="PRODUCT"/>
+		<many-to-one name="distributionStock" column="DISTRIBUTION_STOCK_ID" cascade="all"/>
+		<property name="damageQuantity" column="DAMAGE_QTY"/>
+		<property name="distributionQuantity" column="DIST_QTY"/>
+		<property name="totalQuantity" column="TOT_QTY"/>
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.ColdStorageStockTransfer" table="COLD_STORAGE_STOCK_TRANSFER">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+		<property name="transferDate" column="TXN_DATE"/>
+		<property name="receiptNo" column="RECEIPT_NO"/>
+		<property name="branchId" column="BRANCH_ID"/>
+		<many-to-one name="warehouse" column="WAREHOUSE_ID"/>
+		<property name="coldStorageName" column="COLD_STORAGE_NAME"/>
+		<property name="batchNo" column="BATCH_NO"/>
+		<many-to-one name="buyer" column="BUYER_ID"/>
+		<property name="truckId" column="TRUCK_ID" />
+		<property name="driverName" column="DRIVER_NAME" />		
+		<property name="createdUserName" column="CREATED_USER_NAME" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedUserName" column="UPDATED_USER_NAME" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="revisionNo" column="REVISION_NO" />
+		<property name="poNumber" column="poNumber" />
+		<property name="invoiceNumber" column="invoiceNumber" />
+		<set name="coldStorageStockTransferDetail" cascade="all" >
+			<key column="COLD_STORAGE_STOCK_TRANSFER_ID" />
+			<one-to-many class="com.sourcetrace.eses.order.entity.txn.ColdStorageStockTransferDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.ColdStorageStockTransferDetail" table="COLD_STORAGE_STOCK_TRANSFER_DETAIL">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+		<many-to-one name="farmer" column="FARMER_ID"/>
+		<many-to-one name="procurementProduct" column="PROCUREMENT_PRODUCT_ID"/>
+		<many-to-one name="procurementVariety" column="PROCURMENT_GRADE_ID"/>
+		<property name="noOfBags" column="NO_OF_BAGS" />
+		<property name="qty" column="QTY" />
+		<property name="blockName" column="BLOCK_NAME"/>
+		<property name="floorName" column="FLOOR_NAME"/>
+		<property name="bayNumber" column="BAY_NUMBER" />
+	    <many-to-one name="coldStorageStockTransfer" column="COLD_STORAGE_STOCK_TRANSFER_ID"/>
+		<property name="batchNo" column="BATCH_NO"/>
+	</class>
+	<class name="com.sourcetrace.esesw.entity.profile.CropCalendar" table="CROP_CALENDAR">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+		<property name="txnDate" column="TXN_DATE" />
+		<property name="name" column="NAME" />
+		<many-to-one name="procurementProduct" column="CROP_ID" cascade="all" />
+		<many-to-one name="procurementVariety" column="VARIETY_ID" cascade="all" />		
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="activityType" column="ACTIVITY_TYPE" />		
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="updatedDate" column="UPDATED_DATE" />		
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="revisionNo" column="REVISION_NO" />
+		<set name="cropCalendarDetail" cascade="all">
+			<key column="CROP_CALENDAR_ID" />
+			<one-to-many class="com.sourcetrace.esesw.entity.profile.CropCalendarDetail" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+
+	<class name="com.sourcetrace.esesw.entity.profile.CropCalendarDetail" table="CROP_CALENDAR_DETAIL">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>		
+		<property name="activityMethod" column="ACTIVITY_METHOD" />
+		<property name="noOfDays" column="NO_OF_DAYS" />
+		<many-to-one name="cropCalendar" column="CROP_CALENDAR_ID"/>
+		
+	</class>
+	
+	<sql-query name="activityReport">
+		SELECT
+		`f`.`ID` AS `ID`,
+		`f`.`FARMER_ID` AS
+		`FARMERID`,
+		`f`.`FIRST_NAME` AS `FIRSTNAME`,
+		`f`.`BRANCH_ID` AS
+		`BRANCHID`,
+      `f`.`LAST_NAME` AS
+		`LASTNAME`,
+		`f`.`FARMER_CODE` AS
+		`FARMERCODE`,
+		(
+		SELECT
+		count(`d`.`ID`)
+		FROM
+		`distribution` `d`
+		WHERE
+		(
+		`d`.`FARMER_ID` = `f`.`FARMER_ID`
+		)
+		AND `d`.TXN_TIME BETWEEN :startDate
+		AND :endDate
+		) AS `DIST_COUNT`,
+
+		(
+		SELECT
+		count(`p`.`ID`)
+		FROM
+		`procurement`
+		`p`
+		INNER JOIN trxn_agro tx
+		WHERE
+		(`p`.`FARMER_ID` = `f`.`ID`)
+		AND tx.ID =
+		p.TRXN_AGRO_ID
+		AND tx.TXN_TIME BETWEEN :startDate
+		AND :endDate
+		) AS
+		`PROC_COUNT`,
+
+		(
+		SELECT
+		count(0)
+		FROM
+		(
+		`periodic_inspection` `pins`
+		JOIN
+		`farm` `frm` ON (
+		(
+		`frm`.`FARM_CODE` = `pins`.`FARM_ID`
+		)
+		)
+		)
+		WHERE
+		(`frm`.`FARMER_ID` = `f`.`ID`)
+		AND pins.INSPECTION_DATE BETWEEN
+		:startDate
+		AND :endDate
+		) AS `PERIODIC_COUNT`,
+
+		(
+		SELECT
+		count(`ts`.`ID`)
+		FROM
+		`training_status` `ts`
+		WHERE
+		(
+		`ts`.`FARMER_ID` LIKE concat('%',
+		`f`.`FARMER_ID`, '%')
+		AND ts.TRAINING_DATE BETWEEN :startDate
+		AND
+		:endDate
+		)
+		) AS `TRAIN_COUNT`,
+   (getDynamicTxn(f.id))  AS DYNAMIC_COUNT
+		
+			FROM
+		`farmer` `f`
+		WHERE `f`.STATUS_CODE = '0' and f.status='1'
+
+	</sql-query>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.EventCalendar" table="EVENT_CALENDAR">
+	<id name="id" column="ID">
+		<generator class="native"/>
+	</id>
+	<property name="createdDate" column="CREATED_DATE"/>
+	<property name="agentId" column="AGENT_ID"/>
+	<property name="agentName" column="AGENT_NAME"/>
+	<property name="eventType" column="EVENT_TYPE"/>
+	<property name="startDate" column="START_DATE"/>
+	<property name="endDate" column="END_DATE"/>
+	<property name="startTime" column="START_TIME"/>
+	<property name="endTime" column="END_TIME"/>
+	<property name="farmerId" column="FARMER_ID"/>
+	<property name="purpose" column="PURPOUSE"/>
+	<property name="status" column="STATUS"/>
+	<property name="branchId" column="BRANCH_ID"/>
+	<property name="msgNo" column="MSG_NO"/>
+	<property name="revisionNo" column="REVISION_NO"/>
+	<property name="updatedDate" column="UPDATED_DATE"/>
+	<property name="group" column="GROUP_CODE"/>
+	<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.EventReport" table="EVENT_REPORT">
+	<id name="id" column="ID">
+		<generator class="native"/>
+	</id>
+	<property name="eventId" column="EVENT_ID"/>
+	<property name="farmerId" column="FARMER_ID"/>
+	<property name="status" column="STATUS"/>
+	<property name="output" column="OUTPUT"/>
+	<property name="remark" column="REMARK"/>
+	<property name="captureTime" column="PH_CAPTURE_TIME"/>
+	<property name="latitude" column="LATITUDE"/>
+	<property name="longitude" column="LONGITUDE"/>
+	<property name="photo" column="PHOTO"/>
+	<property name="createdDate" column="CREATED_DATE" type="date"/>
+	<property name="agentId" column="AGENT_ID"/>
+	<property name="agentName" column="AGENT_NAME"/>
+		<property name="group" column="GROUP_CODE"/>
+	<property name="branchId" column="BRANCH_ID"/>
+	<property name="farmerName" column="FARMER_NAME"/>
+	
+	<property name="eventType" column="EVENT_TYPE"/>
+	<property name="startDate" column="START_DATE" type="date"/>
+	<property name="endDate" column="END_DATE" type="date"/>
+	<property name="startTime" column="START_TIME"/>
+	<property name="endTime" column="END_TIME"/>
+	<property name="purpose" column="PURPOSE"/>
+	<property name="warehouseName" column="WAREHOUSE_NAME"/>
+	<property name="eventTypeCatalogueName" column="EVENTTYPE_CATALOGUE_NAME"/>
+	<property name="statusCatalogueName" column="STATUS_CATALOGUE_NAME"/>
+	<property name="agentPersInfoName" column="AGENT_PERS_INFO_NAME"/>
+	
+	<property name="cordinates"
+			formula="(SELECT concat(EVENT_REPORT.LATITUDE,',', EVENT_REPORT.LONGITUDE) FROM EVENT_REPORT WHERE EVENT_REPORT.ID=ID )" />
+	
+	<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineFarmCropCalendar"
+		table="OFFLINE_FARM_CROP_CALENDAR">
+		<id name="id">
+			<generator class="native" />
+		</id>	
+		<property name="farmCode" column="FARM_CODE" />
+		<property name="varietyId" column="VARIETY_ID" />
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="agentId" column="AGENT_ID" />
+		<property name="deviceId" column="DEVICE_ID" />		
+		<property name="statusCode" column="STATUS_CODE" />
+		<property name="statusMsg" column="STATUS_MSG" />		
+		<set name="offlineFarmCropCalendarDetail" cascade="all" lazy ="false" >
+			<key column="OFFLINE_FARM_CROP_CALENDAR_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.OfflineFarmCropCalendarDetail" />
+		</set>
+		
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.OfflineFarmCropCalendarDetail"
+		table="OFFLINE_FARM_CROP_CALENDAR_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="activityMethod" column="ACTIVITY_METHOD" />
+		<property name="status" column="STATUS" />
+		<property name="date" column="DATE" />
+		<property name="remarks" column="REMARKS" />		
+		<many-to-one name="offlineFarmCropCalendar" column="OFFLINE_FARM_CROP_CALENDAR_ID"/>
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.FarmCropCalendar"
+		table="FARM_CROP_CALENDAR">
+		<id name="id">
+			<generator class="native" />
+		</id>	
+		<many-to-one name="farm" column="FARM_ID"/>
+		<many-to-one name="variety" column="VARIETY_ID"/>
+		<property name="agentId" column="AGENT_ID" />	
+		<property name="seasonCode" column="SEASON_CODE" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="branchId" column="BRANCH_ID" />
+				
+		<set name="farmCropCalendarDetail" cascade="all" lazy ="false" >
+			<key column="FARM_CROP_CALENDAR_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.FarmCropCalendarDetail" />
+		</set>
+		
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.FarmCropCalendarDetail"
+		table="FARM_CROP_CALENDAR_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		<property name="activityMethod" column="ACTIVITY_METHOD" />
+		<property name="status" column="STATUS" />
+		<property name="date" column="DATE" />
+		<property name="remarks" column="REMARKS" />		
+		<many-to-one name="farmCropCalendar" column="FARM_CROP_CALENDAR_ID"/>
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.LoanDistribution" table="LOAN_DISTRIBUTION">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		
+		<property name="loanDate" column="LOAN_DATE" />
+		<property name="loanTo" column="LOAN_TO" />				
+		<set name="loanDistributionDetail" cascade="all"  >
+			<key column="LOAN_DISTRIBUTION_ID" />
+			<one-to-many
+				class="com.sourcetrace.eses.order.entity.txn.LoanDistributionDetail" />
+		</set>	
+		<many-to-one name="village" column="VILLAGE_ID"   />	
+		<many-to-one name="farmer" column="FARMER_ID"   />
+		<many-to-one name="agroTransaction" column="TRXN_AGRO_ID" cascade="all" />	
+		<many-to-one name="group" column="GROUP_ID"/>
+		<property name="loanCategory" column="LOAN_CATEGORY" />	
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />		
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="branchId" column="BRANCH_ID" />
+			
+		<property name="downPaymentQty" column="DOWN_PAYMENT_QTY" />
+		<property name="downPaymentAmt" column="DOWN_PAYMENT_AMT" />
+		
+		<property name="interestPercentage" column="INTEREST_PERCENTAGE" />
+		<property name="interestAmt" column="INTEREST_AMOUNT" />
+		<property name="totalCostToFarmer" column="TOTAL_COST_TO_FARMER" />
+		<property name="loanTenure" column="LOAN_TENURE" />
+		<property name="loanTenureAmt" column="LOAN_TENURE_AMT" />
+		<property name="loanStatus" column="LOAN_STATUS" />
+		<property name="monthlyRepaymentAmt" column="MONTHLY_REPAYMENT_AMT" />	
+		<many-to-one name="vendor" column="VENDOR_ID"/>		
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+		
+
+	</class>
+
+	<class name="com.sourcetrace.eses.order.entity.txn.LoanDistributionDetail"
+		table="LOAN_DISTRIBUTION_DETAIL">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		
+		<many-to-one name="product" column="PRODUCT_CODE"   />
+		<property name="ratePerUnit" column="RATE_PER_UNIT" />
+		<property name="quantity" column="QUANTITY" />
+		<property name="amount" column="AMOUNT" />
+		<property name="totalAmt" column="TOTAL_AMT" />
+		<property name="subsidyInterest" column="SUBSIDY_INTEREST" />
+		<property name="subsidyAmt" column="SUBSIDY_AMT" />			
+		<many-to-one name="loanDistribution" column="LOAN_DISTRIBUTION_ID"  />
+		
+	</class>
+	
+	<class name="com.ese.entity.util.LoanLedger" table="LOAN_LEDGER">
+	<id name="id" column="ID">
+		<generator class="native" />
+	</id>
+	<property name="txnTime" column="TXN_TIME" />
+	<property name="receiptNo" column="RECEIPT_NO" />
+	<property name="farmerId" column="FARMER_ID" />
+	<property name="actualAmount" column="ACTUAL_AMT" />
+	<property name="loanInterest" column="LOAN_PERCENTAGE" />
+	<property name="finalPayAmt" column="FINAL_PAY_AMOUNT" />
+	<property name="loanDesc" column="LOAN_DESC" />
+	<property name="preFarmerBal" column="FARMER_OUTSTANDING_BAL" />
+	<property name="newFarmerBal" column="FARMER_LOAN_BAL" />
+	<property name="accountNo" column="ACC_NO" />
+	<property name="txnType" column="TXN_TYPE" />
+	<property name="branchId" column="BRANCH" />
+	<many-to-one name="account" column="ESE_ACCOUNT_ID"/>
+	<property name="vendorId" column="VENDOR_ID" />
+	<property name="loanStatus" column="LOAN_STATUS" />
+	<filter name="branchFilter" condition="branch in ( :branchIdParam )" />
+	</class>
+	
+	<class name="com.sourcetrace.eses.order.entity.txn.LoanApplication" table="LOAN_APPLICATION">
+		<id name="id">
+			<generator class="native" />
+		</id>
+	<many-to-one name="farmer" column="FARMER_ID"   />
+	<property name="seedlingQty" column="SEEDLING_QTY" />
+	<property name="loanStatus" column="LOAN_STATUS" />
+	<property name="declineReason" column="DECLINE_REASON" />
+	<property name="createdUser" column="CREATED_USER" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />		
+		<property name="updatedUser" column="UPDATED_USER" />
+		<property name="branchId" column="BRANCH_ID" />
+		<many-to-one name="farmerDynamicData" column="FARMER_DYNAMIC_DATA_ID"   />
+	</class>
+
+</hibernate-mapping>
+

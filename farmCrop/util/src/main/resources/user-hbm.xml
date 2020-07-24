@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.sourcetrace.eses.umgmt.entity.Action" table="ESE_ACTION">
+        <id column="ID" name="id" type="long">
+            <generator class="native" />
+        </id>        
+        <property name="name" column="NAME" />
+    </class>
+
+	<class name="com.sourcetrace.eses.umgmt.entity.Menu" table="ESE_MENU">
+        <id column="ID" name="id" type="long">
+            <generator class="native" /> 
+        </id>
+        <property name="parentId" column="PARENT_ID" type="long" />
+        <property name="label" column="NAME" />
+        <property name="description" column="DES" />
+        <property name="url" column="URL" />
+        <property name="order" column="ORD" />
+        <property name="dataFiltered" column="FILTER" />
+        <property name="dimension" column="DIMENSION" />
+        <property name="priority" column="PRIORITY" />
+        <property name="iconClass" column="ICON_CLASS" />
+        <set name="subMenus" inverse="true" order-by="`ORD`"  >
+            <key column="PARENT_ID" />
+            <one-to-many class="com.sourcetrace.eses.umgmt.entity.Menu" />
+        </set>
+        <set name="actions" table="ESE_MENU_ACTION" order-by="ACTION_ID"  >
+            <key column="MENU_ID" />
+            <many-to-many column="ACTION_ID" class="com.sourcetrace.eses.umgmt.entity.Action" />
+        </set>
+        <property name="exportAvailability" column="EXPORT_AVILABILITY" />
+    </class>		
+	
+	<class name="com.sourcetrace.eses.umgmt.entity.Role" table="ESE_ROLE">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="name" column="NAME" />
+		<property name="description" column="DES" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="isAdminUser" column="IS_ADMIN" />
+		<many-to-one name="filter" column="FILTER_ID"   />
+		<set name="users" table="ESE_USER"  >
+			<key column="ESE_ROLE_ID" />
+			<one-to-many class="com.sourcetrace.eses.umgmt.entity.User" />
+		</set>
+		<set name="entitlements" table="ESE_ROLE_ENT">
+			<key column="ROLE_ID" />
+			<many-to-many column="ENT_ID" class="com.sourcetrace.eses.umgmt.entity.Entitlement" />
+		</set>
+		<set name="menus" table="ESE_ROLE_MENU">
+			<key column="ROLE_ID" />
+			<many-to-many column="MENU_ID" class="com.sourcetrace.eses.umgmt.entity.Menu" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+		
+	<class name="com.sourcetrace.eses.umgmt.entity.Entitlement" table="ESE_ENT">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="authority" column="NAME" />
+	</class>
+		
+	<class name="com.sourcetrace.eses.umgmt.entity.Filter" table="FILTER">
+        <id column="ID" name="id" type="integer"/>
+        <property name="code" column="CODE" />
+    </class>
+
+	<class name="com.sourcetrace.eses.umgmt.entity.User" table="ESE_USER">
+		<id column="ID" name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="username" column="USER_NAME" />
+		<property name="password" column="PASSWORD" />
+		<property name="language" column="LANG" />
+		<property name="milliSecond" column="UPDATE_SEC" />
+		<property name="status" column="STATUS" />
+		<property name="enabled" column="ENABLE" />
+		<property name="dataId" column="DATA_ID" type="long"/>
+		<property name="loginStatus" column="LOGIN_STATUS" />
+		<many-to-one name="filter" column="FILTER_ID"   />
+		<many-to-one name="role" column="ESE_ROLE_ID"   />
+		<many-to-one name="personalInfo" column="PERS_INFO_ID"   cascade="all" />
+		<many-to-one name="contactInfo" column="CONT_INFO_ID"   cascade="all" />
+		<property name="reset" column="IS_RESET" />
+		<property name="branchId" column="BRANCH_ID" />
+		<property name="createdDate" column="CREATED_DATE" />
+		<property name="updatedDate" column="UPDATED_DATE" />
+		<property name="createdUser" column="CREATED_USER" />
+		<property name="updatedUser" column="UPDATED_USER" />
+		
+		<map name="preferences" table="ESE_USER_PREF">
+			<key column="USER_ID" />
+			<index column="PREF_ID" type="long" />
+			<element type="string" column="VAL" not-null="true" />
+		</map>
+		<set name="entitlements" table="ESE_USER_ENT">
+			<key column="ESE_USER_ID" />
+			<many-to-many column="ESE_ENT_ID" class="com.sourcetrace.eses.umgmt.entity.Entitlement" />
+		</set>
+		<filter name="branchFilter" condition="branch_id in ( :branchIdParam )" />
+	</class>
+	
+</hibernate-mapping>

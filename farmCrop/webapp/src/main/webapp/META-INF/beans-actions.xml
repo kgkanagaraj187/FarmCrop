@@ -1,0 +1,1753 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util
+	    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+
+	<!-- Action beans -->
+	<bean name="eseAction" class="com.ese.view.ESEAction" abstract="true" />
+
+	<bean name="switchAction" class="com.sourcetrace.esesw.view.SwitchAction"
+		abstract="true" />
+
+	<bean name="baseReportAction" class="com.sourcetrace.esesw.view.BaseReportAction"
+		abstract="true" />
+
+	<bean name="webTransactionAction" class="com.sourcetrace.esesw.view.WebTransactionAction"
+		parent="switchAction" scope="prototype">
+		<property name="agentService" ref="agentService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="homeAction" class="com.ese.view.user.HomeAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+
+	<bean name="dashboardAction" class="com.sourcetrace.esesw.view.DashboardAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+
+	<bean name="farmerLocationAction" class="com.sourcetrace.esesw.view.FarmerLocationAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+
+	<bean name="stateValidator"
+		class="com.sourcetrace.esesw.view.general.validator.StateValidator">
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+	<bean name="stateAction" class="com.sourcetrace.esesw.view.general.StateAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="stateListService" />
+		<property name="validator" ref="stateValidator" />
+		<property name="locationService" ref="locationService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+
+	<bean name="countryAction" class="com.sourcetrace.esesw.view.general.CountryAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="countryListService" />
+		<property name="validator" ref="countryValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+
+	<bean name="countryValidator"
+		class="com.sourcetrace.esesw.view.general.validator.CountryValidator">
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+
+
+	<bean name="profileDeviceAction"
+		class="com.sourcetrace.esesw.view.general.ProfileDeviceAction" scope="prototype"
+		parent="eseAction">
+		<property name="deviceService" ref="deviceService" />
+		<property name="reportService" ref="deviceReportService" />
+		<property name="validator" ref="deviceValidator" />
+		<property name="agentService" ref="agentService" />
+		<property name="processStockTransfer" ref="processStockTransfer" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+
+	<bean name="deviceValidator"
+		class="com.sourcetrace.esesw.view.general.validator.ProfileDeviceValidator">
+		<property name="deviceDAO" ref="deviceDAO" />
+	</bean>
+
+	<bean name="processStockTransfer" class="com.sourcetrace.esesw.view.ProcessStockTransferImpl">
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="productService" ref="productService" />
+		<property name="agentService" ref="agentService" />
+	</bean>
+
+	<bean name="customerAction" class="com.ese.view.profile.CustomerAction"
+		scope="prototype" parent="eseAction">
+		<property name="clientService" ref="clientService" />
+		<property name="accountService" ref="accountService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="reportService" ref="customerListService" />
+		<property name="validator" ref="customerValidator" />
+	</bean>
+
+	<bean name="samithiAction" class="com.sourcetrace.esesw.view.general.SamithiAction"
+		scope="prototype" parent="eseAction">
+		<property name="agentService" ref="agentService" />
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="samithiListService" />
+		<property name="validator" ref="samithiValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+	<bean name="customerValidator" class="com.ese.view.profile.validator.CustomerValidator">
+		<property name="clientDAO" ref="clientDAO" />
+	</bean>
+
+	<bean name="samithiValidator"
+		class="com.sourcetrace.esesw.view.general.validator.SamithiValidator">
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+	<bean name="vendorAction" class="com.ese.view.profile.VendorAction"
+		scope="prototype" parent="eseAction">
+		<property name="agentService" ref="agentService" />
+		<property name="accountService" ref="accountService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="reportService" ref="vendorListService" />
+		<property name="validator" ref="vendorValidator" />
+	</bean>
+
+	<bean name="vendorValidator" class="com.ese.view.profile.validator.VendorValidator">
+		<property name="agentDAO" ref="agentDAO" />
+	</bean>
+
+	<bean name="cooperativeValidator"
+		class="com.sourcetrace.esesw.view.general.validator.CooperativeValidator">
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+	<bean name="cooperativeAction" class="com.sourcetrace.esesw.view.general.CooperativeAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="agentService" ref="agentService" />
+		<property name="reportService" ref="cooperativeListService" />
+		<property name="validator" ref="cooperativeValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+
+	<bean name="subCategoryServiceAction" class="com.ese.view.service.SubCategoryServiceAction"
+		scope="prototype" parent="eseAction">
+		<property name="validator" ref="subCategoryServiceValidator" />
+		<property name="reportService" ref="subCategoryListService" />
+		<property name="categoryService" ref="categoryService" />
+	</bean>
+
+	<bean name="subCategoryServiceValidator"
+		class="com.ese.view.service.validator.SubCategoryServiceValidator">
+		<property name="categoryDAO" ref="categoryDAO" />
+	</bean>
+
+	<bean name="procurementProductAction" class="com.ese.view.service.ProcurementProductAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="reportService" ref="procurementService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="accountService" ref="accountService" />
+	</bean>
+
+
+	<bean name="warehouseStockReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.WarehouseStockReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="warehouseStockReportService" />
+		<property name="productService" ref="productService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="fieldStaffStockReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FieldStaffStockReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="fieldStaffStockReportService" />
+		<property name="productService" ref="productService" />
+		<property name="locationService" ref="locationService" />
+		<property name="agentService" ref="agentService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+
+
+	</bean>
+
+	<bean name="warehouseStockEntryReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.WarehouseStockEntryReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="warehouseStockEntryReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+
+	</bean>
+
+	<bean name="distributionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.DistributionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="type" value="farmer" />
+		<property name="reportService" ref="distributionReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="agentService" ref="agentService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="agentDistributionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.DistributionReportAction"
+		scope="prototype" parent="distributionReportAction">
+		<property name="type" value="agent" />
+		<property name="clientService" ref="clientService" />
+	</bean>
+
+	<bean name="procurementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ProcurementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="procurementReportService" />
+		<!-- <property name="productDistributionService" ref="productDistributionService" 
+			/> <property name="locationService" ref="locationService" /> <property name="farmerService" 
+			ref="farmerService" /> <property name="agentService" ref="agentService" /> 
+			<property name="catalogueService" ref="catalogueService" /> <property name="preferncesService" 
+			ref="preferencesService" /> -->
+	</bean>
+
+	<bean name="procurementStockReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ProcurementStockReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="procurementStockReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="clientService" ref="clientService" />
+		<property name="productService" ref="productService" />
+	</bean>
+
+	<bean name="pmtReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.PMTReportAction" scope="prototype"
+		parent="baseReportAction">
+		<property name="type" value="pmtnt" />
+		<property name="reportService" ref="pmtReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+
+	</bean>
+
+	<bean name="pmtnrReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.PMTReportAction" scope="prototype"
+		parent="pmtReportAction">
+		<property name="type" value="pmtnr" />
+	</bean>
+
+	<bean name="periodicInspectionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.PeriodicInspectionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="periodicInspectionReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="agentService" ref="agentService" />
+		<property name="locationService" ref="locationService" />
+		<property name="clientService" ref="clientService" />
+		<!-- <property name="catalogueService" ref="catalogueService" /> -->
+	</bean>
+
+	<bean name="agentBalanceReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.AgentBalanceReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="agentBalanceReportService" />
+		<property name="agentService" ref="agentService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerBalanceReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerBalanceReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerBalanceReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="agentService" ref="agentService" />
+
+	</bean>
+
+	<bean name="fieldStaffManagementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FieldStaffManagementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="fieldStaffManagementReportService" />
+		<property name="agentService" ref="agentService" />
+		<property name="locationService" ref="locationService" />
+		<property name="deviceService" ref="deviceService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="offlineFarmerEnrollmentReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.OfflineFarmerEnrollmentReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="offlineFarmerReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="offlineDistributionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.OfflineDistributionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="offlineDistributionReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+	</bean>
+
+	<bean name="offlineProcurementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.OfflineProcurementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="offlineProcurementReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+	</bean>
+
+	<bean name="warehouseStockReturnReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.WarehouseStockReturnReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="warehouseStockReturnReportService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+	<bean name="warehouseProductAction" class="com.ese.view.service.WarehouseProductAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="productService" ref="productService" />
+		<property name="reportService" ref="warehouseProductListService" />
+		<property name="locationService" ref="locationService" />
+		<property name="categoryService" ref="categoryService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="validator" ref="warehouseProductValidator" />
+		<property name="productDistributionService" ref="productDistributionService" />
+	</bean>
+
+	<bean name="warehouseProductValidator"
+		class="com.ese.view.service.validator.WarehouseProductValidator">
+	</bean>
+
+	<bean name="agentAction" class="com.sourcetrace.esesw.view.general.AgentAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="agentListService" />
+		<property name="agentService" ref="agentService" />
+		<property name="userService" ref="userService" />
+		<property name="servicePointService" ref="servicePointService" />
+		<property name="serviceLocationService" ref="serviceLocationService" />
+		<property name="mailService" ref="mailService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="validator" ref="agentValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="accountService" ref="accountService" />
+		<property name="cardService" ref="cardService" />
+		<property name="processStockTransfer" ref="processStockTransfer" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="cryptoUtil" ref="tripleDES" />
+	</bean>
+
+	<bean name="sMSAlertAction" class="com.ese.view.service.SMSAlertAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="sMSListService" />
+	</bean>
+
+	<bean name="agentValidator" class="com.ese.view.profile.validator.AgentValidator">
+		<property name="locationDAO" ref="locationDAO" />
+		<property name="servicePointDAO" ref="servicePointDAO" />
+		<property name="agentDAO" ref="agentDAO" />
+		<property name="productDistributionDAO" ref="productDistributionDAO" />
+
+	</bean>
+
+	<bean name="distributionToFieldStaffAction" class="com.ese.view.service.DistributionToFieldStaffAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productService" ref="productService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="accountService" ref="accountService" />
+		<property name="reportService" ref="distributionToFiledStaffService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+	<bean name="distributionAction" class="com.ese.view.service.DistributionAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="categoryService" ref="categoryService" />
+		<property name="productService" ref="productService" />
+		<property name="accountService" ref="accountService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="reportService" ref="distributionService" />
+
+	</bean>
+	<bean name="excelImportAction" class="com.ese.view.service.ExcelImportAction"
+		scope="prototype" parent="eseAction">
+
+	</bean>
+
+	<bean name="farmerAction" class="com.ese.view.profile.FarmerAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="farmerListService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="validator" ref="farmerValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="cardService" ref="cardService" />
+		<property name="accountService" ref="accountService" />
+		<property name="agentService" ref="agentService" />
+		<property name="txnService" ref="ESETxnService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="clientService" ref="clientService" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+	</bean>
+
+	<bean name="farmerFamilyAction" class="com.ese.view.profile.FarmerFamilyAction"
+		scope="prototype" parent="eseAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="farmerFamilyListService" />
+		<property name="validator" ref="farmerFamilyValidator" />
+	</bean>
+
+	<bean name="farmerFamilyValidator" class="com.ese.view.profile.validator.FarmerFamilyValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="farmerValidator" class="com.ese.view.profile.validator.FarmerValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+		<property name="certificationDAO" ref="certificationDAO" />
+		<property name="clientDAO" ref="clientDAO" />
+	</bean>
+
+	<bean name="farmAction" class="com.ese.view.profile.FarmAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="farmListService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="validator" ref="farmValidator" />
+	</bean>
+
+	<bean name="farmValidator" class="com.ese.view.profile.validator.FarmValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="farmInventoryAction" class="com.ese.view.profile.FarmInventoryAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="farmInventoryListService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="validator" ref="farmInventoryValidator" />
+	</bean>
+
+	<bean name="farmInventoryValidator" class="com.ese.view.profile.validator.FarmInventoryValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="animalHusbandaryAction" class="com.ese.view.profile.AnimalHusbandaryAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="animalHusbandaryListService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="validator" ref="animalHusbandaryValidator" />
+	</bean>
+	
+	<bean name="inspectionCheckAction" class="com.ese.view.service.InspectionCheckAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="inspectionCheckListService" />
+		<property name="farmerService" ref="farmerService" />
+	
+	</bean>
+	
+	<bean name="fieldHistoryAction" class="com.ese.view.service.FieldHistoryAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="fieldHistoryListService" />
+		<property name="farmerService" ref="farmerService" />
+	
+	</bean>
+
+	<bean name="cropYieldAction" class="com.ese.view.profile.CropYieldAction"
+		scope="prototype" parent="switchAction">
+		<property name="reportService" ref="cropYieldListService" />
+	</bean>
+
+	<bean name="animalHusbandaryValidator"
+		class="com.ese.view.profile.validator.AnimalHusbandaryValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="stockTransferAction" class="com.ese.view.service.StockTransferAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="clientService" ref="clientService" />
+
+	</bean>
+
+	<bean name="stockReturnsAction" class="com.ese.view.service.StockReturnsAction"
+		scope="prototype" parent="eseAction">
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="accountService" ref="accountService" />
+		<property name="productService" ref="productService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+	<bean name="mtnrAction" class="com.ese.view.service.MTNRAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+
+	<bean name="roleAction" class="com.ese.view.profile.RoleAction"
+		scope="prototype" parent="eseAction">
+		<property name="roleService" ref="roleService" />
+		<property name="reportService" ref="roleListService" />
+		<property name="validator" ref="roleValidator" />
+	</bean>
+
+	<bean name="roleValidator" class="com.ese.view.profile.validator.RoleValidator">
+		<property name="roleDAO" ref="roleDAO" />
+	</bean>
+
+	<bean name="credRoleEntitleAction" class="com.ese.view.credential.RoleEntitlementAction"
+		scope="prototype" parent="eseAction">
+		<property name="roleService" ref="roleService" />
+	</bean>
+
+	<bean name="credRoleMenuAction" class="com.ese.view.credential.RoleMenuAction"
+		scope="prototype" parent="eseAction">
+		<property name="roleService" ref="roleService" />
+	</bean>
+
+
+	<bean name="prefernceAction" class="com.sourcetrace.esesw.view.PreferncesAction"
+		scope="prototype" parent="eseAction">
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="validator" ref="prefernceValidator" />
+		<property name="licenseKeyGenerator" ref="licenseKeyGenerator" />
+	</bean>
+
+	<bean name="prefernceValidator" class="com.sourcetrace.esesw.view.PreferncesValidator" />
+
+
+	<bean name="userAction" class="com.ese.view.user.UserAction"
+		scope="prototype" parent="eseAction">
+		<property name="userService" ref="userService" />
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="userListService" />
+		<property name="mailService" ref="mailService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="validator" ref="userValidator" />
+		<property name="roleService" ref="roleService" />
+		<property name="cryptoUtil" ref="tripleDES" />
+	</bean>
+
+	<bean name="userValidator" class="com.ese.view.credential.validator.UserValidator">
+		<property name="userDAO" ref="userDAO" />
+	</bean>
+
+	<bean name="licenseAction" class="com.sourcetrace.eses.action.LicenseAction"
+		scope="prototype" parent="eseAction">
+		<property name="usageValidator" ref="usageValidator" />
+	</bean>
+
+	<bean name="usageValidator" class="com.sourcetrace.eses.filter.UsageValidator">
+		<property name="licenseDAO" ref="licenseDAO" />
+		<property name="tripleDES" ref="tripleDES" />
+	</bean>
+
+	<bean name="localityAction" class="com.sourcetrace.esesw.view.general.LocalityAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="localityListService" />
+		<property name="validator" ref="localityValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="localityValidator"
+		class="com.sourcetrace.esesw.view.general.validator.LocalityValidator">
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+	<bean name="municipalityAction" class="com.sourcetrace.esesw.view.general.MunicipalityAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="municipalityListService" />
+		<property name="userService" ref="userService" />
+		<property name="validator" ref="municipalityValidator" />
+		<property name="servicePointService" ref="servicePointService" />
+		<property name="agentService" ref="agentService" />
+		<property name="clientService" ref="clientService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="municipalityValidator"
+		class="com.sourcetrace.esesw.view.general.validator.MunicipalityValidator">
+		<property name="locationDAO" ref="locationDAO" />
+	</bean>
+
+	<bean name="villageAction" class="com.sourcetrace.esesw.view.general.VillageAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="villageListService" />
+		<property name="validator" ref="villageValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="villageValidator"
+		class="com.sourcetrace.esesw.view.general.validator.VillageValidator">
+		<property name="locationDAO" ref="locationDAO" />
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="gramPanchayatAction"
+		class="com.sourcetrace.esesw.view.general.GramPanchayatAction" scope="prototype"
+		parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="gramPanchayatListService" />
+		<property name="validator" ref="gramPanchayatValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+	<bean name="gramPanchayatValidator"
+		class="com.sourcetrace.esesw.view.general.validator.GramPanchayatValidator">
+		<property name="locationDAO" ref="locationDAO" />
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+
+	<bean name="procurementProductEnrollAction"
+		class="com.sourcetrace.esesw.view.general.ProcurementProductEnrollAction"
+		scope="prototype" parent="eseAction">
+		<property name="validator" ref="procurementProductValidator" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="reportService" ref="procurementProductListService" />
+	</bean>
+	<bean name="procurementProductValidator"
+		class="com.sourcetrace.esesw.view.general.validator.ProcurementProductValidator">
+		<property name="productDistributionDAO" ref="productDistributionDAO" />
+	</bean>
+	<bean name="procurementVarietyAction"
+		class="com.sourcetrace.esesw.view.general.ProcurementVarietyAction"
+		scope="prototype" parent="eseAction">
+		<property name="validator" ref="procurementVarietyValidator" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="reportService" ref="procurementVarietyListService" />
+	</bean>
+	<bean name="procurementVarietyValidator"
+		class="com.sourcetrace.esesw.view.general.validator.ProcurementVarietyValidator">
+		<property name="productDistributionDAO" ref="productDistributionDAO" />
+	</bean>
+
+	<bean name="procurementGradeAction"
+		class="com.sourcetrace.esesw.view.general.ProcurementGradeAction"
+		scope="prototype" parent="eseAction">
+		<property name="validator" ref="procurementGradeValidator" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="reportService" ref="procurementGradeListService" />
+	</bean>
+	<bean name="procurementGradeValidator"
+		class="com.sourcetrace.esesw.view.general.validator.ProcurementGradeValidator">
+		<property name="productDistributionDAO" ref="productDistributionDAO" />
+	</bean>
+
+	<bean name="customerProjectAction" class="com.ese.view.profile.CustomerProjectAction"
+		scope="prototype" parent="eseAction">
+		<property name="certificationService" ref="certificationService" />
+		<property name="clientService" ref="clientService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="reportService" ref="customerProjectListService" />
+		<property name="validator" ref="customerProjectValidator" />
+	</bean>
+
+	<bean name="customerProjectValidator"
+		class="com.ese.view.profile.validator.CustomerProjectValidator">
+		<property name="certificationDAO" ref="certificationDAO" />
+		<property name="clientDAO" ref="clientDAO" />
+	</bean>
+
+	<bean name="productServiceAction" class="com.ese.view.service.ProductServiceAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="productListService" />
+		<property name="categoryService" ref="categoryService" />
+		<property name="productService" ref="productService" />
+		<property name="validator" ref="productServiceValidator" />
+		<property name="txnService" ref="ESETxnService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+
+	</bean>
+	<bean name="productServiceValidator"
+		class="com.ese.view.service.validator.ProductServiceValidator">
+		<property name="categoryDAO" ref="categoryDAO" />
+		<property name="productDAO" ref="productDAO" />
+	</bean>
+
+
+	<bean name="farmCropsAction" class="com.ese.view.service.FarmCropsAction"
+		scope="prototype" parent="eseAction">
+		<property name="validator" ref="farmCropsValidator" />
+		<property name="farmCropsService" ref="farmCropsService" />
+		<property name="reportService" ref="farmCropsListService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+
+	</bean>
+	<bean name="farmCropsValidator" class="com.ese.view.service.validator.FarmCropsValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="harvestSeasonAction" class="com.ese.view.profile.HarvestSeasonAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="harvestSeasonListService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="validator" ref="harvestSeasonValidator" />
+	</bean>
+
+	<bean name="farmerListReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerListReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+		<property name="reportService" ref="farmerListCropsService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+
+
+	<bean name="catalogueValidator" class="com.ese.view.profile.validator.CatalogueValidator">
+		<property name="catalogueDAO" ref="catalogueDAO" />
+	</bean>
+
+
+	<bean name="catalogueAction" class="com.sourcetrace.esesw.view.general.CatalogueAction"
+		scope="prototype" parent="eseAction">
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="reportService" ref="catalogueListService" />
+		<property name="validator" ref="catalogueValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+
+	<bean name="harvestSeasonValidator" class="com.ese.view.profile.validator.HarvestSeasonValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+
+	<bean name="cBRReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CBRReportAction" scope="prototype"
+		parent="baseReportAction">
+		<property name="reportService" ref="cBRReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="clientService" ref="clientService" />
+	</bean>
+
+	<bean name="cultivationReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CultivationReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="cultivationReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="catalogueService" ref="catalogueService" />
+
+	</bean>
+
+	<bean name="cropHarvestReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CropHarvestReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="cropHarvestReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productService" ref="productService" />
+		<property name="clientService" ref="clientService" />
+
+	</bean>
+
+	<bean name="cropSaleReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CropSaleReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="cropSaleReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerIncomeReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerIncomeReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerIncomeReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+	</bean>
+
+	<bean name="farmerCropReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerCropReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerCropReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+	</bean>
+
+	<bean name="cropHarvestServiceReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CropHarvestServiceReportAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="cropHarvestServiceReport" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productService" ref="productService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerTrainingSelectionAction"
+		class="com.sourcetrace.esesw.view.general.FarmerTrainingSelectionAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="farmerTrainingSelectionListService" />
+		<property name="trainingService" ref="trainingService" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="validator" ref="farmerTrainingSelectionValidator" />
+	</bean>
+
+	<bean name="farmerTrainingSelectionValidator"
+		class="com.sourcetrace.esesw.view.general.validator.FarmerTrainingSelectionValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+
+	<bean name="cropSaleEntryReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CropSaleEntryReportAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="cropSaleServiceReport" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="trainingPlannerAction"
+		class="com.sourcetrace.esesw.view.general.TrainingPlannerAction"
+		scope="prototype" parent="eseAction">
+		<property name="trainingService" ref="trainingService" />
+	</bean>
+
+
+	<bean name="reportMailConfigurationAction"
+		class="com.sourcetrace.esesw.view.general.ReportMailConfigurationAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="reportMailConfigurationListService" />
+		<property name="mailConfigurationService" ref="mailConfigurationService" />
+		<property name="validator" ref="reportMailConfigurationValidator" />
+
+	</bean>
+
+	<bean name="reportMailConfigurationValidator"
+		class="com.ese.view.profile.validator.ReportMailConfigurationValidator">
+		<property name="mailConfigurationDAO" ref="mailConfigurationDAO" />
+	</bean>
+
+	<bean name="trainingTopicAction"
+		class="com.sourcetrace.esesw.view.general.TrainingTopicAction" scope="prototype"
+		parent="eseAction">
+		<property name="reportService" ref="trainingTopicListService" />
+		<property name="validator" ref="trainingTopicValidator" />
+		<property name="trainingService" ref="trainingService" />
+	</bean>
+
+	<bean name="trainingTopicValidator"
+		class="com.sourcetrace.esesw.view.general.validator.TrainingTopicValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean name="trainingCriteriaCategoryAction"
+		class="com.sourcetrace.esesw.view.general.TrainingCriteriaCategoryAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="trainingCriteriaCategoryListService" />
+		<property name="validator" ref="trainingCriteriaCategoryValidator" />
+		<property name="trainingService" ref="trainingService" />
+
+	</bean>
+
+	<bean name="trainingCriteriaCategoryValidator"
+		class="com.sourcetrace.esesw.view.general.validator.TrainingCriteriaCategoryValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean name="targetGroupAction" class="com.sourcetrace.esesw.view.general.TargetGroupAction"
+		scope="prototype" parent="eseAction">
+		<property name="trainingService" ref="trainingService" />
+		<property name="reportService" ref="targetGroupListService" />
+		<property name="validator" ref="targetGroupValidator" />
+	</bean>
+
+	<bean name="targetGroupValidator"
+		class="com.sourcetrace.esesw.view.general.validator.TargetGroupValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean name="trainingMethodAction"
+		class="com.sourcetrace.esesw.view.general.TrainingMethodAction" scope="prototype"
+		parent="eseAction">
+		<property name="trainingService" ref="trainingService" />
+		<property name="reportService" ref="trainingMethodListService" />
+		<property name="validator" ref="trainingMethodValidator" />
+	</bean>
+
+	<bean name="trainingMethodValidator"
+		class="com.sourcetrace.esesw.view.general.validator.TrainingMethodValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean name="branchMasterAction" class="com.sourcetrace.esesw.view.general.BranchMasterAction"
+		scope="prototype" parent="eseAction">
+		<property name="clientService" ref="clientService" />
+		<property name="reportService" ref="branchMasterListService" />
+		<property name="validator" ref="branchMasterValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="accountService" ref="accountService" />
+	</bean>
+
+	<bean name="branchMasterValidator"
+		class="com.sourcetrace.esesw.view.general.validator.BranchMasterValidator">
+		<property name="clientDAO" ref="clientDAO" />
+	</bean>
+
+	<bean name="trainingCompletionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.TrainingCompletionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="trainingCompletionReportService" />
+		<property name="trainingService" ref="trainingService" />
+		<property name="agentService" ref="agentService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="offlineTrainingCompletionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.OfflineTrainingCompletionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="offlineTrainingCompletionReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerInspectionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerInspectionOrganicReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionOrganicReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionOrganicReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerInspectionNpopReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionNpopReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionNpopReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerInspectionIcsReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionIcsReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionIcsReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="topicCriteriaAction"
+		class="com.sourcetrace.esesw.view.general.TopicCriteriaAction" scope="prototype"
+		parent="switchAction">
+		<property name="reportService" ref="topicCriteriaListService" />
+		<property name="trainingService" ref="trainingService" />
+		<property name="validator" ref="topicCriteriaValidator" />
+	</bean>
+
+	<bean name="topicCriteriaValidator"
+		class="com.sourcetrace.esesw.view.general.validator.TopicCriteriaValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean name="changePasswordAction" class="com.sourcetrace.eses.action.ChangePasswordAction"
+		scope="prototype" parent="eseAction">
+		<property name="userService" ref="userService" />
+	</bean>
+
+	<bean name="masterDataAction" class="com.sourcetrace.esesw.view.general.MasterDataAction"
+		scope="prototype" parent="eseAction">
+		<property name="clientService" ref="clientService" />
+		<property name="reportService" ref="masterDataService" />
+		<property name="validator" ref="masterDataValidator" />
+	</bean>
+
+	<bean name="masterDataValidator"
+		class="com.sourcetrace.esesw.view.general.validator.MasterDataValidator">
+		<property name="clientDAO" ref="clientDAO" />
+	</bean>
+
+
+	<bean name="farmTabAction" class="com.ese.view.profile.FarmTabAction"
+		scope="prototype" parent="eseAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="catalogueService" ref="catalogueService" />
+	</bean>
+
+	<bean name="agentBalanceAction" class="com.ese.view.service.AgentBalanceAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="agentService" ref="agentService" />
+		<property name="accountService" ref="accountService" />
+		<property name="reportService" ref="agentCashFlowReportService" />
+	</bean>
+
+	<bean name="cropYieldVillageReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CropYieldVillageReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="cropYieldVillageReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+
+	<bean name="cropYieldCropReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CropYieldCropReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="cropYieldCropReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="farmCropsService" ref="farmCropsService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+	</bean>
+
+	<bean name="agentLoginAction" class="com.ese.view.service.AgentLoginAction"
+		scope="prototype" parent="eseAction">
+		<property name="agentService" ref="agentService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+	<bean name="paymentAction" class="com.ese.view.service.PaymentAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="accountService" ref="accountService" />
+		<property name="idGenerator" ref="idGenerator" />
+	</bean>
+
+	<bean name="farmerInspectionNopReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionNopReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionNopReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerInspectionNopGroupReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionNopGroupReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionNopGroupReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="farmerProductTransferAction" class="com.ese.view.service.FarmerProductTransferAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="clientService" ref="clientService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+	<bean name="failedInspectionQuestionsReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FailedInspectionQuestionsReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="failedInspectionQuestionsReportService" />
+		<property name="certificationService" ref="certificationService" />
+	</bean>
+
+	<bean name="farmerFailedInspectionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerFailedInspectionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerFailedInspectionReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="certificationService" ref="certificationService" />
+	</bean>
+
+	<bean name="sowingReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.SowingReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="sowingReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productService" ref="productService" />
+		<property name="locationService" ref="locationService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+	</bean>
+
+	<bean name="farmerInspectionUtzReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerInspectionUtzReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerInspectionUtzReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="pesticideUsageReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.PesticideUsageReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="pesticideUsageReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="bciFieldMonitoringReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.BciFieldMonitoringReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="bciFieldMonitoringReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="fieldstaffAccessReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FieldstaffAccessReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="fieldStaffAccessReportService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="researchStationAction" class="com.ese.view.profile.ResearchStationAction"
+		scope="prototype" parent="eseAction">
+		<property name="clientService" ref="clientService" />
+		<property name="accountService" ref="accountService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="reportService" ref="researchStationListService" />
+		<property name="validator" ref="researchStationValidator" />
+	</bean>
+
+	<bean name="researchStationValidator"
+		class="com.ese.view.profile.validator.ResearchStationValidator">
+		<property name="farmerDAO" ref="farmerDAO" />
+	</bean>
+
+	<bean name="costFarmingReportAction" class="com.ese.view.service.CostFarmingReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="costFarmingReportService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+	<bean name="cowAction" class="com.ese.view.profile.CowAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="cowReportService" />
+	</bean>
+
+	<bean name="housingInfoAction" class="com.ese.view.profile.HousingInformation"
+		scope="prototype" parent="eseAction">
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+
+	<bean name="cowInspectionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.CowInspectionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="cowInspReportService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+	<bean name="sensitizingReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.SensitizingReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="sensitizingReportService" />
+	</bean>
+
+
+	<bean name="milkProductionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.MilkProductionReportAction"
+		scope="prototype" parent="eseAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="milkProductionReportService" />
+	</bean>
+
+
+	<bean name="samithiAccessReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.SamithiAccessReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="samithiAccessReportService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+	<bean name="yieldEstimationReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.YieldEstimationReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="yieldEstimationReportService" />
+	</bean>
+
+	<bean name="farmerIndividualBalanceReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerIndividualBalanceReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerIndividualBalanceReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="agentService" ref="agentService" />
+
+	</bean>
+
+	<bean name="farmerFieldAction" class="com.ese.view.profile.FarmerFieldAction"
+		scope="prototype" parent="eseAction">
+
+	</bean>
+
+	<bean name="productReturnFromFieldStaffAction"
+		class="com.ese.view.service.ProductReturnFromFieldStaffAction" scope="prototype"
+		parent="webTransactionAction">
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productService" ref="productService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="accountService" ref="accountService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="productReturnReportService" />
+	</bean>
+
+
+	<bean name="productReturnFromFarmerAction" class="com.ese.view.service.ProductReturnFromFarmerAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productService" ref="productService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="accountService" ref="accountService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="productReturnReportService" />
+	</bean>
+
+
+
+	<bean name="productReturnReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ProductReturnReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="type" value="farmer" />
+		<property name="reportService" ref="productReturnReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="agentService" ref="agentService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="productService" ref="productService" />
+	</bean>
+
+
+
+	<bean name="productReturnFromFieldStaffReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ProductReturnFromFieldStaffReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="type" value="agent" />
+		<property name="reportService" ref="productReturnReportService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="agentService" ref="agentService" />
+		<property name="clientService" ref="clientService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+
+	<bean name="globalReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.GlobalReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="globalReportReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+
+	<bean name="trainingMaterialAction"
+		class="com.sourcetrace.esesw.view.general.TrainingMaterialAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="trainingMaterialReportService" />
+		<property name="trainingService" ref="trainingService" />
+		<property name="validator" ref="trainingMaterialVallidator" />
+
+	</bean>
+
+	<bean name="trainingMaterialVallidator"
+		class="com.sourcetrace.esesw.view.general.validator.TrainingMaterialValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+	<bean name="observationAction" class="com.sourcetrace.esesw.view.general.ObservationsAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="observationReportService" />
+		<property name="trainingService" ref="trainingService" />
+		<property name="validator" ref="observationsVallidator" />
+
+	</bean>
+	<bean name="observationsVallidator"
+		class="com.sourcetrace.esesw.view.general.validator.ObservationsValidator">
+		<property name="trainingDAO" ref="trainingDAO" />
+	</bean>
+
+	<bean name="paymentReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.PaymentReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="paymentReportService" />
+	</bean>
+
+	<bean name="qrCodeGenAction" class="com.ese.view.service.QRCodeGeneratorAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+
+	<bean name="creationToolAction" class="com.sourcetrace.esesw.view.general.CreationToolAction"
+		parent="eseAction" scope="prototype">
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="catalogueService" ref="catalogueService" />
+		<property name="reportService" ref="creationToolService" />
+
+	</bean>
+
+	<bean name="farmerFeedBackReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerFeedBackReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerFeedBackReportService" />
+		<property name="certificationService" ref="certificationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="preferncesService" ref="preferencesService" />
+	</bean>
+
+
+	<bean name="farmerFeedBackServiceAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerFeedBackServiceAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+
+	<bean name="farmerActivityReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerActivityReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerActivityListService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="clientService" ref="clientService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="trainingService" ref="trainingService" />
+
+	</bean>
+
+	<bean name="supplierProcurementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.SupplierProcurementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="supplierProcurementReportService" />
+		<!-- <property name="productDistributionService" ref="productDistributionService" 
+			/> <property name="locationService" ref="locationService" /> <property name="farmerService" 
+			ref="farmerService" /> <property name="agentService" ref="agentService" /> 
+			<property name="catalogueService" ref="catalogueService" /> <property name="preferncesService" 
+			ref="preferencesService" /> <property name="productService" ref="productService" 
+			/> -->
+	</bean>
+	<bean name="supplierProcurementAction" class="com.ese.view.service.SupplierProcurementAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="reportService" ref="supplierProcurementService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="accountService" ref="accountService" />
+	</bean>
+
+	<!-- <bean name="shgAction" class="com.ese.view.profile.ShgAction" scope="prototype" 
+		parent="eseAction"> <property name="reportService" ref="shgListService" /> 
+		<property name="validator" ref="shgValidator" /> <property name="preferncesService" 
+		ref="preferencesService" /> <property name="locationService" ref="locationService" 
+		/> <property name="farmerService" ref="farmerService" /> </bean> <bean name="shgValidator" 
+		class="com.ese.view.profile.validator.ShgValidator"> <property name="locationDAO" 
+		ref="locationDAO" /> </bean> -->
+
+	<bean name="procurementTraceabilityAction" class="com.ese.view.service.ProcurementTraceabilityAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="reportService" ref="procurementTraceabilityReportService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="accountService" ref="accountService" />
+	</bean>
+
+	<bean name="traceabilityProcurementTransferAction"
+		class="com.ese.view.service.TraceabilityProcurementTransferAction"
+		scope="prototype" parent="webTransactionAction">
+	</bean>
+
+	<bean name="procurementTraceabilityReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ProcurementTraceabilityReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="procurementTraceabilityReportService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="productService" ref="productService" />
+	</bean>
+
+	<bean name="procurementTraceabilityStockReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ProcurementTraceabilityStockReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="procurementTraceabilityStockReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="clientService" ref="clientService" />
+		<property name="productService" ref="productService" />
+	</bean>
+
+	<bean name="receptionTraceabilityAction" class="com.ese.view.service.ReceptionTraceabilityAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="pmtReportService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+	</bean>
+
+	<bean name="icsFarmerDairyReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.IcsFarmerDairyReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="icsFarmerDairyReportService" />
+	</bean>
+
+	<bean name="gmoAction" class="com.ese.view.profile.GMOAction"
+		scope="prototype" parent="eseAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="reportService" ref="gmoListService" />
+	</bean>
+
+
+	<bean name="ginnerQuantitySoldAction" class="com.ese.view.profile.GinnerQuantitySoldAction"
+		scope="prototype" parent="eseAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="reportService" ref="ginnerQuantityListService" />
+	</bean>
+
+
+	<bean name="heapStockReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.HeapStockReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="heapStockReportService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="clientService" ref="clientService" />
+		<property name="productService" ref="productService" />
+	</bean>
+
+	<bean name="ginningProcessAction" class="com.ese.view.service.GinningProcessAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="preferncesService" ref="preferencesService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+
+	<bean name="ginningReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.GinningReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="ginningReportService" />
+	</bean>
+
+	<bean name="cottonPriceAction" class="com.ese.view.profile.CottonPriceAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="cottonPriceListService" />
+	</bean>
+
+	<bean name="dynamicCertificationAction" class="com.ese.view.service.DynamicCertificationAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="dynamicCertificationReportService" />
+	</bean>
+
+	<bean name="dynamicMenuConfigAction"
+		class="com.sourcetrace.esesw.view.general.DynamicMenuConfigAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="dynamicMenuFieldListService" />
+		<property name="validator" ref="dynamicMenuValidator" />
+	</bean>
+
+	<bean name="dynamicMenuValidator"
+		class="com.sourcetrace.esesw.view.general.validator.DynamicMenuValidator">
+	</bean>
+
+	<bean name="farmerPlottingAction" class="com.sourcetrace.esesw.view.FarmerPlottingAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+	<bean name="spinningReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.SpinningReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="spinningReportService" />
+	</bean>
+	<bean name="farmCropsMasterAction" class="com.ese.view.profile.FarmCropsMasterAction"
+		scope="prototype" parent="eseAction">
+		<property name="validator" ref="farmCropsMasterValidator" />
+		<property name="farmCropsService" ref="farmCropsService" />
+		<property name="reportService" ref="farmCropsMasterListService" />
+		<property name="idGenerator" ref="idGenerator" />
+	</bean>
+
+	<bean name="farmCropsMasterValidator"
+		class="com.ese.view.profile.validator.FarmCropsMasterValidator">
+		<property name="farmCropsDAO" ref="farmCropsDAO" />
+	</bean>
+
+	<bean name="weatherForecastAction"
+		class="com.sourcetrace.esesw.view.general.WeatherForeCastAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="farmerService" ref="farmerService" />
+		<property name="locationService" ref="locationService" />
+	</bean>
+	
+	<bean name="forecastAdvisorAction"
+		class="com.sourcetrace.esesw.view.general.ForecastAdvisorAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="forecastAdvisorListService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		</bean>
+		
+	<bean name="distributionBalanceAction" class="com.ese.view.profile.DistributionBalanceAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="distributionBalanceListService" />
+		<!-- <property name="validator" ref="distributionBalanceValidator" /> -->
+		<property name="farmerService" ref="farmerService" />
+	</bean>
+	
+	<bean name="dynamicViewReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.DynamicViewReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="dynamicViewReportService" />
+	</bean>
+	
+	<bean name="dynamicViewReportDTAction"
+		class="com.sourcetrace.esesw.view.report.agro.DynamicViewReportDTAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="dynamicViewReportService" />
+	</bean>
+	
+	<bean name="dynamicReportAction" class="com.sourcetrace.esesw.view.general.DynamicReportAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+	
+	<bean name="distributionStockTransferReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.DistributionStockTransferReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="distributionStockTransferReportService" />
+	</bean>
+	<bean name="distributionStockTransferAction" class="com.ese.view.service.DistributionStockTransferAction"
+		scope="prototype" parent="webTransactionAction">
+	</bean>
+	<bean name="distributionStockReceptionAction" class="com.ese.view.service.DistributionStockReceptionAction"
+		scope="prototype" parent="webTransactionAction">
+
+	</bean>
+	
+	<bean name="dynamicDataImportAction" class="com.sourcetrace.esesw.view.general.DynamicDataImportAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+	<bean name="geoPlottingAction" class="com.sourcetrace.esesw.view.GeoPlottingAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+	
+	<bean name="coldStorageEntryAction" class="com.ese.view.service.ColdStorageEntryAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="reportService" ref="coldStorageEntryService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="accountService" ref="accountService" />
+	</bean>
+	
+	 <bean name="coldStorageStockTransferAction" class="com.ese.view.service.ColdStorageStockTransferAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="locationService" ref="locationService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />
+		<property name="clientService" ref="clientService" />
+
+	</bean> 
+	<bean name="cropCalendarAction" class="com.ese.view.service.CropCalendarAction"
+			scope="prototype" parent="eseAction">
+		<property name="reportService" ref="cropCalendarService" />
+		
+	</bean>
+	<bean name="farmerTraceabiltiyReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerTraceabilityReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerTraceabilityReportService" />
+	</bean>
+	
+	<bean name="sowingLocationAction" class="com.sourcetrace.esesw.view.SowingLocationAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+	
+	<bean name="dynamicUiAction" class="com.sourcetrace.esesw.view.general.DynamicUiAction"
+		parent="eseAction" scope="prototype">
+	</bean>
+	
+	<bean name="baleGenerationAction" class="com.ese.view.service.BaleGenerationAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="baleGenerationReportService" />
+	</bean>
+	
+	<bean name="farmHistoryAction" class="com.ese.view.profile.FarmHistoryAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="farmHistoryListService" />		
+	</bean>
+
+<bean name="traceabilityReportAction" class="com.sourcetrace.esesw.view.report.agro.TraceabilityReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="traceabilityReportService" />	
+	</bean>
+	
+	<bean name="moleculeProcessAction" class="com.sourcetrace.esesw.view.service.agro.MoleculeAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="moleculeProcessReportService" />	
+	</bean>
+	
+	<bean name="procurementPaymentImportAction" class="com.ese.view.service.ProcurementPaymentImportAction"
+		scope="prototype" parent="eseAction">
+
+	</bean>
+	
+	<bean name="ndviAction" class="com.sourcetrace.esesw.view.general.NdviProcessAction"
+		scope="prototype" parent="eseAction">
+		<property name="locationService" ref="locationService" />
+		<property name="reportService" ref="ndviListService" />
+		<property name="validator" ref="ndviValidator" />
+		<property name="idGenerator" ref="uniqueIDGenerator" />		
+	</bean>
+	
+	<bean name="ndviValidator"
+		class="com.sourcetrace.esesw.view.general.validator.NDVIValidator">		
+	</bean>	
+	
+	<bean name="loanDistributionAction" class="com.ese.view.service.LoanDistributionAction"
+		scope="prototype" parent="webTransactionAction">
+		<property name="reportService" ref="loanDistributionService" />
+		<property name="productDistributionService" ref="productDistributionService" />
+		<property name="locationService" ref="locationService" />
+		<property name="farmerService" ref="farmerService" />
+		<property name="accountService" ref="accountService" />
+	</bean>
+	
+		<bean name="loanDistributionReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.LoanDistributionReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="loanDistributionReportService" />
+		<!-- <property name="productDistributionService" ref="productDistributionService" 
+			/> <property name="locationService" ref="locationService" /> <property name="farmerService" 
+			ref="farmerService" /> <property name="agentService" ref="agentService" /> 
+			<property name="catalogueService" ref="catalogueService" /> <property name="preferncesService" 
+			ref="preferencesService" /> -->
+	</bean>
+	
+	<bean name="icsSummaryReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.ICSSummaryReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="icsSummaryReportService" />
+		
+	</bean>
+	<bean name="certificationDetailsAction" class="com.ese.view.service.CertificationDetailsAction"
+		scope="prototype" parent="eseAction">
+		<property name="reportService" ref="certificationDetailsListService" />
+		<!-- <property name="farmerService" ref="farmerService" /> -->
+	
+	</bean>
+	
+	<bean name="samithiFarmerDetailsAction" class="com.sourcetrace.esesw.view.general.SamithiFarmerDetailsAction"
+		scope="prototype" parent="eseAction">
+		
+		<property name="reportService" ref="samithiFarmerDetailsListService" />
+		
+	</bean>
+	
+	<bean name="samithiIcsAction" class="com.sourcetrace.esesw.view.general.SamithiIcsAction"
+		scope="prototype" parent="eseAction">
+		
+		<property name="reportService" ref="samithiIcsListService" />
+		
+	</bean>
+	
+	<bean name="agrodashboardAction" class="com.sourcetrace.esesw.view.AgroDashboardAction"
+		scope="prototype" parent="eseAction">
+	</bean>
+	<bean name="farmerLoanStatementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerLoanStatementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerLoanStatementReportService" />
+		
+
+	</bean>
+	<bean name="farmerStatementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.FarmerStatementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="farmerStatementReportService" />
+		
+
+	</bean>
+	<bean name="loanManagementReportAction"
+		class="com.sourcetrace.esesw.view.report.agro.LoanManagementReportAction"
+		scope="prototype" parent="baseReportAction">
+		<property name="reportService" ref="loanManagementReportService" />
+		</bean>
+</beans>

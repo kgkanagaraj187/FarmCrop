@@ -1,0 +1,10 @@
+Dear ${firstName} ,
+Warm welcome. 
+
+Your credential has been reset and the details are indicated below.
+User Name: ${userName}
+Password  : ${password}
+
+
+Regards,
+SourceTrace Systems
