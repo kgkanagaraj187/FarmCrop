@@ -73,7 +73,7 @@
 		<commons-codec.version>1.10</commons-codec.version>
 		<poi-ooxml-schemas.version>3.10-FINAL</poi-ooxml-schemas.version>
 		<poi-ooxml.version>3.10-FINAL</poi-ooxml.version>
-		<xmlbeans.version>2.4.0</xmlbeans.version>
+		<xmlbeans.version>3.0.0</xmlbeans.version>
 	</properties>
 
 	<repositories>
