@@ -63,7 +63,7 @@
 		<grass.version>1.4</grass.version>
 		<itext-pdf.version>5.4.2</itext-pdf.version>
 		<itext-pdf-tool.version>5.4.1</itext-pdf-tool.version>
-		<google-gson.version>2.8.5</google-gson.version>
+		<google-gson.version>2.8.9</google-gson.version>
 		<squareup-okhttp.version>2.5.0</squareup-okhttp.version>
 		
 		<maven-compiler.version>3.5</maven-compiler.version>
