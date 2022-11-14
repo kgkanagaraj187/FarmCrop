@@ -30,7 +30,7 @@
 		<quartz.version>1.6.3</quartz.version>
 		<apache-velocity.version>1.7</apache-velocity.version>
 
-		<spring.version>4.2.4.RELEASE</spring.version>
+		<spring.version>4.2.7.RELEASE</spring.version>
 		<spring.support.version>2.0.8</spring.support.version>
 		<spring.security.version>3.2.8.RELEASE</spring.security.version>
 
